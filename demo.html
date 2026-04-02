@@ -22,7 +22,7 @@
   --txt3: #64748b;
 }
 *{margin:0;padding:0;box-sizing:border-box}
-body{font-family:'Noto Sans SC','Inter',sans-serif;background:var(--bg);color:var(--txt);overflow-x:hidden}
+body{font-family:'Noto Sans SC','Inter',sans-serif;background:var(--bg);color:var(--txt);overflow-x:hidden;font-size:18px}
 
 /* Top bar */
 .topbar{
@@ -33,14 +33,14 @@ body{font-family:'Noto Sans SC','Inter',sans-serif;background:var(--bg);color:va
   border-bottom:1px solid var(--border);
 }
 .back-btn{
-  color:var(--txt2);text-decoration:none;font-size:.78rem;
+  color:var(--txt2);text-decoration:none;font-size:1.05rem;
   display:flex;align-items:center;gap:.3rem;
   transition:color .3s;
 }
 .back-btn:hover{color:var(--accent-b)}
-.topbar-title{font-size:.82rem;font-weight:600;color:var(--txt)}
+.topbar-title{font-size:1.1rem;font-weight:600;color:var(--txt)}
 .topbar-venue{
-  font-family:'JetBrains Mono',monospace;font-size:.62rem;
+  font-family:'JetBrains Mono',monospace;font-size:.85rem;
   padding:.12rem .4rem;border-radius:3px;
   background:rgba(248,113,113,.1);color:var(--red);font-weight:600;
 }
@@ -60,20 +60,20 @@ body{font-family:'Noto Sans SC','Inter',sans-serif;background:var(--bg);color:va
   mask-image:radial-gradient(ellipse 70% 60% at 50% 50%,black,transparent);
 }
 .demo-hero-inner{position:relative;max-width:900px}
-.demo-hero h1{font-size:clamp(1.6rem,3.5vw,2.4rem);font-weight:800;line-height:1.3;margin-bottom:.8rem}
+.demo-hero h1{font-size:clamp(2.4rem,4vw,3.4rem);font-weight:800;line-height:1.3;margin-bottom:.8rem}
 .demo-hero h1 .hl{
   background:linear-gradient(135deg,var(--accent-b),var(--green));
   -webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;
 }
-.demo-hero-desc{font-size:.92rem;color:var(--txt2);max-width:650px;line-height:1.7;font-weight:300}
+.demo-hero-desc{font-size:1.25rem;color:var(--txt2);max-width:650px;line-height:1.7;font-weight:300}
 .demo-meta{
   display:flex;gap:2rem;margin-top:1.5rem;flex-wrap:wrap;
 }
 .demo-meta-item{
   border-left:2px solid var(--accent);padding-left:.8rem;
 }
-.demo-meta-val{font-family:'JetBrains Mono',monospace;font-size:1.1rem;font-weight:700;color:var(--accent-b)}
-.demo-meta-lbl{font-size:.68rem;color:var(--txt3)}
+.demo-meta-val{font-family:'JetBrains Mono',monospace;font-size:1.5rem;font-weight:700;color:var(--accent-b)}
+.demo-meta-lbl{font-size:.95rem;color:var(--txt3)}
 
 /* Main canvas area */
 .demo-main{padding:2.5rem}
@@ -92,9 +92,9 @@ body{font-family:'Noto Sans SC','Inter',sans-serif;background:var(--bg);color:va
   display:flex;align-items:center;justify-content:space-between;
   margin-bottom:1rem;
 }
-.chain-title{font-size:.85rem;font-weight:600}
+.chain-title{font-size:1.15rem;font-weight:600}
 .chain-badge{
-  font-family:'JetBrains Mono',monospace;font-size:.6rem;
+  font-family:'JetBrains Mono',monospace;font-size:.85rem;
   padding:.15rem .45rem;border-radius:3px;
   background:rgba(52,211,153,.08);color:var(--green);
   border:1px solid rgba(52,211,153,.15);
@@ -112,7 +112,7 @@ body{font-family:'Noto Sans SC','Inter',sans-serif;background:var(--bg);color:va
   padding:1.5rem;
   margin-bottom:1.5rem;
 }
-.slots-title{font-size:.85rem;font-weight:600;margin-bottom:1rem}
+.slots-title{font-size:1.15rem;font-weight:600;margin-bottom:1rem}
 .slots-row{
   display:flex;gap:4px;overflow-x:auto;
   padding-bottom:.5rem;
@@ -123,7 +123,7 @@ body{font-family:'Noto Sans SC','Inter',sans-serif;background:var(--bg);color:va
   display:flex;flex-direction:column;
   align-items:center;justify-content:center;
   font-family:'JetBrains Mono',monospace;
-  font-size:.6rem;gap:2px;
+  font-size:.85rem;gap:2px;
   transition:all .3s;
   border:1px solid transparent;
   cursor:default;
@@ -132,7 +132,7 @@ body{font-family:'Noto Sans SC','Inter',sans-serif;background:var(--bg);color:va
 .slot.attack{background:rgba(248,113,113,.1);color:var(--red);border-color:rgba(248,113,113,.2)}
 .slot.empty{background:rgba(148,163,184,.04);color:var(--txt3);border-color:rgba(148,163,184,.06)}
 .slot.pending{background:rgba(251,191,36,.08);color:var(--amber);border-color:rgba(251,191,36,.15)}
-.slot-num{font-size:.55rem;opacity:.6}
+.slot-num{font-size:.78rem;opacity:.6}
 
 /* Controls */
 .controls{
@@ -140,7 +140,7 @@ body{font-family:'Noto Sans SC','Inter',sans-serif;background:var(--bg);color:va
 }
 .ctrl-btn{
   padding:.5rem 1.2rem;
-  font-size:.78rem;font-weight:600;
+  font-size:1.05rem;font-weight:600;
   border:1px solid var(--border);
   border-radius:6px;background:var(--card);
   color:var(--txt2);cursor:pointer;
@@ -167,14 +167,14 @@ body{font-family:'Noto Sans SC','Inter',sans-serif;background:var(--bg);color:va
   opacity:.4;
 }
 .placeholder-overlay .ph-title{
-  font-size:1rem;font-weight:600;margin-bottom:.4rem;
+  font-size:1.35rem;font-weight:600;margin-bottom:.4rem;
 }
 .placeholder-overlay .ph-desc{
-  font-size:.82rem;color:var(--txt3);max-width:400px;margin:0 auto;
+  font-size:1.1rem;color:var(--txt3);max-width:400px;margin:0 auto;
 }
 .placeholder-overlay .ph-tag{
   display:inline-block;margin-top:1rem;
-  font-family:'JetBrains Mono',monospace;font-size:.65rem;
+  font-family:'JetBrains Mono',monospace;font-size:.9rem;
   padding:.2rem .6rem;border-radius:3px;
   background:rgba(96,165,250,.06);color:var(--txt3);
   border:1px solid var(--border);
@@ -187,7 +187,7 @@ body{font-family:'Noto Sans SC','Inter',sans-serif;background:var(--bg);color:va
 }
 .legend-item{
   display:flex;align-items:center;gap:.4rem;
-  font-size:.7rem;color:var(--txt3);
+  font-size:.95rem;color:var(--txt3);
 }
 .legend-dot{width:8px;height:8px;border-radius:2px}
 
@@ -431,7 +431,7 @@ function drawChain() {
     ctx.stroke();
 
     ctx.fillStyle = b.type === 'attack' ? '#f87171' : b.type === 'empty' ? '#64748b' : '#93c5fd';
-    ctx.font = '600 9px JetBrains Mono';
+    ctx.font = '600 13px JetBrains Mono';
     ctx.textAlign = 'center';
     ctx.fillText(`#${b.slot}`, bx + b.w / 2, b.y + b.h / 2 + 3);
     ctx.globalAlpha = 1;
@@ -446,7 +446,7 @@ function drawChain() {
       ctx.fill();
       ctx.stroke();
       ctx.fillStyle = '#f87171';
-      ctx.font = '600 8px JetBrains Mono';
+      ctx.font = '600 12px JetBrains Mono';
       ctx.fillText('fork', bx + b.w / 2, b.fork.y + b.h / 2 + 3);
       ctx.globalAlpha = 1;
     }

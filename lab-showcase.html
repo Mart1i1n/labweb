@@ -30,15 +30,15 @@
 }
 *{margin:0;padding:0;box-sizing:border-box}
 html{scroll-behavior:smooth}
-body{font-family:'Noto Sans SC','Inter',sans-serif;background:var(--bg-primary);color:var(--text-primary);line-height:1.75;overflow-x:hidden}
+body{font-family:'Noto Sans SC','Inter',sans-serif;background:var(--bg-primary);color:var(--text-primary);line-height:1.75;overflow-x:hidden;font-size:18px}
 
 /* NAV */
 nav{position:fixed;top:0;left:0;right:0;z-index:100;padding:0 3rem;height:60px;display:flex;align-items:center;justify-content:space-between;background:rgba(10,14,23,.88);backdrop-filter:blur(24px);border-bottom:1px solid var(--border)}
-.nav-logo{font-size:.82rem;font-weight:700;color:var(--accent-bright);display:flex;align-items:center;gap:.6rem}
+.nav-logo{font-size:1.1rem;font-weight:700;color:var(--accent-bright);display:flex;align-items:center;gap:.6rem}
 .nav-logo .dot{width:7px;height:7px;background:var(--accent-green);border-radius:50%;animation:pulse 2s ease-in-out infinite}
 @keyframes pulse{0%,100%{box-shadow:0 0 0 0 rgba(52,211,153,.5)}50%{box-shadow:0 0 0 5px rgba(52,211,153,0)}}
 .nav-links{display:flex;gap:1.8rem;list-style:none}
-.nav-links a{color:var(--text-secondary);text-decoration:none;font-size:.8rem;font-weight:500;transition:color .3s}
+.nav-links a{color:var(--text-secondary);text-decoration:none;font-size:1.05rem;font-weight:500;transition:color .3s}
 .nav-links a:hover{color:var(--accent-bright)}
 
 /* HERO */
@@ -48,15 +48,15 @@ nav{position:fixed;top:0;left:0;right:0;z-index:100;padding:0 3rem;height:60px;d
 .hero-glow-1{top:-10%;right:-5%;background:var(--accent)}
 .hero-glow-2{bottom:-20%;left:-10%;background:var(--accent-green)}
 .hero-content{position:relative;max-width:560px;flex:0 0 auto;z-index:1}
-.hero-badge{display:inline-flex;align-items:center;gap:.5rem;padding:.3rem .9rem;background:rgba(96,165,250,.07);border:1px solid var(--border);border-radius:100px;font-size:.72rem;color:var(--accent);font-weight:500;letter-spacing:.05em;margin-bottom:1.8rem;animation:fadeUp .6s ease-out}
+.hero-badge{display:inline-flex;align-items:center;gap:.5rem;padding:.3rem .9rem;background:rgba(96,165,250,.07);border:1px solid var(--border);border-radius:100px;font-size:1rem;color:var(--accent);font-weight:500;letter-spacing:.05em;margin-bottom:1.8rem;animation:fadeUp .6s ease-out}
 .hero-badge .status{width:5px;height:5px;background:var(--accent-green);border-radius:50%;animation:pulse 2s ease-in-out infinite}
-.hero h1{font-size:clamp(1.8rem,3.5vw,3rem);font-weight:900;line-height:1.3;margin-bottom:1.4rem;letter-spacing:-.02em;animation:fadeUp .6s ease-out .1s both}
+.hero h1{font-size:clamp(2.8rem,4.5vw,4.4rem);font-weight:900;line-height:1.3;margin-bottom:1.4rem;letter-spacing:-.02em;animation:fadeUp .6s ease-out .1s both}
 .hero h1 .hl{background:linear-gradient(135deg,var(--accent-bright),var(--accent-green));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
-.hero-desc{font-size:1rem;color:var(--text-secondary);margin-bottom:2.2rem;font-weight:300;animation:fadeUp .6s ease-out .2s both}
+.hero-desc{font-size:1.35rem;color:var(--text-secondary);margin-bottom:2.2rem;font-weight:300;animation:fadeUp .6s ease-out .2s both}
 .hero-stats{display:flex;gap:2rem;flex-wrap:wrap;animation:fadeUp .6s ease-out .3s both}
 .hero-stat{border-left:2px solid var(--accent-dim);padding-left:1rem}
-.hero-stat .num{font-family:'JetBrains Mono',monospace;font-size:1.6rem;font-weight:700;color:var(--accent-bright)}
-.hero-stat .lbl{font-size:.68rem;color:var(--text-muted);letter-spacing:.04em}
+.hero-stat .num{font-family:'JetBrains Mono',monospace;font-size:2.2rem;font-weight:700;color:var(--accent-bright)}
+.hero-stat .lbl{font-size:.95rem;color:var(--text-muted);letter-spacing:.04em}
 /* Right visual panel */
 .hero-visual{width:clamp(380px,45%,640px);flex-shrink:0;position:relative;height:540px;display:flex;align-items:center;justify-content:center}
 .hero-canvas{position:absolute;inset:0;width:100%;height:100%;pointer-events:none;opacity:.45}
@@ -67,10 +67,10 @@ nav{position:fixed;top:0;left:0;right:0;z-index:100;padding:0 3rem;height:60px;d
 .hero-ring-r2{position:absolute;width:400px;height:400px;border-radius:50%;border:1px dashed rgba(96,165,250,.06);animation:spin 40s linear infinite reverse;pointer-events:none}
 .hero-ring-r3{position:absolute;width:510px;height:510px;border-radius:50%;border:1px solid rgba(96,165,250,.04);pointer-events:none}
 @keyframes spin{to{transform:rotate(360deg)}}
-.hero-ring-inner{width:88px;height:88px;border-radius:50%;background:rgba(96,165,250,.07);border:1px solid rgba(96,165,250,.3);box-shadow:0 0 30px rgba(96,165,250,.12);display:flex;align-items:center;justify-content:center;font-size:2.2rem}
+.hero-ring-inner{width:88px;height:88px;border-radius:50%;background:rgba(96,165,250,.07);border:1px solid rgba(96,165,250,.3);box-shadow:0 0 30px rgba(96,165,250,.12);display:flex;align-items:center;justify-content:center;font-size:3rem}
 /* Floating badges */
-.hbf{position:absolute;border-radius:10px;padding:.55rem 1rem;font-size:.75rem;font-family:'JetBrains Mono',monospace;font-weight:600;backdrop-filter:blur(10px);z-index:2;white-space:nowrap;animation:floatY 4s ease-in-out infinite;line-height:1.4}
-.hbf .hbf-sub{display:block;font-size:.62rem;opacity:.65;margin-top:.1rem}
+.hbf{position:absolute;border-radius:10px;padding:.55rem 1rem;font-size:1.05rem;font-family:'JetBrains Mono',monospace;font-weight:600;backdrop-filter:blur(10px);z-index:2;white-space:nowrap;animation:floatY 4s ease-in-out infinite;line-height:1.4}
+.hbf .hbf-sub{display:block;font-size:.88rem;opacity:.65;margin-top:.1rem}
 .hbf.red{background:rgba(248,113,113,.1);border:1px solid rgba(248,113,113,.25);color:var(--accent-red)}
 .hbf.blue{background:rgba(96,165,250,.1);border:1px solid rgba(96,165,250,.25);color:var(--accent-bright)}
 .hbf.green{background:rgba(52,211,153,.1);border:1px solid rgba(52,211,153,.25);color:var(--accent-green)}
@@ -82,10 +82,10 @@ nav{position:fixed;top:0;left:0;right:0;z-index:100;padding:0 3rem;height:60px;d
 #bgCanvas{position:fixed;inset:0;width:100%;height:100%;pointer-events:none;z-index:0}
 section{padding:5rem 3rem;position:relative;z-index:1}
 .section-header{margin-bottom:3rem;max-width:1200px;margin-left:auto;margin-right:auto}
-.section-tag{font-family:'JetBrains Mono',monospace;font-size:.7rem;color:var(--accent);letter-spacing:.12em;text-transform:uppercase;margin-bottom:.7rem;display:flex;align-items:center;gap:.5rem}
+.section-tag{font-family:'JetBrains Mono',monospace;font-size:.98rem;color:var(--accent);letter-spacing:.12em;text-transform:uppercase;margin-bottom:.7rem;display:flex;align-items:center;gap:.5rem}
 .section-tag::before{content:'';display:inline-block;width:18px;height:1px;background:var(--accent)}
-.section-title{font-size:1.8rem;font-weight:700}
-.section-sub{color:var(--text-secondary);font-size:.92rem;margin-top:.4rem;font-weight:300}
+.section-title{font-size:2.6rem;font-weight:700}
+.section-sub{color:var(--text-secondary);font-size:1.25rem;margin-top:.4rem;font-weight:300}
 
 /* OVERVIEW */
 .overview-section{background:var(--bg-secondary);border-top:1px solid var(--border);border-bottom:1px solid var(--border)}
@@ -95,12 +95,12 @@ section{padding:5rem 3rem;position:relative;z-index:1}
 .arch-card:hover{border-color:var(--border-hover);transform:translateY(-2px)}
 .arch-card:hover::before{opacity:1}
 .arch-card.blue{--c:var(--accent)}.arch-card.green{--c:var(--accent-green)}.arch-card.amber{--c:var(--accent-amber)}
-.arch-layer{font-family:'JetBrains Mono',monospace;font-size:.65rem;letter-spacing:.1em;text-transform:uppercase;margin-bottom:.6rem}
+.arch-layer{font-family:'JetBrains Mono',monospace;font-size:.92rem;letter-spacing:.1em;text-transform:uppercase;margin-bottom:.6rem}
 .arch-card.blue .arch-layer{color:var(--accent)}.arch-card.green .arch-layer{color:var(--accent-green)}.arch-card.amber .arch-layer{color:var(--accent-amber)}
-.arch-title{font-size:1.05rem;font-weight:700;margin-bottom:.5rem}
-.arch-desc{font-size:.82rem;color:var(--text-secondary);line-height:1.65}
+.arch-title{font-size:1.4rem;font-weight:700;margin-bottom:.5rem}
+.arch-desc{font-size:1.1rem;color:var(--text-secondary);line-height:1.65}
 .arch-items{margin-top:.8rem;display:flex;flex-wrap:wrap;gap:.35rem}
-.arch-item{padding:.18rem .55rem;font-size:.68rem;font-family:'JetBrains Mono',monospace;border-radius:3px}
+.arch-item{padding:.18rem .55rem;font-size:.95rem;font-family:'JetBrains Mono',monospace;border-radius:3px}
 .arch-card.blue .arch-item{background:rgba(96,165,250,.08);color:var(--accent);border:1px solid rgba(96,165,250,.1)}
 .arch-card.green .arch-item{background:rgba(52,211,153,.08);color:var(--accent-green);border:1px solid rgba(52,211,153,.1)}
 .arch-card.amber .arch-item{background:rgba(251,191,36,.08);color:var(--accent-amber);border:1px solid rgba(251,191,36,.1)}
@@ -110,26 +110,26 @@ section{padding:5rem 3rem;position:relative;z-index:1}
 .hl-card{background:var(--bg-card);border:1px solid var(--border);border-radius:10px;padding:1.5rem;transition:all .35s;display:flex;flex-direction:column}
 .hl-card:hover{border-color:var(--border-hover);background:var(--bg-card-hover)}
 .hl-top{display:flex;align-items:center;gap:.6rem;margin-bottom:.8rem}
-.hl-icon{width:36px;height:36px;border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:1rem}
+.hl-icon{width:36px;height:36px;border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:1.35rem}
 .hl-icon.blue{background:rgba(96,165,250,.1);border:1px solid rgba(96,165,250,.15)}
-.hl-icon.green{background:rgba(52,211,153,.1);border:1px solid rgba(52,211,153,.15)}
+.hl-icon.green{background:rgba(52,211,153,.25);border:2px solid rgba(52,211,153,.4);box-shadow:0 0 12px rgba(52,211,153,.2)}
 .hl-icon.amber{background:rgba(251,191,36,.1);border:1px solid rgba(251,191,36,.15)}
 .hl-icon.red{background:rgba(248,113,113,.1);border:1px solid rgba(248,113,113,.15)}
 .hl-icon.purple{background:rgba(167,139,250,.1);border:1px solid rgba(167,139,250,.15)}
 .hl-icon.orange{background:rgba(251,146,60,.1);border:1px solid rgba(251,146,60,.15)}
-.hl-venue{font-family:'JetBrains Mono',monospace;font-size:.62rem;letter-spacing:.05em;padding:.15rem .45rem;border-radius:3px;font-weight:600}
+.hl-venue{font-family:'JetBrains Mono',monospace;font-size:.88rem;letter-spacing:.05em;padding:.15rem .45rem;border-radius:3px;font-weight:600}
 .hl-venue.top{background:rgba(248,113,113,.12);color:var(--accent-red)}
 .hl-venue.good{background:rgba(52,211,153,.1);color:var(--accent-green)}
-.hl-title{font-size:.95rem;font-weight:700;margin-bottom:.4rem;line-height:1.45}
-.hl-desc{font-size:.8rem;color:var(--text-secondary);line-height:1.6;margin-bottom:.7rem;flex:1}
-.hl-impact{font-size:.72rem;color:var(--accent-amber);font-family:'JetBrains Mono',monospace;display:flex;align-items:center;gap:.3rem}
-.hl-ref{font-size:.68rem;color:var(--text-muted);margin-top:.5rem;line-height:1.5;border-top:1px solid var(--border);padding-top:.5rem}
+.hl-title{font-size:1.3rem;font-weight:700;margin-bottom:.4rem;line-height:1.45}
+.hl-desc{font-size:1.08rem;color:var(--text-secondary);line-height:1.6;margin-bottom:.7rem;flex:1}
+.hl-impact{font-size:1rem;color:var(--accent-amber);font-family:'JetBrains Mono',monospace;display:flex;align-items:center;gap:.3rem}
+.hl-ref{font-size:.95rem;color:var(--text-muted);margin-top:.5rem;line-height:1.5;border-top:1px solid var(--border);padding-top:.5rem}
 
 /* Demo link */
 .hl-demo-link{
   display:inline-flex;align-items:center;gap:.4rem;
   margin-top:.8rem;padding:.4rem .9rem;
-  font-size:.72rem;font-weight:600;
+  font-size:1rem;font-weight:600;
   color:var(--accent);
   background:rgba(96,165,250,.06);
   border:1px solid rgba(96,165,250,.15);
@@ -146,7 +146,7 @@ section{padding:5rem 3rem;position:relative;z-index:1}
 }
 .hl-demo-link .arrow{
   transition:transform .3s;
-  font-size:.8rem;
+  font-size:1.1rem;
 }
 .hl-demo-link:hover .arrow{transform:translateX(3px)}
 
@@ -155,34 +155,34 @@ section{padding:5rem 3rem;position:relative;z-index:1}
 .platform-container{max-width:1100px;margin:0 auto}
 .chart-card{background:var(--bg-card);border:1px solid var(--border);border-radius:10px;padding:1.5rem}
 .chart-head{display:flex;align-items:center;justify-content:space-between;margin-bottom:1rem}
-.chart-title{font-size:.85rem;font-weight:600}
-.chart-badge{font-size:.62rem;padding:.15rem .5rem;background:rgba(96,165,250,.07);border:1px solid var(--border);border-radius:3px;color:var(--text-muted);font-family:'JetBrains Mono',monospace}
+.chart-title{font-size:1.15rem;font-weight:600}
+.chart-badge{font-size:.88rem;padding:.15rem .5rem;background:rgba(96,165,250,.07);border:1px solid var(--border);border-radius:3px;color:var(--text-muted);font-family:'JetBrains Mono',monospace}
 .chart-area{height:220px;position:relative}
 .chart-area svg{width:100%;height:100%}
-.chart-note{position:absolute;bottom:.8rem;right:.8rem;font-size:.64rem;color:var(--text-muted);font-family:'JetBrains Mono',monospace;background:rgba(10,14,23,.8);padding:.15rem .5rem;border-radius:3px}
+.chart-note{position:absolute;bottom:.8rem;right:.8rem;font-size:.9rem;color:var(--text-muted);font-family:'JetBrains Mono',monospace;background:rgba(10,14,23,.8);padding:.15rem .5rem;border-radius:3px}
 .sankey-grid{display:flex;flex-direction:column;gap:2rem;margin-top:2rem}
 .sankey-container{background:var(--bg-card);border:1px solid var(--border);border-radius:12px;padding:1.5rem;transition:all .3s}
 .sankey-container:hover{border-color:var(--border-hover);box-shadow:0 0 25px rgba(96,165,250,.08)}
-.sankey-container h3{margin:0 0 1rem 0;font-size:1rem;color:#e2e8f0;font-weight:600}
+.sankey-container h3{margin:0 0 1rem 0;font-size:1.35rem;color:#e2e8f0;font-weight:600}
 .sankey-container>div{height:500px}
 
 /* PUBLICATIONS */
 .pub-list{max-width:960px;display:flex;flex-direction:column;gap:.8rem}
 .pub-item{display:flex;gap:1.2rem;padding:1.2rem 1.4rem;background:var(--bg-card);border:1px solid var(--border);border-radius:8px;transition:all .3s;align-items:flex-start}
 .pub-item:hover{border-color:var(--border-hover);background:var(--bg-card-hover)}
-.pub-year{font-family:'JetBrains Mono',monospace;font-size:.75rem;color:var(--accent);min-width:40px;font-weight:600;padding-top:.1rem}
+.pub-year{font-family:'JetBrains Mono',monospace;font-size:1.05rem;color:var(--accent);min-width:40px;font-weight:600;padding-top:.1rem}
 .pub-body{flex:1}
-.pub-title{font-size:.88rem;font-weight:600;line-height:1.45;margin-bottom:.25rem}
-.pub-authors{font-size:.75rem;color:var(--text-muted);margin-bottom:.35rem}
-.pub-venue-tag{display:inline-flex;align-items:center;gap:.25rem;font-size:.68rem;font-family:'JetBrains Mono',monospace;padding:.12rem .45rem;border-radius:3px}
+.pub-title{font-size:1.15rem;font-weight:600;line-height:1.45;margin-bottom:.25rem}
+.pub-authors{font-size:1.05rem;color:var(--text-muted);margin-bottom:.35rem}
+.pub-venue-tag{display:inline-flex;align-items:center;gap:.25rem;font-size:.95rem;font-family:'JetBrains Mono',monospace;padding:.12rem .45rem;border-radius:3px}
 .pub-venue-tag.s{background:rgba(248,113,113,.1);color:var(--accent-red)}
 .pub-venue-tag.a{background:rgba(251,191,36,.1);color:var(--accent-amber)}
 .pub-venue-tag.b{background:rgba(52,211,153,.1);color:var(--accent-green)}
 .pub-venue-tag.j{background:rgba(96,165,250,.1);color:var(--accent)}
-.pub-award{display:inline-flex;align-items:center;gap:.2rem;font-size:.65rem;color:var(--accent-amber);margin-left:.4rem;font-weight:600}
+.pub-award{display:inline-flex;align-items:center;gap:.2rem;font-size:.92rem;color:var(--accent-amber);margin-left:.4rem;font-weight:600}
 
 /* FOOTER */
-footer{padding:2.5rem 3rem;border-top:1px solid var(--border);text-align:center;color:var(--text-muted);font-size:.75rem}
+footer{padding:2.5rem 3rem;border-top:1px solid var(--border);text-align:center;color:var(--text-muted);font-size:1.05rem}
 footer a{color:var(--accent);text-decoration:none}
 
 /* UTILS */
@@ -276,75 +276,117 @@ footer a{color:var(--accent);text-decoration:none}
   <div class="section-header fi">
     <div class="section-tag">Key Results</div>
     <h2 class="section-title">核心研究成果</h2>
-    <p class="section-sub">针对多个主流区块链平台发现关键安全缺陷，推动协议修复</p>
+    <p class="section-sub">按研究架构分层展示核心成果，推动主流平台协议修复</p>
   </div>
-  <div class="highlights-grid">
 
-    <div class="hl-card fi">
-      <div class="hl-top"><span class="hl-venue top">ACM CCS 2024</span></div>
-      <div class="hl-title">Web3登录盲消息攻击</div>
-      <div class="hl-desc">对排名前25的Dapp网站进行安全分析，提出盲消息攻击，首次实现对用户链下数据的未授权访问。受影响用户超200万，总市值约40亿美元。</div>
-      <div class="hl-impact">🏆 ACM CCS 杰出论文奖</div>
-      <a class="hl-demo-link" href="./demo.html?id=web3-blind">查看攻击演示 <span class="arrow">→</span></a>
+  <!-- Application Layer 应用层 -->
+  <div style="margin-top:3rem">
+    <div style="display:flex;align-items:center;justify-content:center;gap:.6rem;margin-bottom:1.5rem">
+      <div style="width:3px;height:24px;background:var(--accent);border-radius:2px"></div>
+      <h3 style="font-size:1.5rem;color:var(--accent)">应用层安全研究</h3>
+      <span style="font-family:'JetBrains Mono',monospace;font-size:.9rem;color:var(--text-muted);margin-left:.5rem">Application Layer</span>
     </div>
+    <div class="highlights-grid">
+      <div class="hl-card fi">
+        <div class="hl-top">
+          <span class="hl-icon blue">🔐</span>
+          <span class="hl-venue top">ACM CCS 2024</span>
+        </div>
+        <div class="hl-title">Web3登录盲消息攻击</div>
+        <div class="hl-desc">对排名前25的Dapp网站进行安全分析，提出盲消息攻击，首次实现对用户链下数据的未授权访问。受影响用户超200万，总市值约40亿美元。</div>
+        <div class="hl-impact">🏆 ACM CCS 杰出论文奖</div>
+        <a class="hl-demo-link" href="./demo.html?id=web3-blind">查看攻击演示 <span class="arrow">→</span></a>
+      </div>
 
-    <div class="hl-card fi">
-      <div class="hl-top"><span class="hl-venue top">IEEE S&P 2026</span></div>
-      <div class="hl-title">以太坊PoS零成本活性攻击</div>
-      <div class="hl-desc">提出首个无需额外条件的以太坊PoS活性攻击：不需操控网络、不触发罚没，最低仅需23.8%验证者即可导致无区块确认或完全操控交易顺序。</div>
-      <div class="hl-impact">📌 影响以太坊 ~5000亿美元市值</div>
-      <a class="hl-demo-link" href="./demo.html?id=eth-liveness">查看攻击演示 <span class="arrow">→</span></a>
+      <div class="hl-card fi">
+        <div class="hl-top">
+          <span class="hl-icon blue">📱</span>
+          <span class="hl-venue good">WWW 2023 / TDSC</span>
+        </div>
+        <div class="hl-title">DApp生态中心化安全风险</div>
+        <div class="hl-desc">96.4%的以太坊官方推荐钱包存在安全风险（总下载量超1亿次），83.5%链上合约存在权限滥用（含260个知名合约，总市值~980亿）。</div>
+        <div class="hl-impact">📌 1亿+下载量钱包受影响</div>
+        <a class="hl-demo-link" href="./demo.html?id=dapp-central">查看攻击演示 <span class="arrow">→</span></a>
+      </div>
     </div>
-
-    <div class="hl-card fi">
-      <div class="hl-top"><span class="hl-venue top">Usenix Security 2024</span></div>
-      <div class="hl-title">以太坊阶梯攻击（激励机制）</div>
-      <div class="hl-desc">敌手仅需控制29.6%账户余额，即可让所有诚实节点丧失收益甚至负收益。以太坊官方评价该工作"对交易确认规则至关重要（essential）"。</div>
-      <div class="hl-impact">📌 以太坊官方确认 & 修复</div>
-      <a class="hl-demo-link" href="./demo.html?id=eth-staircase">查看攻击演示 <span class="arrow">→</span></a>
-    </div>
-
-    <div class="hl-card fi">
-      <div class="hl-top"><span class="hl-venue top">NDSS 2026</span></div>
-      <div class="hl-title">BunnyFinder：自动化激励漏洞发掘</div>
-      <div class="hl-desc">借鉴软件错误注入思想，结合强化学习自动生成攻击策略，发现三种新型激励机制攻击：自私挖矿、阶梯攻击-II、皮洛士胜利攻击。</div>
-      <div class="hl-impact">📌 与蚂蚁区块链合作 · 自动化漏洞发现</div>
-      <a class="hl-demo-link" href="./demo.html?id=bunnyfinder">查看攻击演示 <span class="arrow">→</span></a>
-    </div>
-
-    <div class="hl-card fi">
-      <div class="hl-top"><span class="hl-venue top">Usenix Security 2025</span></div>
-      <div class="hl-title">AA机制：可证明安全的链重组防御</div>
-      <div class="hl-desc">基于f+1投票提出"存在性投票"机制，在网络同步时彻底解决链重组问题。发表后迅速获以太坊基金会关注，获邀讨论落地并进入EIP阶段。</div>
-      <div class="hl-impact">📌 以太坊基金会邀请讨论 · 推进EIP落地</div>
-      <a class="hl-demo-link" href="./demo.html?id=eth-aa">查看攻击演示 <span class="arrow">→</span></a>
-    </div>
-
-    <div class="hl-card fi">
-      <div class="hl-top"><span class="hl-venue top">Usenix Security 2025</span></div>
-      <div class="hl-title">币安链共识活性攻击</div>
-      <div class="hl-desc">针对币安（~1000亿美元市值）的Fast Finality机制，提出三种攻击使区块确认速度降低一个量级甚至完全无法出块。</div>
-      <div class="hl-impact">📌 影响币安 ~1000亿美元市值</div>
-      <a class="hl-demo-link" href="./demo.html?id=bsc-finality">查看攻击演示 <span class="arrow">→</span></a>
-    </div>
-
-    <div class="hl-card fi">
-      <div class="hl-top"><span class="hl-venue good">WWW 2026</span></div>
-      <div class="hl-title">波卡链无风险自私挖矿攻击</div>
-      <div class="hl-desc">提出首个混合可预测性模型下的无风险自私挖矿攻击，在低于20%质押量时攻击收益即超过比特币经典自私挖矿。</div>
-      <div class="hl-impact">📌 影响波卡 ~70亿美元市值</div>
-      <a class="hl-demo-link" href="./demo.html?id=polkadot-selfish">查看攻击演示 <span class="arrow">→</span></a>
-    </div>
-
-    <div class="hl-card fi">
-      <div class="hl-top"><span class="hl-venue good">WWW 2023 / TDSC</span></div>
-      <div class="hl-title">DApp生态中心化安全风险</div>
-      <div class="hl-desc">96.4%的以太坊官方推荐钱包存在安全风险（总下载量超1亿次），83.5%链上合约存在权限滥用（含260个知名合约，总市值~980亿）。</div>
-      <div class="hl-impact">📌 1亿+下载量钱包受影响</div>
-      <a class="hl-demo-link" href="./demo.html?id=dapp-central">查看攻击演示 <span class="arrow">→</span></a>
-    </div>
-
   </div>
+
+  <!-- Consensus Layer 共识层 -->
+  <div style="margin-top:3rem">
+    <div style="display:flex;align-items:center;justify-content:center;gap:.6rem;margin-bottom:1.5rem">
+      <div style="width:3px;height:24px;background:var(--accent-green);border-radius:2px"></div>
+      <h3 style="font-size:1.5rem;color:var(--accent-green)">共识层安全研究</h3>
+      <span style="font-family:'JetBrains Mono',monospace;font-size:.9rem;color:var(--text-muted);margin-left:.5rem">Consensus Layer</span>
+    </div>
+    <div style="display:grid;grid-template-columns:repeat(2,1fr);gap:1rem;max-width:1200px;margin:0 auto">
+      <div class="hl-card fi">
+        <div class="hl-top">
+          <span class="hl-icon green">⚡</span>
+          <span class="hl-venue top">IEEE S&P 2026</span>
+        </div>
+        <div class="hl-title">以太坊PoS零成本活性攻击</div>
+        <div class="hl-desc">提出首个无需额外条件的以太坊PoS活性攻击：不需操控网络、不触发罚没，最低仅需23.8%验证者即可导致无区块确认或完全操控交易顺序。</div>
+        <div class="hl-impact">📌 影响以太坊 ~5000亿美元市值</div>
+        <a class="hl-demo-link" href="./demo.html?id=eth-liveness">查看攻击演示 <span class="arrow">→</span></a>
+      </div>
+
+      <div class="hl-card fi">
+        <div class="hl-top">
+          <span class="hl-icon green">📊</span>
+          <span class="hl-venue top">Usenix Security 2024</span>
+        </div>
+        <div class="hl-title">以太坊阶梯攻击（激励机制）</div>
+        <div class="hl-desc">敌手仅需控制29.6%账户余额，即可让所有诚实节点丧失收益甚至负收益。以太坊官方评价该工作"对交易确认规则至关重要（essential）"。</div>
+        <div class="hl-impact">📌 以太坊官方确认 & 修复</div>
+        <a class="hl-demo-link" href="./demo.html?id=eth-staircase">查看攻击演示 <span class="arrow">→</span></a>
+      </div>
+
+      <div class="hl-card fi">
+        <div class="hl-top">
+          <span class="hl-icon green">🔗</span>
+          <span class="hl-venue top">Usenix Security 2025</span>
+        </div>
+        <div class="hl-title">AA机制：可证明安全的链重组防御</div>
+        <div class="hl-desc">基于f+1投票提出"存在性投票"机制，在网络同步时彻底解决链重组问题。发表后迅速获以太坊基金会关注，获邀讨论落地并进入EIP阶段。</div>
+        <div class="hl-impact">📌 以太坊基金会邀请讨论 · 推进EIP落地</div>
+        <a class="hl-demo-link" href="./demo.html?id=eth-aa">查看攻击演示 <span class="arrow">→</span></a>
+      </div>
+
+      <div class="hl-card fi">
+        <div class="hl-top">
+          <span class="hl-icon green">⏱️</span>
+          <span class="hl-venue top">Usenix Security 2025</span>
+        </div>
+        <div class="hl-title">币安链共识活性攻击</div>
+        <div class="hl-desc">针对币安（~1000亿美元市值）的Fast Finality机制，提出三种攻击使区块确认速度降低一个量级甚至完全无法出块。</div>
+        <div class="hl-impact">📌 影响币安 ~1000亿美元市值</div>
+        <a class="hl-demo-link" href="./demo.html?id=bsc-finality">查看攻击演示 <span class="arrow">→</span></a>
+      </div>
+
+      <div class="hl-card fi">
+        <div class="hl-top">
+          <span class="hl-icon green">🎯</span>
+          <span class="hl-venue good">WWW 2026</span>
+        </div>
+        <div class="hl-title">波卡链无风险自私挖矿攻击</div>
+        <div class="hl-desc">提出首个混合可预测性模型下的无风险自私挖矿攻击，在低于20%质押量时攻击收益即超过比特币经典自私挖矿。</div>
+        <div class="hl-impact">📌 影响波卡 ~70亿美元市值</div>
+        <a class="hl-demo-link" href="./demo.html?id=polkadot-selfish">查看攻击演示 <span class="arrow">→</span></a>
+      </div>
+
+      <div class="hl-card fi">
+        <div class="hl-top">
+          <span class="hl-icon amber">🔬</span>
+          <span class="hl-venue top">NDSS 2026</span>
+        </div>
+        <div class="hl-title">BunnyFinder：自动化激励漏洞发掘</div>
+        <div class="hl-desc">借鉴软件错误注入思想，结合强化学习自动生成攻击策略，发现三种新型激励机制攻击：自私挖矿、阶梯攻击-II、皮洛士胜利攻击。</div>
+        <div class="hl-impact">📌 与蚂蚁区块链合作 · 自动化漏洞发现</div>
+        <a class="hl-demo-link" href="./demo.html?id=bunnyfinder">查看攻击演示 <span class="arrow">→</span></a>
+      </div>
+    </div>
+  </div>
+
 </section>
 
 <!-- PLATFORM (simplified) -->
@@ -375,16 +417,16 @@ footer a{color:var(--accent);text-decoration:none}
           <line x1="50" y1="90" x2="870" y2="90" stroke="rgba(148,163,184,.04)"/>
           <line x1="50" y1="40" x2="870" y2="40" stroke="rgba(148,163,184,.04)"/>
           <!-- Y labels -->
-          <text x="42" y="194" fill="#64748b" font-size="9" font-family="JetBrains Mono" text-anchor="end">0</text>
-          <text x="42" y="144" fill="#64748b" font-size="9" font-family="JetBrains Mono" text-anchor="end">25</text>
-          <text x="42" y="94" fill="#64748b" font-size="9" font-family="JetBrains Mono" text-anchor="end">50</text>
-          <text x="42" y="44" fill="#64748b" font-size="9" font-family="JetBrains Mono" text-anchor="end">75</text>
+          <text x="42" y="194" fill="#64748b" font-size="13" font-family="JetBrains Mono" text-anchor="end">0</text>
+          <text x="42" y="144" fill="#64748b" font-size="13" font-family="JetBrains Mono" text-anchor="end">25</text>
+          <text x="42" y="94" fill="#64748b" font-size="13" font-family="JetBrains Mono" text-anchor="end">50</text>
+          <text x="42" y="44" fill="#64748b" font-size="13" font-family="JetBrains Mono" text-anchor="end">75</text>
           <!-- X labels -->
-          <text x="50" y="208" fill="#64748b" font-size="8" font-family="JetBrains Mono" text-anchor="middle">2023</text>
-          <text x="255" y="208" fill="#64748b" font-size="8" font-family="JetBrains Mono" text-anchor="middle">2023 Q3</text>
-          <text x="460" y="208" fill="#64748b" font-size="8" font-family="JetBrains Mono" text-anchor="middle">2024</text>
-          <text x="665" y="208" fill="#64748b" font-size="8" font-family="JetBrains Mono" text-anchor="middle">2024 Q3</text>
-          <text x="870" y="208" fill="#64748b" font-size="8" font-family="JetBrains Mono" text-anchor="middle">2025</text>
+          <text x="50" y="208" fill="#64748b" font-size="12" font-family="JetBrains Mono" text-anchor="middle">2023</text>
+          <text x="255" y="208" fill="#64748b" font-size="12" font-family="JetBrains Mono" text-anchor="middle">2023 Q3</text>
+          <text x="460" y="208" fill="#64748b" font-size="12" font-family="JetBrains Mono" text-anchor="middle">2024</text>
+          <text x="665" y="208" fill="#64748b" font-size="12" font-family="JetBrains Mono" text-anchor="middle">2024 Q3</text>
+          <text x="870" y="208" fill="#64748b" font-size="12" font-family="JetBrains Mono" text-anchor="middle">2025</text>
           <!-- Area 1 - attacks -->
           <path d="M50,160 C120,150 180,170 255,130 S380,80 460,100 S560,55 620,65 S740,105 790,80 L870,90 L870,190 L50,190 Z" fill="url(#ag)"/>
           <path d="M50,160 C120,150 180,170 255,130 S380,80 460,100 S560,55 620,65 S740,105 790,80 L870,90" fill="none" stroke="url(#lg)" stroke-width="2" stroke-linecap="round"/>
@@ -401,9 +443,9 @@ footer a{color:var(--accent);text-decoration:none}
           <circle cx="620" cy="118" r="3" fill="#34d399" stroke="#0a0e17" stroke-width="2"/>
           <!-- Legend -->
           <rect x="60" y="25" width="8" height="8" rx="2" fill="#60a5fa"/>
-          <text x="72" y="33" fill="#94a3b8" font-size="9" font-family="Noto Sans SC">共识层攻击事件</text>
+          <text x="72" y="33" fill="#94a3b8" font-size="13" font-family="Noto Sans SC">共识层攻击事件</text>
           <rect x="190" y="25" width="8" height="8" rx="2" fill="#34d399"/>
-          <text x="202" y="33" fill="#94a3b8" font-size="9" font-family="Noto Sans SC">DeFi安全事件</text>
+          <text x="202" y="33" fill="#94a3b8" font-size="13" font-family="Noto Sans SC">DeFi安全事件</text>
         </svg>
         <div class="chart-note">// 待接入真实数据源</div>
       </div>
@@ -493,6 +535,10 @@ footer a{color:var(--accent);text-decoration:none}
     const target=Math.random()<.5&&hubs.length?hubs[Math.floor(Math.random()*hubs.length)]:all[ti];
     const src=all[fi];
     if(src===target)return;
+    // Only create arcs for nearby nodes
+    const dx=target.x-src.x,dy=target.y-src.y;
+    const dist=Math.sqrt(dx*dx+dy*dy);
+    if(dist>350)return; // Skip if too far apart
     const isAtk=Math.random()<.28;
     const cr=isAtk?'248,113,113':'96,165,250';
     const maxLife=45+Math.random()*50;
@@ -503,7 +549,7 @@ footer a{color:var(--accent);text-decoration:none}
   function draw(){
     bx.clearRect(0,0,W,H);
     frame++;
-    if(frame%45===0&&arcs.length<8)spawnArc();
+    if(frame%18===0&&arcs.length<16)spawnArc();
 
     // Small nodes
     smalls.forEach(n=>{
@@ -519,21 +565,21 @@ footer a{color:var(--accent);text-decoration:none}
       a.life++;
       const t=a.life/a.max;
       const base=t<.12?t/.12:t>.65?(1-t)/.35:1;
-      const alpha=base*(0.15+Math.random()*0.25);
+      const alpha=base*(0.3+Math.random()*0.4);
       const pts=lightning(a.src.x,a.src.y,a.target.x,a.target.y);
       bx.save();bx.globalAlpha=alpha;bx.lineCap='round';bx.lineJoin='round';
       // Outer glow
       bx.beginPath();
       pts.forEach((p,i)=>i?bx.lineTo(p[0],p[1]):bx.moveTo(p[0],p[1]));
-      bx.strokeStyle=`rgba(${a.cr},.12)`;bx.lineWidth=a.w*7;bx.stroke();
+      bx.strokeStyle=`rgba(${a.cr},.25)`;bx.lineWidth=a.w*8;bx.stroke();
       // Mid glow
       bx.beginPath();
       pts.forEach((p,i)=>i?bx.lineTo(p[0],p[1]):bx.moveTo(p[0],p[1]));
-      bx.strokeStyle=`rgba(${a.cr},.25)`;bx.lineWidth=a.w*2.5;bx.stroke();
+      bx.strokeStyle=`rgba(${a.cr},.45)`;bx.lineWidth=a.w*3;bx.stroke();
       // Core
       bx.beginPath();
       pts.forEach((p,i)=>i?bx.lineTo(p[0],p[1]):bx.moveTo(p[0],p[1]));
-      bx.strokeStyle=`rgba(${a.cr},.5)`;bx.lineWidth=a.w;bx.stroke();
+      bx.strokeStyle=`rgba(${a.cr},.8)`;bx.lineWidth=a.w*1.2;bx.stroke();
       bx.restore();
       return a.life<a.max;
     });
@@ -594,7 +640,7 @@ document.querySelectorAll('[data-target]').forEach(el=>cObs.observe(el));
 const c=document.getElementById('nodeCanvas'),ctx=c.getContext('2d');let nodes=[];
 function resize(){c.width=c.offsetWidth*devicePixelRatio;c.height=c.offsetHeight*devicePixelRatio;ctx.setTransform(devicePixelRatio,0,0,devicePixelRatio,0,0)}
 function init(n=35){nodes=[];const w=c.offsetWidth,h=c.offsetHeight;for(let i=0;i<n;i++)nodes.push({x:Math.random()*w,y:Math.random()*h,vx:(Math.random()-.5)*.35,vy:(Math.random()-.5)*.35,r:Math.random()*1.8+1})}
-function draw(){const w=c.offsetWidth,h=c.offsetHeight;ctx.clearRect(0,0,w,h);for(let i=0;i<nodes.length;i++)for(let j=i+1;j<nodes.length;j++){const dx=nodes[i].x-nodes[j].x,dy=nodes[i].y-nodes[j].y,d=Math.sqrt(dx*dx+dy*dy);if(d<130){ctx.beginPath();ctx.moveTo(nodes[i].x,nodes[i].y);ctx.lineTo(nodes[j].x,nodes[j].y);ctx.strokeStyle=`rgba(96,165,250,${.1*(1-d/130)})`;ctx.lineWidth=.6;ctx.stroke()}}nodes.forEach(n=>{ctx.beginPath();ctx.arc(n.x,n.y,n.r,0,Math.PI*2);ctx.fillStyle='rgba(96,165,250,.45)';ctx.fill();n.x+=n.vx;n.y+=n.vy;if(n.x<0||n.x>w)n.vx*=-1;if(n.y<0||n.y>h)n.vy*=-1});requestAnimationFrame(draw)}
+function draw(){const w=c.offsetWidth,h=c.offsetHeight;ctx.clearRect(0,0,w,h);for(let i=0;i<nodes.length;i++)for(let j=i+1;j<nodes.length;j++){const dx=nodes[i].x-nodes[j].x,dy=nodes[i].y-nodes[j].y,d=Math.sqrt(dx*dx+dy*dy);if(d<80){ctx.beginPath();ctx.moveTo(nodes[i].x,nodes[i].y);ctx.lineTo(nodes[j].x,nodes[j].y);ctx.strokeStyle=`rgba(96,165,250,${.15*(1-d/80)})`;ctx.lineWidth=.8;ctx.stroke()}}nodes.forEach(n=>{ctx.beginPath();ctx.arc(n.x,n.y,n.r,0,Math.PI*2);ctx.fillStyle='rgba(96,165,250,.45)';ctx.fill();n.x+=n.vx;n.y+=n.vy;if(n.x<0||n.x>w)n.vx*=-1;if(n.y<0||n.y>h)n.vy*=-1});requestAnimationFrame(draw)}
 window.addEventListener('resize',()=>{resize();init()});resize();init();draw();
 
 // 桑基图 - 从左到右
