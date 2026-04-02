@@ -485,7 +485,7 @@ footer a{color:var(--accent);text-decoration:none}
   function draw(){
     bx.clearRect(0,0,W,H);
     frame++;
-    if(frame%45===0&&arcs.length<5)spawnArc();
+    if(frame%45===0&&arcs.length<8)spawnArc();
 
     // Small nodes
     smalls.forEach(n=>{
