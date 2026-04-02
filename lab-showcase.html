@@ -1,0 +1,398 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>密码与数字经济安全全国重点实验室 — 区块链安全研究</title>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+SC:wght@300;400;500;700;900&family=JetBrains+Mono:wght@400;500;600;700&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<style>
+:root {
+  --bg-primary: #0a0e17;
+  --bg-secondary: #0f1420;
+  --bg-card: #141c2b;
+  --bg-card-hover: #192234;
+  --border: rgba(99, 179, 237, 0.1);
+  --border-hover: rgba(99, 179, 237, 0.28);
+  --accent: #60a5fa;
+  --accent-bright: #93c5fd;
+  --accent-dim: #2563eb;
+  --accent-green: #34d399;
+  --accent-amber: #fbbf24;
+  --accent-red: #f87171;
+  --accent-purple: #a78bfa;
+  --accent-orange: #fb923c;
+  --text-primary: #e2e8f0;
+  --text-secondary: #94a3b8;
+  --text-muted: #64748b;
+  --glow-blue: 0 0 40px rgba(96, 165, 250, 0.12);
+  --glow-green: 0 0 40px rgba(52, 211, 153, 0.12);
+}
+*{margin:0;padding:0;box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{font-family:'Noto Sans SC','Inter',sans-serif;background:var(--bg-primary);color:var(--text-primary);line-height:1.75;overflow-x:hidden}
+
+/* NAV */
+nav{position:fixed;top:0;left:0;right:0;z-index:100;padding:0 3rem;height:60px;display:flex;align-items:center;justify-content:space-between;background:rgba(10,14,23,.88);backdrop-filter:blur(24px);border-bottom:1px solid var(--border)}
+.nav-logo{font-size:.82rem;font-weight:700;color:var(--accent-bright);display:flex;align-items:center;gap:.6rem}
+.nav-logo .dot{width:7px;height:7px;background:var(--accent-green);border-radius:50%;animation:pulse 2s ease-in-out infinite}
+@keyframes pulse{0%,100%{box-shadow:0 0 0 0 rgba(52,211,153,.5)}50%{box-shadow:0 0 0 5px rgba(52,211,153,0)}}
+.nav-links{display:flex;gap:1.8rem;list-style:none}
+.nav-links a{color:var(--text-secondary);text-decoration:none;font-size:.8rem;font-weight:500;transition:color .3s}
+.nav-links a:hover{color:var(--accent-bright)}
+
+/* HERO */
+.hero{position:relative;min-height:100vh;display:flex;flex-direction:column;justify-content:center;padding:7rem 3rem 4rem;overflow:hidden}
+.hero-grid-bg{position:absolute;inset:0;background-image:linear-gradient(rgba(96,165,250,.025) 1px,transparent 1px),linear-gradient(90deg,rgba(96,165,250,.025) 1px,transparent 1px);background-size:60px 60px;mask-image:radial-gradient(ellipse 80% 70% at 50% 40%,black 20%,transparent 100%)}
+.hero-glow{position:absolute;width:550px;height:550px;border-radius:50%;filter:blur(120px);opacity:.1;pointer-events:none}
+.hero-glow-1{top:-10%;right:-5%;background:var(--accent)}
+.hero-glow-2{bottom:-20%;left:-10%;background:var(--accent-green)}
+.hero-content{position:relative;max-width:860px}
+.hero-badge{display:inline-flex;align-items:center;gap:.5rem;padding:.3rem .9rem;background:rgba(96,165,250,.07);border:1px solid var(--border);border-radius:100px;font-size:.72rem;color:var(--accent);font-weight:500;letter-spacing:.05em;margin-bottom:1.8rem;animation:fadeUp .6s ease-out}
+.hero-badge .status{width:5px;height:5px;background:var(--accent-green);border-radius:50%;animation:pulse 2s ease-in-out infinite}
+.hero h1{font-size:clamp(2rem,4.5vw,3.2rem);font-weight:900;line-height:1.25;margin-bottom:1.4rem;letter-spacing:-.02em;animation:fadeUp .6s ease-out .1s both}
+.hero h1 .hl{background:linear-gradient(135deg,var(--accent-bright),var(--accent-green));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
+.hero-desc{font-size:1.02rem;color:var(--text-secondary);max-width:620px;margin-bottom:2.2rem;font-weight:300;animation:fadeUp .6s ease-out .2s both}
+.hero-stats{display:flex;gap:2.5rem;animation:fadeUp .6s ease-out .3s both}
+.hero-stat{border-left:2px solid var(--accent-dim);padding-left:1rem}
+.hero-stat .num{font-family:'JetBrains Mono',monospace;font-size:1.8rem;font-weight:700;color:var(--accent-bright)}
+.hero-stat .lbl{font-size:.72rem;color:var(--text-muted);letter-spacing:.04em}
+.hero-canvas{position:absolute;top:0;right:0;width:50%;height:100%;pointer-events:none;opacity:.2}
+
+/* SECTIONS */
+section{padding:5rem 3rem;position:relative}
+.section-header{margin-bottom:3rem}
+.section-tag{font-family:'JetBrains Mono',monospace;font-size:.7rem;color:var(--accent);letter-spacing:.12em;text-transform:uppercase;margin-bottom:.7rem;display:flex;align-items:center;gap:.5rem}
+.section-tag::before{content:'';display:inline-block;width:18px;height:1px;background:var(--accent)}
+.section-title{font-size:1.8rem;font-weight:700}
+.section-sub{color:var(--text-secondary);font-size:.92rem;margin-top:.4rem;font-weight:300}
+
+/* OVERVIEW */
+.overview-section{background:var(--bg-secondary);border-top:1px solid var(--border);border-bottom:1px solid var(--border)}
+.arch-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:1rem;max-width:1100px}
+.arch-card{background:var(--bg-card);border:1px solid var(--border);border-radius:10px;padding:1.6rem;transition:all .35s;position:relative;overflow:hidden}
+.arch-card::before{content:'';position:absolute;top:0;left:0;right:0;height:2px;background:linear-gradient(90deg,transparent,var(--c,var(--accent)),transparent);opacity:0;transition:opacity .35s}
+.arch-card:hover{border-color:var(--border-hover);transform:translateY(-2px)}
+.arch-card:hover::before{opacity:1}
+.arch-card.blue{--c:var(--accent)}.arch-card.green{--c:var(--accent-green)}.arch-card.amber{--c:var(--accent-amber)}
+.arch-layer{font-family:'JetBrains Mono',monospace;font-size:.65rem;letter-spacing:.1em;text-transform:uppercase;margin-bottom:.6rem}
+.arch-card.blue .arch-layer{color:var(--accent)}.arch-card.green .arch-layer{color:var(--accent-green)}.arch-card.amber .arch-layer{color:var(--accent-amber)}
+.arch-title{font-size:1.05rem;font-weight:700;margin-bottom:.5rem}
+.arch-desc{font-size:.82rem;color:var(--text-secondary);line-height:1.65}
+.arch-items{margin-top:.8rem;display:flex;flex-wrap:wrap;gap:.35rem}
+.arch-item{padding:.18rem .55rem;font-size:.68rem;font-family:'JetBrains Mono',monospace;border-radius:3px}
+.arch-card.blue .arch-item{background:rgba(96,165,250,.08);color:var(--accent);border:1px solid rgba(96,165,250,.1)}
+.arch-card.green .arch-item{background:rgba(52,211,153,.08);color:var(--accent-green);border:1px solid rgba(52,211,153,.1)}
+.arch-card.amber .arch-item{background:rgba(251,191,36,.08);color:var(--accent-amber);border:1px solid rgba(251,191,36,.1)}
+
+/* HIGHLIGHTS */
+.highlights-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(340px,1fr));gap:1rem;max-width:1200px}
+.hl-card{background:var(--bg-card);border:1px solid var(--border);border-radius:10px;padding:1.5rem;transition:all .35s;display:flex;flex-direction:column}
+.hl-card:hover{border-color:var(--border-hover);background:var(--bg-card-hover)}
+.hl-top{display:flex;align-items:center;gap:.6rem;margin-bottom:.8rem}
+.hl-icon{width:36px;height:36px;border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:1rem}
+.hl-icon.blue{background:rgba(96,165,250,.1);border:1px solid rgba(96,165,250,.15)}
+.hl-icon.green{background:rgba(52,211,153,.1);border:1px solid rgba(52,211,153,.15)}
+.hl-icon.amber{background:rgba(251,191,36,.1);border:1px solid rgba(251,191,36,.15)}
+.hl-icon.red{background:rgba(248,113,113,.1);border:1px solid rgba(248,113,113,.15)}
+.hl-icon.purple{background:rgba(167,139,250,.1);border:1px solid rgba(167,139,250,.15)}
+.hl-icon.orange{background:rgba(251,146,60,.1);border:1px solid rgba(251,146,60,.15)}
+.hl-venue{font-family:'JetBrains Mono',monospace;font-size:.62rem;letter-spacing:.05em;padding:.15rem .45rem;border-radius:3px;font-weight:600}
+.hl-venue.top{background:rgba(248,113,113,.12);color:var(--accent-red)}
+.hl-venue.good{background:rgba(52,211,153,.1);color:var(--accent-green)}
+.hl-title{font-size:.95rem;font-weight:700;margin-bottom:.4rem;line-height:1.45}
+.hl-desc{font-size:.8rem;color:var(--text-secondary);line-height:1.6;margin-bottom:.7rem;flex:1}
+.hl-impact{font-size:.72rem;color:var(--accent-amber);font-family:'JetBrains Mono',monospace;display:flex;align-items:center;gap:.3rem}
+.hl-ref{font-size:.68rem;color:var(--text-muted);margin-top:.5rem;line-height:1.5;border-top:1px solid var(--border);padding-top:.5rem}
+
+/* Demo link */
+.hl-demo-link{
+  display:inline-flex;align-items:center;gap:.4rem;
+  margin-top:.8rem;padding:.4rem .9rem;
+  font-size:.72rem;font-weight:600;
+  color:var(--accent);
+  background:rgba(96,165,250,.06);
+  border:1px solid rgba(96,165,250,.15);
+  border-radius:5px;
+  text-decoration:none;
+  transition:all .3s;
+  align-self:flex-start;
+}
+.hl-demo-link:hover{
+  background:rgba(96,165,250,.12);
+  border-color:rgba(96,165,250,.3);
+  color:var(--accent-bright);
+  transform:translateX(2px);
+}
+.hl-demo-link .arrow{
+  transition:transform .3s;
+  font-size:.8rem;
+}
+.hl-demo-link:hover .arrow{transform:translateX(3px)}
+
+/* PLATFORM (simplified) */
+.platform-section{background:var(--bg-secondary);border-top:1px solid var(--border);border-bottom:1px solid var(--border)}
+.platform-container{max-width:1100px;margin:0 auto}
+.chart-card{background:var(--bg-card);border:1px solid var(--border);border-radius:10px;padding:1.5rem}
+.chart-head{display:flex;align-items:center;justify-content:space-between;margin-bottom:1rem}
+.chart-title{font-size:.85rem;font-weight:600}
+.chart-badge{font-size:.62rem;padding:.15rem .5rem;background:rgba(96,165,250,.07);border:1px solid var(--border);border-radius:3px;color:var(--text-muted);font-family:'JetBrains Mono',monospace}
+.chart-area{height:220px;position:relative}
+.chart-area svg{width:100%;height:100%}
+.chart-note{position:absolute;bottom:.8rem;right:.8rem;font-size:.64rem;color:var(--text-muted);font-family:'JetBrains Mono',monospace;background:rgba(10,14,23,.8);padding:.15rem .5rem;border-radius:3px}
+
+/* PUBLICATIONS */
+.pub-list{max-width:960px;display:flex;flex-direction:column;gap:.8rem}
+.pub-item{display:flex;gap:1.2rem;padding:1.2rem 1.4rem;background:var(--bg-card);border:1px solid var(--border);border-radius:8px;transition:all .3s;align-items:flex-start}
+.pub-item:hover{border-color:var(--border-hover);background:var(--bg-card-hover)}
+.pub-year{font-family:'JetBrains Mono',monospace;font-size:.75rem;color:var(--accent);min-width:40px;font-weight:600;padding-top:.1rem}
+.pub-body{flex:1}
+.pub-title{font-size:.88rem;font-weight:600;line-height:1.45;margin-bottom:.25rem}
+.pub-authors{font-size:.75rem;color:var(--text-muted);margin-bottom:.35rem}
+.pub-venue-tag{display:inline-flex;align-items:center;gap:.25rem;font-size:.68rem;font-family:'JetBrains Mono',monospace;padding:.12rem .45rem;border-radius:3px}
+.pub-venue-tag.s{background:rgba(248,113,113,.1);color:var(--accent-red)}
+.pub-venue-tag.a{background:rgba(251,191,36,.1);color:var(--accent-amber)}
+.pub-venue-tag.b{background:rgba(52,211,153,.1);color:var(--accent-green)}
+.pub-venue-tag.j{background:rgba(96,165,250,.1);color:var(--accent)}
+.pub-award{display:inline-flex;align-items:center;gap:.2rem;font-size:.65rem;color:var(--accent-amber);margin-left:.4rem;font-weight:600}
+
+/* FOOTER */
+footer{padding:2.5rem 3rem;border-top:1px solid var(--border);text-align:center;color:var(--text-muted);font-size:.75rem}
+footer a{color:var(--accent);text-decoration:none}
+
+/* UTILS */
+@keyframes fadeUp{from{opacity:0;transform:translateY(18px)}to{opacity:1;transform:translateY(0)}}
+.fi{opacity:0;transform:translateY(18px);transition:all .55s cubic-bezier(.25,.46,.45,.94)}
+.fi.v{opacity:1;transform:translateY(0)}
+
+@media(max-width:900px){
+  nav{padding:0 1.5rem}.nav-links{display:none}
+  section,.hero{padding:3.5rem 1.5rem}
+  .hero-stats{flex-wrap:wrap;gap:1.5rem}
+  .arch-grid,.highlights-grid{grid-template-columns:1fr}
+}
+</style>
+</head>
+<body>
+
+<nav>
+  <div class="nav-logo"><span class="dot"></span>密码与数字经济安全 · 区块链安全研究</div>
+  <ul class="nav-links">
+    <li><a href="#overview">研究概览</a></li>
+    <li><a href="#highlights">核心成果</a></li>
+    <li><a href="#platform">分析平台</a></li>
+  </ul>
+</nav>
+
+<section class="hero">
+  <div class="hero-grid-bg"></div>
+  <div class="hero-glow hero-glow-1"></div>
+  <div class="hero-glow hero-glow-2"></div>
+  <canvas class="hero-canvas" id="nodeCanvas"></canvas>
+  <div class="hero-content">
+    <div class="hero-badge"><span class="status"></span>密码与数字经济安全全国重点实验室</div>
+    <h1>加密数字货币<span class="hl">安全</span>与<br><span class="hl">风险度量</span>研究</h1>
+    <p class="hero-desc">面向以太坊、币安、波卡等主流区块链平台，系统性地发现共识协议安全缺陷与DeFi经济攻击，推动协议层修复与安全标准演进，构建区块链安全态势感知能力。</p>
+    <div class="hero-stats">
+      <div class="hero-stat"><div class="num" data-target="10">0</div><div class="lbl">顶会/顶刊论文</div></div>
+      <div class="hero-stat"><div class="num" data-target="6000" data-suffix="亿+">0</div><div class="lbl">影响平台市值(美元)</div></div>
+      <div class="hero-stat"><div class="num" data-target="5">0</div><div class="lbl">主流平台发现漏洞</div></div>
+      <div class="hero-stat"><div class="num" data-target="1">0</div><div class="lbl">CCS杰出论文奖</div></div>
+    </div>
+  </div>
+</section>
+
+<section class="overview-section" id="overview">
+  <div class="section-header fi">
+    <div class="section-tag">Research Overview</div>
+    <h2 class="section-title">研究架构</h2>
+    <p class="section-sub">覆盖区块链协议栈三层安全研究</p>
+  </div>
+  <div class="arch-grid">
+    <div class="arch-card blue fi">
+      <div class="arch-layer">Application Layer · 应用层</div>
+      <div class="arch-title">区块链应用安全</div>
+      <div class="arch-desc">针对Dapp、加密钱包、智能合约、跨链桥等应用层组件，发现安全漏洞与攻击面</div>
+      <div class="arch-items">
+        <span class="arch-item">Web3登录缺陷</span><span class="arch-item">钱包漏洞</span><span class="arch-item">合约权限滥用</span><span class="arch-item">跨链不一致</span>
+      </div>
+    </div>
+    <div class="arch-card green fi">
+      <div class="arch-layer">Consensus Layer · 共识层</div>
+      <div class="arch-title">共识机制安全</div>
+      <div class="arch-desc">针对PoS/PoSA共识机制，发现激励缺陷、活性攻击与自私挖矿等协议层漏洞</div>
+      <div class="arch-items">
+        <span class="arch-item">激励机制攻击</span><span class="arch-item">活性攻击</span><span class="arch-item">自私挖矿</span><span class="arch-item">链重组</span>
+      </div>
+    </div>
+    <div class="arch-card amber fi">
+      <div class="arch-layer">Platform · 平台</div>
+      <div class="arch-title">安全态势感知</div>
+      <div class="arch-desc">构建区块链安全分析平台与态势感知能力，实现攻击监测、风险预警与决策支持</div>
+      <div class="arch-items">
+        <span class="arch-item">全网监测</span><span class="arch-item">异常识别</span><span class="arch-item">攻击预警</span><span class="arch-item">实体溯源</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="highlights">
+  <div class="section-header fi">
+    <div class="section-tag">Key Results</div>
+    <h2 class="section-title">核心研究成果</h2>
+    <p class="section-sub">针对多个主流区块链平台发现关键安全缺陷，推动协议修复</p>
+  </div>
+  <div class="highlights-grid">
+
+    <div class="hl-card fi">
+      <div class="hl-top"><span class="hl-venue top">ACM CCS 2024</span></div>
+      <div class="hl-title">Web3登录盲消息攻击</div>
+      <div class="hl-desc">对排名前25的Dapp网站进行安全分析，提出盲消息攻击，首次实现对用户链下数据的未授权访问。受影响用户超200万，总市值约40亿美元。</div>
+      <div class="hl-impact">🏆 ACM CCS 杰出论文奖</div>
+      <a class="hl-demo-link" href="./demo.html?id=web3-blind">查看攻击演示 <span class="arrow">→</span></a>
+    </div>
+
+    <div class="hl-card fi">
+      <div class="hl-top"><span class="hl-venue top">IEEE S&P 2026</span></div>
+      <div class="hl-title">以太坊PoS零成本活性攻击</div>
+      <div class="hl-desc">提出首个无需额外条件的以太坊PoS活性攻击：不需操控网络、不触发罚没，最低仅需23.8%验证者即可导致无区块确认或完全操控交易顺序。</div>
+      <div class="hl-impact">📌 影响以太坊 ~5000亿美元市值</div>
+      <a class="hl-demo-link" href="./demo.html?id=eth-liveness">查看攻击演示 <span class="arrow">→</span></a>
+    </div>
+
+    <div class="hl-card fi">
+      <div class="hl-top"><span class="hl-venue top">Usenix Security 2024</span></div>
+      <div class="hl-title">以太坊阶梯攻击（激励机制）</div>
+      <div class="hl-desc">敌手仅需控制29.6%账户余额，即可让所有诚实节点丧失收益甚至负收益。以太坊官方评价该工作"对交易确认规则至关重要（essential）"。</div>
+      <div class="hl-impact">📌 以太坊官方确认 & 修复</div>
+      <a class="hl-demo-link" href="./demo.html?id=eth-staircase">查看攻击演示 <span class="arrow">→</span></a>
+    </div>
+
+    <div class="hl-card fi">
+      <div class="hl-top"><span class="hl-venue top">NDSS 2026</span></div>
+      <div class="hl-title">BunnyFinder：自动化激励漏洞发掘</div>
+      <div class="hl-desc">借鉴软件错误注入思想，结合强化学习自动生成攻击策略，发现三种新型激励机制攻击：自私挖矿、阶梯攻击-II、皮洛士胜利攻击。</div>
+      <div class="hl-impact">📌 与蚂蚁区块链合作 · 自动化漏洞发现</div>
+      <a class="hl-demo-link" href="./demo.html?id=bunnyfinder">查看攻击演示 <span class="arrow">→</span></a>
+    </div>
+
+    <div class="hl-card fi">
+      <div class="hl-top"><span class="hl-venue top">Usenix Security 2025</span></div>
+      <div class="hl-title">AA机制：可证明安全的链重组防御</div>
+      <div class="hl-desc">基于f+1投票提出"存在性投票"机制，在网络同步时彻底解决链重组问题。发表后迅速获以太坊基金会关注，获邀讨论落地并进入EIP阶段。</div>
+      <div class="hl-impact">📌 以太坊基金会邀请讨论 · 推进EIP落地</div>
+      <a class="hl-demo-link" href="./demo.html?id=eth-aa">查看攻击演示 <span class="arrow">→</span></a>
+    </div>
+
+    <div class="hl-card fi">
+      <div class="hl-top"><span class="hl-venue top">Usenix Security 2025</span></div>
+      <div class="hl-title">币安链共识活性攻击</div>
+      <div class="hl-desc">针对币安（~1000亿美元市值）的Fast Finality机制，提出三种攻击使区块确认速度降低一个量级甚至完全无法出块。</div>
+      <div class="hl-impact">📌 影响币安 ~1000亿美元市值</div>
+      <a class="hl-demo-link" href="./demo.html?id=bsc-finality">查看攻击演示 <span class="arrow">→</span></a>
+    </div>
+
+    <div class="hl-card fi">
+      <div class="hl-top"><span class="hl-venue good">WWW 2026</span></div>
+      <div class="hl-title">波卡链无风险自私挖矿攻击</div>
+      <div class="hl-desc">提出首个混合可预测性模型下的无风险自私挖矿攻击，在低于20%质押量时攻击收益即超过比特币经典自私挖矿。</div>
+      <div class="hl-impact">📌 影响波卡 ~70亿美元市值</div>
+      <a class="hl-demo-link" href="./demo.html?id=polkadot-selfish">查看攻击演示 <span class="arrow">→</span></a>
+    </div>
+
+    <div class="hl-card fi">
+      <div class="hl-top"><span class="hl-venue good">WWW 2023 / TDSC</span></div>
+      <div class="hl-title">DApp生态中心化安全风险</div>
+      <div class="hl-desc">96.4%的以太坊官方推荐钱包存在安全风险（总下载量超1亿次），83.5%链上合约存在权限滥用（含260个知名合约，总市值~980亿）。</div>
+      <div class="hl-impact">📌 1亿+下载量钱包受影响</div>
+      <a class="hl-demo-link" href="./demo.html?id=dapp-central">查看攻击演示 <span class="arrow">→</span></a>
+    </div>
+
+  </div>
+</section>
+
+<!-- PLATFORM (simplified) -->
+<section class="platform-section" id="platform">
+  <div class="platform-container">
+    <div class="section-header fi">
+      <div class="section-tag">Analytics Platform</div>
+      <h2 class="section-title">区块链安全态势感知平台</h2>
+      <p class="section-sub">持续监测区块链生态，实现风险趋势感知与事前预警</p>
+    </div>
+
+    <div class="chart-card fi">
+      <div class="chart-head">
+        <span class="chart-title">攻击事件趋势监测</span>
+        <span class="chart-badge">DEMO · 待接入数据</span>
+      </div>
+      <div class="chart-area">
+        <svg viewBox="0 0 900 220" xmlns="http://www.w3.org/2000/svg">
+          <defs>
+            <linearGradient id="ag" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="#60a5fa" stop-opacity=".2"/><stop offset="100%" stop-color="#60a5fa" stop-opacity="0"/></linearGradient>
+            <linearGradient id="lg" x1="0" y1="0" x2="1" y2="0"><stop offset="0%" stop-color="#2563eb"/><stop offset="100%" stop-color="#60a5fa"/></linearGradient>
+            <linearGradient id="ag2" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="#34d399" stop-opacity=".15"/><stop offset="100%" stop-color="#34d399" stop-opacity="0"/></linearGradient>
+            <linearGradient id="lg2" x1="0" y1="0" x2="1" y2="0"><stop offset="0%" stop-color="#059669"/><stop offset="100%" stop-color="#34d399"/></linearGradient>
+          </defs>
+          <!-- Grid -->
+          <line x1="50" y1="190" x2="870" y2="190" stroke="rgba(148,163,184,.08)"/>
+          <line x1="50" y1="140" x2="870" y2="140" stroke="rgba(148,163,184,.04)"/>
+          <line x1="50" y1="90" x2="870" y2="90" stroke="rgba(148,163,184,.04)"/>
+          <line x1="50" y1="40" x2="870" y2="40" stroke="rgba(148,163,184,.04)"/>
+          <!-- Y labels -->
+          <text x="42" y="194" fill="#64748b" font-size="9" font-family="JetBrains Mono" text-anchor="end">0</text>
+          <text x="42" y="144" fill="#64748b" font-size="9" font-family="JetBrains Mono" text-anchor="end">25</text>
+          <text x="42" y="94" fill="#64748b" font-size="9" font-family="JetBrains Mono" text-anchor="end">50</text>
+          <text x="42" y="44" fill="#64748b" font-size="9" font-family="JetBrains Mono" text-anchor="end">75</text>
+          <!-- X labels -->
+          <text x="50" y="208" fill="#64748b" font-size="8" font-family="JetBrains Mono" text-anchor="middle">2023</text>
+          <text x="255" y="208" fill="#64748b" font-size="8" font-family="JetBrains Mono" text-anchor="middle">2023 Q3</text>
+          <text x="460" y="208" fill="#64748b" font-size="8" font-family="JetBrains Mono" text-anchor="middle">2024</text>
+          <text x="665" y="208" fill="#64748b" font-size="8" font-family="JetBrains Mono" text-anchor="middle">2024 Q3</text>
+          <text x="870" y="208" fill="#64748b" font-size="8" font-family="JetBrains Mono" text-anchor="middle">2025</text>
+          <!-- Area 1 - attacks -->
+          <path d="M50,160 C120,150 180,170 255,130 S380,80 460,100 S560,55 620,65 S740,105 790,80 L870,90 L870,190 L50,190 Z" fill="url(#ag)"/>
+          <path d="M50,160 C120,150 180,170 255,130 S380,80 460,100 S560,55 620,65 S740,105 790,80 L870,90" fill="none" stroke="url(#lg)" stroke-width="2" stroke-linecap="round"/>
+          <!-- Area 2 - DeFi -->
+          <path d="M50,175 C120,168 180,178 255,155 S380,130 460,140 S560,110 620,118 S740,135 790,125 L870,130 L870,190 L50,190 Z" fill="url(#ag2)"/>
+          <path d="M50,175 C120,168 180,178 255,155 S380,130 460,140 S560,110 620,118 S740,135 790,125 L870,130" fill="none" stroke="url(#lg2)" stroke-width="1.5" stroke-linecap="round"/>
+          <!-- Dots -->
+          <circle cx="255" cy="130" r="3.5" fill="#60a5fa" stroke="#0a0e17" stroke-width="2"/>
+          <circle cx="460" cy="100" r="3.5" fill="#60a5fa" stroke="#0a0e17" stroke-width="2"/>
+          <circle cx="620" cy="65" r="3.5" fill="#60a5fa" stroke="#0a0e17" stroke-width="2"/>
+          <circle cx="790" cy="80" r="3.5" fill="#60a5fa" stroke="#0a0e17" stroke-width="2"/>
+          <circle cx="255" cy="155" r="3" fill="#34d399" stroke="#0a0e17" stroke-width="2"/>
+          <circle cx="460" cy="140" r="3" fill="#34d399" stroke="#0a0e17" stroke-width="2"/>
+          <circle cx="620" cy="118" r="3" fill="#34d399" stroke="#0a0e17" stroke-width="2"/>
+          <!-- Legend -->
+          <rect x="60" y="25" width="8" height="8" rx="2" fill="#60a5fa"/>
+          <text x="72" y="33" fill="#94a3b8" font-size="9" font-family="Noto Sans SC">共识层攻击事件</text>
+          <rect x="190" y="25" width="8" height="8" rx="2" fill="#34d399"/>
+          <text x="202" y="33" fill="#94a3b8" font-size="9" font-family="Noto Sans SC">DeFi安全事件</text>
+        </svg>
+        <div class="chart-note">// 待接入真实数据源</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+
+<footer>
+  密码与数字经济安全全国重点实验室 · 清华大学<br>
+  <span style="margin-top:.3rem;display:inline-block;">© 2026</span>
+</footer>
+
+<script>
+const obs=new IntersectionObserver(es=>{es.forEach(e=>{if(e.isIntersecting)e.target.classList.add('v')})},{threshold:.1});
+document.querySelectorAll('.fi').forEach(el=>obs.observe(el));
+
+function countUp(el,target,suffix,dur=1400){let s=0;const step=ts=>{if(!s)s=ts;const p=Math.min((ts-s)/dur,1);el.textContent=Math.floor((1-Math.pow(1-p,3))*target)+(suffix||'');if(p<1)requestAnimationFrame(step)};requestAnimationFrame(step)}
+const cObs=new IntersectionObserver(es=>{es.forEach(e=>{if(e.isIntersecting&&!e.target.dataset.done){e.target.dataset.done='1';countUp(e.target,+e.target.dataset.target,e.target.dataset.suffix||'')}})},{threshold:.5});
+document.querySelectorAll('[data-target]').forEach(el=>cObs.observe(el));
+
+const c=document.getElementById('nodeCanvas'),ctx=c.getContext('2d');let nodes=[];
+function resize(){c.width=c.offsetWidth*devicePixelRatio;c.height=c.offsetHeight*devicePixelRatio;ctx.setTransform(devicePixelRatio,0,0,devicePixelRatio,0,0)}
+function init(n=35){nodes=[];const w=c.offsetWidth,h=c.offsetHeight;for(let i=0;i<n;i++)nodes.push({x:Math.random()*w,y:Math.random()*h,vx:(Math.random()-.5)*.35,vy:(Math.random()-.5)*.35,r:Math.random()*1.8+1})}
+function draw(){const w=c.offsetWidth,h=c.offsetHeight;ctx.clearRect(0,0,w,h);for(let i=0;i<nodes.length;i++)for(let j=i+1;j<nodes.length;j++){const dx=nodes[i].x-nodes[j].x,dy=nodes[i].y-nodes[j].y,d=Math.sqrt(dx*dx+dy*dy);if(d<130){ctx.beginPath();ctx.moveTo(nodes[i].x,nodes[i].y);ctx.lineTo(nodes[j].x,nodes[j].y);ctx.strokeStyle=`rgba(96,165,250,${.1*(1-d/130)})`;ctx.lineWidth=.6;ctx.stroke()}}nodes.forEach(n=>{ctx.beginPath();ctx.arc(n.x,n.y,n.r,0,Math.PI*2);ctx.fillStyle='rgba(96,165,250,.45)';ctx.fill();n.x+=n.vx;n.y+=n.vy;if(n.x<0||n.x>w)n.vx*=-1;if(n.y<0||n.y>h)n.vy*=-1});requestAnimationFrame(draw)}
+window.addEventListener('resize',()=>{resize();init()});resize();init();draw();
+</script>
+</body>
+</html>
