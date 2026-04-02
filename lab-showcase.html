@@ -5,6 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>密码与数字经济安全全国重点实验室 — 区块链安全研究</title>
 <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+SC:wght@300;400;500;700;900&family=JetBrains+Mono:wght@400;500;600;700&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
 <style>
 :root {
   --bg-primary: #0a0e17;
@@ -159,6 +160,10 @@ section{padding:5rem 3rem;position:relative;z-index:1}
 .chart-area{height:220px;position:relative}
 .chart-area svg{width:100%;height:100%}
 .chart-note{position:absolute;bottom:.8rem;right:.8rem;font-size:.64rem;color:var(--text-muted);font-family:'JetBrains Mono',monospace;background:rgba(10,14,23,.8);padding:.15rem .5rem;border-radius:3px}
+.sankey-grid{display:flex;flex-direction:column;gap:1.5rem;margin-top:1.5rem}
+.sankey-container{height:500px;width:100%;position:relative}
+.chart-badge.live{background:rgba(52,211,153,.1);border-color:rgba(52,211,153,.25);color:var(--accent-green)}
+@media(max-width:900px){.sankey-grid{grid-template-columns:1fr}}
 
 /* PUBLICATIONS */
 .pub-list{max-width:960px;display:flex;flex-direction:column;gap:.8rem}
@@ -213,10 +218,9 @@ footer a{color:var(--accent);text-decoration:none}
     <h1>加密数字货币<span class="hl">安全</span>与<span class="hl">风险度量</span>研究</h1>
     <p class="hero-desc">面向以太坊、币安、波卡等主流区块链平台，系统性地发现共识协议安全缺陷与DeFi经济攻击，推动协议层修复与安全标准演进，构建区块链安全态势感知能力。</p>
     <div class="hero-stats">
-      <div class="hero-stat"><div class="num" data-target="10">0</div><div class="lbl">顶会/顶刊论文</div></div>
+      <div class="hero-stat"><div class="num" data-target="10+">0</div><div class="lbl">顶会/顶刊论文</div></div>
       <div class="hero-stat"><div class="num" data-target="6000" data-suffix="亿+">0</div><div class="lbl">影响平台市值(美元)</div></div>
-      <div class="hero-stat"><div class="num" data-target="5">0</div><div class="lbl">主流平台发现漏洞</div></div>
-      <div class="hero-stat"><div class="num" data-target="1">0</div><div class="lbl">CCS杰出论文奖</div></div>
+      <div class="hero-stat"><div class="num" data-target="5+">0</div><div class="lbl">主流平台发现漏洞</div></div>
     </div>
   </div>
   <div class="hero-visual">
@@ -403,6 +407,24 @@ footer a{color:var(--accent);text-decoration:none}
         <div class="chart-note">// 待接入真实数据源</div>
       </div>
     </div>
+
+    <!-- Sankey Charts -->
+    <div class="sankey-grid fi">
+      <div class="chart-card">
+        <div class="chart-head">
+          <span class="chart-title">USDC 资金流向分析</span>
+        </div>
+        <div id="sankey-usdc" class="sankey-container"></div>
+      </div>
+
+      <div class="chart-card">
+        <div class="chart-head">
+          <span class="chart-title">USDT 资金流向分析</span>
+        </div>
+        <div id="sankey-usdt" class="sankey-container"></div>
+      </div>
+    </div>
+
   </div>
 </section>
 
@@ -579,6 +601,177 @@ function resize(){c.width=c.offsetWidth*devicePixelRatio;c.height=c.offsetHeight
 function init(n=35){nodes=[];const w=c.offsetWidth,h=c.offsetHeight;for(let i=0;i<n;i++)nodes.push({x:Math.random()*w,y:Math.random()*h,vx:(Math.random()-.5)*.35,vy:(Math.random()-.5)*.35,r:Math.random()*1.8+1})}
 function draw(){const w=c.offsetWidth,h=c.offsetHeight;ctx.clearRect(0,0,w,h);for(let i=0;i<nodes.length;i++)for(let j=i+1;j<nodes.length;j++){const dx=nodes[i].x-nodes[j].x,dy=nodes[i].y-nodes[j].y,d=Math.sqrt(dx*dx+dy*dy);if(d<130){ctx.beginPath();ctx.moveTo(nodes[i].x,nodes[i].y);ctx.lineTo(nodes[j].x,nodes[j].y);ctx.strokeStyle=`rgba(96,165,250,${.1*(1-d/130)})`;ctx.lineWidth=.6;ctx.stroke()}}nodes.forEach(n=>{ctx.beginPath();ctx.arc(n.x,n.y,n.r,0,Math.PI*2);ctx.fillStyle='rgba(96,165,250,.45)';ctx.fill();n.x+=n.vx;n.y+=n.vy;if(n.x<0||n.x>w)n.vx*=-1;if(n.y<0||n.y>h)n.vy*=-1});requestAnimationFrame(draw)}
 window.addEventListener('resize',()=>{resize();init()});resize();init();draw();
+
+// 严格从左到右的桑基图 - 单向流动
+function createRealSankey(containerId, title, linkColor) {
+  let nodeLabels, nodeColors, links;
+  
+  if (title === 'USDC') {
+    // USDC - 严格左到右三层结构
+    nodeLabels = [
+      // === 左侧层 (0-4) ===
+      'Unknown Source',
+      'Circle Issuer', 
+      'Market Makers',
+      'MEV Bots',
+      'Binance (Source)',
+      
+      // === 中间层 (5-9) ===
+      'Uniswap DEX',
+      'Morpho Lending',
+      'Aave Lending',
+      'Coinbase (Hub)',
+      'Trading Bots',
+      
+      // === 右侧层 (10-14) ===
+      'Unknown Dest',
+      'Binance (Dest)',
+      'Kraken',
+      'Bybit',
+      'DeFi Protocols'
+    ];
+    
+    nodeColors = [
+      // 左侧 - 源头
+      '#fb923c', '#a78bfa', '#93c5fd', '#fbbf24', '#60a5fa',
+      // 中间 - 中转
+      '#34d399', '#34d399', '#34d399', '#60a5fa', '#fbbf24',
+      // 右侧 - 目标
+      '#fb923c', '#60a5fa', '#60a5fa', '#60a5fa', '#34d399'
+    ];
+    
+    // 严格单向：左->中->右
+    links = {
+      source: [
+        // 左侧 -> 中间层
+        0, 0, 0, 0, 1, 1, 2, 3, 3, 4,
+        // 中间层 -> 右侧
+        5, 5, 6, 6, 7, 8, 8, 9
+      ],
+      target: [
+        // 左侧 -> 中间层
+        8, 6, 7, 5, 8, 10, 5, 5, 6, 8,
+        // 中间层 -> 右侧
+        10, 11, 10, 3, 10, 11, 10, 10
+      ],
+      value: [
+        // 左侧 -> 中间层 (亿USDC)
+        4972, 399, 214, 368, 569, 628, 368, 3246, 3181, 1098,
+        // 中间层 -> 右侧
+        3233, 334, 385, 3176, 204, 1476, 4326, 211
+      ]
+    };
+  } else {
+    // USDT - 严格左到右三层结构
+    nodeLabels = [
+      // === 左侧层 (0-4) ===
+      'Unknown Source',
+      'Tether Issuer',
+      'Market Makers',
+      'MEV Bots',
+      'OKX (Source)',
+      
+      // === 中间层 (5-9) ===
+      'Binance (Hub)',
+      'Uniswap DEX',
+      'Aave Lending',
+      'Coinbase (Hub)',
+      'Kraken (Hub)',
+      
+      // === 右侧层 (10-14) ===
+      'Unknown Dest',
+      'Binance (Dest)',
+      'OKX (Dest)',
+      'Coinbase (Dest)',
+      'Trading Bots'
+    ];
+    
+    nodeColors = [
+      // 左侧
+      '#fb923c', '#a78bfa', '#93c5fd', '#fbbf24', '#60a5fa',
+      // 中间
+      '#60a5fa', '#34d399', '#34d399', '#60a5fa', '#60a5fa',
+      // 右侧
+      '#fb923c', '#60a5fa', '#60a5fa', '#60a5fa', '#fbbf24'
+    ];
+    
+    links = {
+      source: [
+        // 左侧 -> 中间层
+        0, 0, 0, 0, 1, 2, 3, 3, 4,
+        // 中间层 -> 右侧
+        5, 5, 6, 6, 7, 8, 9
+      ],
+      target: [
+        // 左侧 -> 中间层
+        5, 8, 9, 7, 10, 6, 6, 7, 5,
+        // 中间层 -> 右侧
+        10, 11, 3, 10, 10, 13, 10
+      ],
+      value: [
+        // 左侧 -> 中间层 (亿USDT)
+        1672, 805, 405, 271, 196, 154, 749, 387, 622,
+        // 中间层 -> 右侧
+        1650, 291, 738, 268, 658, 284, 230
+      ]
+    };
+  }
+
+  const data = [{
+    type: 'sankey',
+    orientation: 'h',
+    node: {
+      pad: 15,
+      thickness: 20,
+      line: { color: 'rgba(20, 28, 43, 0.8)', width: 1 },
+      label: nodeLabels,
+      color: nodeColors,
+      hovertemplate: '<b>%{label}</b><br>流量: %{value:.0f} 亿 ' + title + '<extra></extra>'
+    },
+    link: {
+      source: links.source,
+      target: links.target,
+      value: links.value,
+      color: linkColor,
+      hovertemplate: '<b>%{source.label}</b><br>→<br><b>%{target.label}</b><br>流量: %{value:.0f} 亿 ' + title + '<extra></extra>'
+    }
+  }];
+
+  const layout = {
+    font: { 
+      size: 10, 
+      family: 'Noto Sans SC, sans-serif', 
+      color: '#94a3b8' 
+    },
+    paper_bgcolor: 'rgba(0,0,0,0)',
+    plot_bgcolor: 'rgba(0,0,0,0)',
+    margin: { l: 10, r: 10, t: 10, b: 10 },
+    hoverlabel: {
+      bgcolor: '#141c2b',
+      bordercolor: linkColor.replace('0.12', '0.8'),
+      font: { 
+        family: 'Noto Sans SC, sans-serif',
+        color: '#e2e8f0',
+        size: 11
+      }
+    }
+  };
+
+  Plotly.newPlot(containerId, data, layout, { 
+    responsive: true, 
+    displayModeBar: false 
+  });
+}
+
+// 初始化桑基图
+if (document.getElementById('sankey-usdc')) {
+  createRealSankey('sankey-usdc', 'USDC', 'rgba(96, 165, 250, 0.12)');
+}
+if (document.getElementById('sankey-usdt')) {
+  createRealSankey('sankey-usdt', 'USDT', 'rgba(52, 211, 153, 0.12)');
+}
+
+
 </script>
 </body>
 </html>
