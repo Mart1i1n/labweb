@@ -4,6 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>密码与数字经济安全全国重点实验室 — 区块链安全研究</title>
+<script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
 <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+SC:wght@300;400;500;700;900&family=JetBrains+Mono:wght@400;500;600;700&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
 <style>
 :root {
@@ -578,6 +579,77 @@ function resize(){c.width=c.offsetWidth*devicePixelRatio;c.height=c.offsetHeight
 function init(n=35){nodes=[];const w=c.offsetWidth,h=c.offsetHeight;for(let i=0;i<n;i++)nodes.push({x:Math.random()*w,y:Math.random()*h,vx:(Math.random()-.5)*.35,vy:(Math.random()-.5)*.35,r:Math.random()*1.8+1})}
 function draw(){const w=c.offsetWidth,h=c.offsetHeight;ctx.clearRect(0,0,w,h);for(let i=0;i<nodes.length;i++)for(let j=i+1;j<nodes.length;j++){const dx=nodes[i].x-nodes[j].x,dy=nodes[i].y-nodes[j].y,d=Math.sqrt(dx*dx+dy*dy);if(d<130){ctx.beginPath();ctx.moveTo(nodes[i].x,nodes[i].y);ctx.lineTo(nodes[j].x,nodes[j].y);ctx.strokeStyle=`rgba(96,165,250,${.1*(1-d/130)})`;ctx.lineWidth=.6;ctx.stroke()}}nodes.forEach(n=>{ctx.beginPath();ctx.arc(n.x,n.y,n.r,0,Math.PI*2);ctx.fillStyle='rgba(96,165,250,.45)';ctx.fill();n.x+=n.vx;n.y+=n.vy;if(n.x<0||n.x>w)n.vx*=-1;if(n.y<0||n.y>h)n.vy*=-1});requestAnimationFrame(draw)}
 window.addEventListener('resize',()=>{resize();init()});resize();init();draw();
+
+// 桑基图 - 从左到右
+function createRealSankey(containerId, title, linkColor) {
+  const nodeLabels = title === 'USDC' ? [
+    'Unknown Source','Circle Issuer','Market Makers','MEV Bots','Binance (Source)',
+    'Uniswap DEX','Morpho Lending','Aave Lending','Coinbase (Hub)','Trading Bots',
+    'Unknown Dest','Binance (Dest)','Kraken','Bybit','DeFi Protocols'
+  ] : [
+    'Unknown Source','Tether Issuer','Market Makers','MEV Bots','OKX (Source)',
+    'Binance (Hub)','Uniswap DEX','Aave Lending','Coinbase (Hub)','Kraken (Hub)',
+    'Unknown Dest','Binance (Dest)','OKX (Dest)','Coinbase (Dest)','Trading Bots'
+  ];
+  
+  const nodeColors = title === 'USDC' ? [
+    '#fb923c','#a78bfa','#93c5fd','#fbbf24','#60a5fa',
+    '#34d399','#34d399','#34d399','#60a5fa','#fbbf24',
+    '#fb923c','#60a5fa','#60a5fa','#60a5fa','#34d399'
+  ] : [
+    '#fb923c','#a78bfa','#93c5fd','#fbbf24','#60a5fa',
+    '#60a5fa','#34d399','#34d399','#60a5fa','#60a5fa',
+    '#fb923c','#60a5fa','#60a5fa','#60a5fa','#fbbf24'
+  ];
+  
+  const links = title === 'USDC' ? {
+    source: [0,0,0,0,1,1,2,3,3,4, 5,5,6,6,7,8,8,9],
+    target: [8,6,7,5,8,10,5,5,6,8, 10,11,10,3,10,11,10,10],
+    value: [4972,399,214,368,569,628,368,3246,3181,1098, 3233,334,385,3176,204,1476,4326,211]
+  } : {
+    source: [0,0,0,0,1,2,3,3,4, 5,5,6,6,7,8,9],
+    target: [5,8,9,7,10,6,6,7,5, 10,11,3,10,10,13,10],
+    value: [1672,805,405,271,196,154,749,387,622, 1650,291,738,268,658,284,230]
+  };
+
+  Plotly.newPlot(containerId, [{
+    type: 'sankey',
+    orientation: 'h',
+    node: {
+      pad: 15,
+      thickness: 20,
+      line: { color: 'rgba(20,28,43,0.8)', width: 1 },
+      label: nodeLabels,
+      color: nodeColors,
+      hovertemplate: '<b>%{label}</b><br>流量: %{value:.0f} 亿 '+title+'<extra></extra>'
+    },
+    link: {
+      source: links.source,
+      target: links.target,
+      value: links.value,
+      color: linkColor,
+      hovertemplate: '<b>%{source.label}</b><br>→<br><b>%{target.label}</b><br>流量: %{value:.0f} 亿 '+title+'<extra></extra>'
+    }
+  }], {
+    font: { size: 10, family: 'Noto Sans SC, sans-serif', color: '#94a3b8' },
+    paper_bgcolor: 'rgba(0,0,0,0)',
+    plot_bgcolor: 'rgba(0,0,0,0)',
+    margin: { l: 10, r: 10, t: 10, b: 10 },
+    hoverlabel: {
+      bgcolor: '#141c2b',
+      bordercolor: linkColor.replace('0.12','0.8'),
+      font: { family: 'Noto Sans SC, sans-serif', color: '#e2e8f0', size: 11 }
+    }
+  }, { responsive: true, displayModeBar: false });
+}
+
+if (document.getElementById('sankey-usdc')) {
+  createRealSankey('sankey-usdc', 'USDC', 'rgba(96,165,250,0.12)');
+}
+if (document.getElementById('sankey-usdt')) {
+  createRealSankey('sankey-usdt', 'USDT', 'rgba(52,211,153,0.12)');
+}
+
 </script>
 </body>
 </html>

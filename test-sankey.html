@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<title>桑基图测试</title>
+<script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
+<style>
+body { background: #0a0e17; color: #e2e8f0; font-family: sans-serif; padding: 20px; }
+.container { max-width: 1200px; margin: 0 auto; }
+h1 { color: #60a5fa; }
+#sankey { height: 600px; background: #141c2b; border: 1px solid rgba(96,165,250,0.2); border-radius: 8px; padding: 10px; }
+</style>
+</head>
+<body>
+<div class="container">
+  <h1>桑基图测试</h1>
+  <div id="sankey"></div>
+</div>
+
+<script>
+// 简单测试数据
+const data = [{
+  type: 'sankey',
+  orientation: 'h',
+  node: {
+    pad: 15,
+    thickness: 20,
+    line: { color: '#141c2b', width: 1 },
+    label: ['A', 'B', 'C', 'D', 'E', 'F'],
+    color: ['#60a5fa', '#34d399', '#fbbf24', '#60a5fa', '#34d399', '#fb923c']
+  },
+  link: {
+    source: [0, 0, 1, 1, 2],
+    target: [2, 3, 3, 4, 5],
+    value: [100, 80, 50, 60, 90],
+    color: 'rgba(96, 165, 250, 0.2)'
+  }
+}];
+
+const layout = {
+  font: { size: 12, color: '#94a3b8' },
+  paper_bgcolor: 'rgba(0,0,0,0)',
+  plot_bgcolor: 'rgba(0,0,0,0)',
+  margin: { l: 10, r: 10, t: 10, b: 10 }
+};
+
+console.log('开始渲染桑基图...');
+Plotly.newPlot('sankey', data, layout, { responsive: true, displayModeBar: false })
+  .then(() => console.log('桑基图渲染成功！'))
+  .catch(err => console.error('桑基图渲染失败:', err));
+</script>
+</body>
+</html>
