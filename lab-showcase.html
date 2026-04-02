@@ -553,10 +553,10 @@ footer a{color:var(--accent);text-decoration:none}
       bx.beginPath();bx.arc(x,y,r*.6,0,Math.PI*2);
       bx.strokeStyle=`rgba(${cr},.35)`;bx.lineWidth=.8;bx.stroke();
       // Label
-      bx.fillStyle=color;
-      bx.font='bold 9px "JetBrains Mono",monospace';
-      bx.textAlign='center';bx.textBaseline='middle';
-      bx.fillText(label,x,y);
+      // bx.fillStyle=color;
+      // bx.font='bold 9px "JetBrains Mono",monospace';
+      // bx.textAlign='center';bx.textBaseline='middle';
+      // bx.fillText(label,x,y);
     });
 
     requestAnimationFrame(draw);
