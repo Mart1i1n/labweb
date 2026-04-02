@@ -223,7 +223,7 @@ footer a{color:var(--accent);text-decoration:none}
     <canvas class="hero-canvas" id="nodeCanvas"></canvas>
     <div class="hero-ring-r3"></div>
     <div class="hero-ring-r2"></div>
-    <div class="hero-ring"><div class="hero-ring-inner">🛡️</div></div>
+    <div class="hero-ring"><div class="hero-ring-inner"></div></div>
     <div class="hbf amber" style="top:5%;left:12%;animation-delay:0s">🏆 CCS 杰出论文奖<span class="hbf-sub">Outstanding Paper Award</span></div>
     <div class="hbf red" style="top:18%;right:4%;animation-delay:.9s">IEEE S&P 2026<span class="hbf-sub">以太坊活性攻击</span></div>
     <div class="hbf red" style="top:44%;left:2%;animation-delay:1.8s">ACM CCS 2024<span class="hbf-sub">Web3盲消息攻击</span></div>
@@ -453,9 +453,9 @@ footer a{color:var(--accent);text-decoration:none}
     const dx=x2-x1,dy=y2-y1,len=Math.sqrt(dx*dx+dy*dy);
     if(len<2)return[[x1,y1],[x2,y2]];
     const px=-dy/len,py=dx/len;
-    const off=(Math.random()-.5)*len*.45;
+    const off=(Math.random()-.5)*len*.15;
     const cx=(x1+x2)/2+px*off,cy=(y1+y2)/2+py*off;
-    const jag=Math.min(len*.12,28);
+    const jag=Math.min(len*.04,10);
     for(let i=1;i<segs;i++){
       const t=i/segs;
       const bpx=(1-t)*(1-t)*x1+2*(1-t)*t*cx+t*t*x2;
@@ -486,7 +486,7 @@ footer a{color:var(--accent);text-decoration:none}
   function draw(){
     bx.clearRect(0,0,W,H);
     frame++;
-    if(frame%45===0&&arcs.length<5)spawnArc();
+    if(frame%45===0&&arcs.length<1)spawnArc();
 
     // Small nodes
     smalls.forEach(n=>{
@@ -554,10 +554,10 @@ footer a{color:var(--accent);text-decoration:none}
       bx.beginPath();bx.arc(x,y,r*.6,0,Math.PI*2);
       bx.strokeStyle=`rgba(${cr},.35)`;bx.lineWidth=.8;bx.stroke();
       // Label
-      bx.fillStyle=color;
-      bx.font='bold 9px "JetBrains Mono",monospace';
-      bx.textAlign='center';bx.textBaseline='middle';
-      bx.fillText(label,x,y);
+      // bx.fillStyle=color;
+      // bx.font='bold 9px "JetBrains Mono",monospace';
+      // bx.textAlign='center';bx.textBaseline='middle';
+      // bx.fillText(label,x,y);
     });
 
     requestAnimationFrame(draw);
