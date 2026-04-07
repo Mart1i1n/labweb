@@ -1,0 +1,1359 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Web3中的中心化安全风险：钱包与智能合约</title>
+  <style>
+    :root {
+      --bg: #0a0e17;
+      --bg-2: #0f1420;
+      --card: rgba(20, 28, 43, 0.9);
+      --card-2: rgba(25, 34, 52, 0.96);
+      --line: rgba(99, 179, 237, 0.12);
+      --line-strong: rgba(99, 179, 237, 0.28);
+      --blue: #60a5fa;
+      --blue-2: #93c5fd;
+      --red: #f87171;
+      --red-2: #fca5a5;
+      --violet: #8b5cf6;
+      --violet-2: #c4b5fd;
+      --green: #34d399;
+      --amber: #fbbf24;
+      --txt: #e2e8f0;
+      --txt-2: #94a3b8;
+      --txt-3: #64748b;
+      --shadow: 0 24px 60px rgba(3, 8, 20, 0.34);
+      --radius-lg: 18px;
+      --radius-md: 14px;
+      --radius-sm: 10px;
+      --sans: "Noto Sans SC", "PingFang SC", "Microsoft YaHei", sans-serif;
+      --mono: "JetBrains Mono", "Consolas", monospace;
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      font-family: var(--sans);
+      color: var(--txt);
+      background:
+        radial-gradient(circle at top right, rgba(96, 165, 250, 0.08), transparent 24%),
+        radial-gradient(circle at bottom left, rgba(248, 113, 113, 0.06), transparent 20%),
+        var(--bg);
+      overflow-x: hidden;
+    }
+
+    body::before {
+      content: "";
+      position: fixed;
+      inset: 0;
+      pointer-events: none;
+      background-image:
+        linear-gradient(rgba(96, 165, 250, 0.02) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(96, 165, 250, 0.02) 1px, transparent 1px);
+      background-size: 50px 50px;
+      mask-image: radial-gradient(ellipse 72% 62% at 50% 26%, black, transparent);
+    }
+
+    a {
+      color: inherit;
+    }
+
+    .topbar {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      z-index: 100;
+      height: 52px;
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+      padding: 0 2rem;
+      background: rgba(10, 14, 23, 0.9);
+      backdrop-filter: blur(20px);
+      border-bottom: 1px solid var(--line);
+    }
+
+    .back-btn {
+      color: var(--txt-2);
+      text-decoration: none;
+      font-size: 1.05rem;
+      display: flex;
+      align-items: center;
+      gap: 0.3rem;
+      transition: color 0.3s;
+      white-space: nowrap;
+    }
+
+    .back-btn:hover {
+      color: var(--blue-2);
+    }
+
+    .topbar-title {
+      font-size: 1.1rem;
+      font-weight: 600;
+      color: var(--txt);
+      white-space: nowrap;
+    }
+
+    .topbar-venue {
+      font-family: var(--mono);
+      font-size: 0.85rem;
+      padding: 0.12rem 0.4rem;
+      border-radius: 3px;
+      background: rgba(248, 113, 113, 0.1);
+      color: var(--red);
+      font-weight: 600;
+      white-space: nowrap;
+    }
+
+    .page {
+      position: relative;
+      z-index: 1;
+      max-width: 1360px;
+      margin: 0 auto;
+      padding: 72px 24px 56px;
+    }
+
+    .layout {
+      display: grid;
+      gap: 20px;
+    }
+
+    .hero,
+    .section,
+    .graph-wrap,
+    .risk-panel,
+    .footer {
+      background: var(--card);
+      border: 1px solid var(--line);
+      border-radius: var(--radius-lg);
+      box-shadow: var(--shadow);
+    }
+
+    .hero {
+      padding: 32px;
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 22px;
+    }
+
+    .kicker {
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      padding: 0.28rem 0.8rem;
+      border-radius: 999px;
+      background: rgba(96, 165, 250, 0.08);
+      border: 1px solid rgba(96, 165, 250, 0.12);
+      color: var(--blue-2);
+      font-size: 0.9rem;
+      font-weight: 700;
+    }
+
+    .kicker::before {
+      content: "";
+      width: 7px;
+      height: 7px;
+      border-radius: 50%;
+      background: var(--green);
+      box-shadow: 0 0 12px rgba(52, 211, 153, 0.4);
+    }
+
+    h1,
+    h2,
+    h3,
+    p {
+      margin: 0;
+    }
+
+    .hero h1 {
+      margin-top: 16px;
+      font-size: clamp(2.3rem, 4vw, 3.7rem);
+      line-height: 1.14;
+      letter-spacing: -0.04em;
+    }
+
+    .hero h1 span {
+      background: linear-gradient(135deg, var(--blue-2), var(--red-2));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+
+    .hero-sub {
+      margin-top: 14px;
+      color: var(--txt-2);
+      line-height: 1.7;
+      font-size: 1.12rem;
+      font-weight: 300;
+    }
+
+    .hero-desc {
+      margin-top: 16px;
+      color: var(--txt-2);
+      line-height: 1.84;
+    }
+
+    .hero-points {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 18px;
+      align-items: end;
+      margin-top: 6px;
+    }
+
+    .mini-card,
+    .normal-card,
+    .risk-card,
+    .callout {
+      padding: 22px 24px;
+      border-radius: var(--radius-md);
+      background: var(--card-2);
+      border: 1px solid rgba(148, 163, 184, 0.1);
+    }
+
+    .normal-card strong,
+    .risk-card strong,
+    .mini-card strong {
+      display: block;
+      font-size: 0.95rem;
+      margin-bottom: 8px;
+    }
+
+    .normal-card p,
+    .risk-card p,
+    .mini-card p {
+      color: var(--txt-2);
+      line-height: 1.7;
+      font-size: 0.95rem;
+    }
+
+    .hero .demo-meta-item {
+      border-left: 2px solid var(--blue);
+      padding-left: 0.8rem;
+    }
+
+    .hero .demo-meta-val {
+      font-family: var(--mono);
+      font-size: 1.5rem;
+      line-height: 1.1;
+      font-weight: 700;
+      color: var(--blue-2);
+    }
+
+    .hero .demo-meta-lbl {
+      margin-top: 0;
+      font-size: 0.95rem;
+      color: var(--txt-2);
+      line-height: 1.4;
+    }
+
+    .section {
+      padding: 24px;
+      display: grid;
+      gap: 18px;
+    }
+
+    .section-head {
+      display: grid;
+      gap: 10px;
+    }
+
+    .section h2 {
+      font-size: 1.42rem;
+    }
+
+    .section p {
+      color: var(--txt-2);
+      line-height: 1.8;
+    }
+
+    .normal-layout {
+      display: grid;
+      grid-template-columns: minmax(0, 1.2fr) minmax(280px, 0.8fr);
+      gap: 18px;
+      align-items: start;
+    }
+
+    .path-row {
+      display: grid;
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+      gap: 12px;
+      align-items: center;
+    }
+
+    .path-node {
+      min-height: 86px;
+      padding: 14px 12px;
+      border-radius: var(--radius-md);
+      background: rgba(96, 165, 250, 0.08);
+      border: 1px solid rgba(96, 165, 250, 0.18);
+      display: grid;
+      place-items: center;
+      text-align: center;
+    }
+
+    .path-node strong {
+      font-size: 1rem;
+      margin-bottom: 6px;
+    }
+
+    .path-node span {
+      font-size: 0.82rem;
+      color: var(--txt-2);
+      font-family: var(--mono);
+    }
+
+    .path-arrow {
+      display: none;
+    }
+
+    .path-note {
+      color: var(--blue-2);
+      font-weight: 600;
+    }
+
+    .controls {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+    }
+
+    button {
+      border: 0;
+      cursor: pointer;
+      font: inherit;
+      border-radius: 999px;
+      padding: 0.78rem 1.18rem;
+      transition: transform 0.18s ease, border-color 0.18s ease, background 0.18s ease;
+    }
+
+    button:hover {
+      transform: translateY(-1px);
+    }
+
+    .btn-primary {
+      background: linear-gradient(135deg, rgba(96, 165, 250, 0.2), rgba(59, 130, 246, 0.12));
+      color: var(--blue-2);
+      border: 1px solid rgba(96, 165, 250, 0.24);
+    }
+
+    .btn-danger {
+      background: linear-gradient(135deg, rgba(248, 113, 113, 0.18), rgba(220, 38, 38, 0.1));
+      color: var(--red-2);
+      border: 1px solid rgba(248, 113, 113, 0.22);
+    }
+
+    .btn-active {
+      box-shadow: 0 0 0 1px rgba(255, 255, 255, 0.03) inset, 0 0 24px rgba(96, 165, 250, 0.16);
+    }
+
+    .analysis-layout {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 18px;
+      align-items: start;
+    }
+
+    .graph-wrap {
+      grid-column: 1 / -1;
+      padding: 18px;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .graph-head {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 12px;
+      margin-bottom: 14px;
+      flex-wrap: wrap;
+    }
+
+    .graph-head p {
+      color: var(--txt-2);
+      font-size: 0.95rem;
+    }
+
+    .graph-stage {
+      position: relative;
+      min-height: 620px;
+      border-radius: var(--radius-lg);
+      background:
+        linear-gradient(180deg, rgba(255, 255, 255, 0.01), rgba(255, 255, 255, 0)),
+        rgba(15, 20, 32, 0.9);
+      border: 1px solid rgba(148, 163, 184, 0.08);
+      overflow: hidden;
+    }
+
+    .graph-stage::before {
+      content: "";
+      position: absolute;
+      inset: 0;
+      pointer-events: none;
+      background-image:
+        linear-gradient(rgba(96, 165, 250, 0.025) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(96, 165, 250, 0.025) 1px, transparent 1px);
+      background-size: 46px 46px;
+      mask-image: radial-gradient(circle at 50% 40%, black 60%, transparent 100%);
+    }
+
+    .graph-svg,
+    .graph-nodes {
+      position: absolute;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+    }
+
+    .graph-svg {
+      pointer-events: none;
+    }
+
+    .graph-line-normal {
+      fill: none;
+      stroke: rgba(96, 165, 250, 0.92);
+      stroke-width: 2.4;
+      stroke-linecap: round;
+      stroke-linejoin: round;
+      filter: drop-shadow(0 0 10px rgba(96, 165, 250, 0.2));
+    }
+
+    .graph-line-risk {
+      fill: none;
+      stroke: rgba(248, 113, 113, 0.9);
+      stroke-width: 2.5;
+      stroke-linecap: round;
+      stroke-linejoin: round;
+      stroke-dasharray: 8 8;
+      opacity: 0;
+      transition: opacity 0.25s ease, stroke-width 0.2s ease, filter 0.2s ease;
+      filter: drop-shadow(0 0 10px rgba(248, 113, 113, 0.16));
+    }
+
+    .risk-on .graph-line-risk {
+      opacity: 1;
+    }
+
+    .graph-line-risk.risk-privacy {
+      stroke: rgba(248, 113, 113, 0.92);
+    }
+
+    .graph-line-risk.risk-asset {
+      stroke: rgba(252, 165, 165, 0.9);
+    }
+
+    .graph-line-contract {
+      fill: none;
+      stroke: rgba(139, 92, 246, 0.88);
+      stroke-width: 2.2;
+      stroke-linecap: round;
+      stroke-linejoin: round;
+      stroke-dasharray: 7 7;
+      opacity: 0;
+      transition: opacity 0.25s ease;
+      filter: drop-shadow(0 0 10px rgba(139, 92, 246, 0.14));
+    }
+
+    .risk-on .graph-line-contract {
+      opacity: 1;
+    }
+
+    .graph-node {
+      position: absolute;
+      width: 160px;
+      min-height: 74px;
+      padding: 12px 14px;
+      border-radius: 14px;
+      background: rgba(20, 28, 43, 0.94);
+      border: 1px solid rgba(148, 163, 184, 0.12);
+      box-shadow: 0 12px 24px rgba(2, 8, 20, 0.22);
+      display: grid;
+      gap: 5px;
+      transform: translate(-50%, -50%);
+    }
+
+    .graph-node strong {
+      font-size: 0.98rem;
+    }
+
+    .graph-node small {
+      color: var(--txt-2);
+      font-size: 0.76rem;
+      font-family: var(--mono);
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+    }
+
+    .graph-node span {
+      color: var(--txt-2);
+      font-size: 0.82rem;
+      line-height: 1.5;
+    }
+
+    .node-main {
+      border-color: rgba(96, 165, 250, 0.2);
+      background: linear-gradient(180deg, rgba(96, 165, 250, 0.08), rgba(20, 28, 43, 0.96));
+    }
+
+    .wallet-node {
+      width: 176px;
+      min-height: 88px;
+      border-color: rgba(96, 165, 250, 0.34);
+      background: linear-gradient(180deg, rgba(96, 165, 250, 0.14), rgba(20, 28, 43, 0.98));
+      box-shadow: 0 18px 32px rgba(12, 24, 44, 0.34), 0 0 0 1px rgba(96, 165, 250, 0.08) inset;
+    }
+
+    .wallet-node strong {
+      font-size: 1.04rem;
+    }
+
+    .node-contract {
+      width: 214px;
+      min-height: 96px;
+      border-color: rgba(139, 92, 246, 0.34);
+      background: linear-gradient(180deg, rgba(139, 92, 246, 0.14), rgba(20, 28, 43, 0.98));
+      box-shadow: 0 18px 32px rgba(18, 10, 42, 0.34), 0 0 0 1px rgba(139, 92, 246, 0.1) inset;
+      opacity: 0;
+      transition: opacity 0.25s ease, transform 0.2s ease, box-shadow 0.2s ease;
+      cursor: pointer;
+    }
+
+    .risk-on .node-contract {
+      opacity: 1;
+    }
+
+    .node-contract strong {
+      font-size: 1.04rem;
+    }
+
+    .node-contract .sub {
+      color: var(--violet-2);
+      font-size: 0.76rem;
+      font-family: var(--mono);
+      line-height: 1.4;
+    }
+
+    .node-contract.open {
+      box-shadow: 0 22px 36px rgba(18, 10, 42, 0.4), 0 0 0 1px rgba(139, 92, 246, 0.16) inset;
+      transform: translate(-50%, -50%) scale(1.02);
+    }
+
+    .node-risk {
+      border-color: rgba(248, 113, 113, 0.18);
+      background: linear-gradient(180deg, rgba(248, 113, 113, 0.07), rgba(20, 28, 43, 0.96));
+      opacity: 0.3;
+      transition: opacity 0.25s ease, transform 0.25s ease;
+    }
+
+    .risk-on .node-risk {
+      opacity: 1;
+    }
+
+    .risk-label {
+      position: absolute;
+      transform: translate(-50%, -50%);
+      padding: 0.18rem 0.48rem;
+      border-radius: 999px;
+      background: rgba(248, 113, 113, 0.12);
+      border: 1px solid rgba(248, 113, 113, 0.18);
+      color: var(--red-2);
+      font-size: 0.72rem;
+      line-height: 1.2;
+      white-space: nowrap;
+      opacity: 0;
+      transition: opacity 0.2s ease, transform 0.2s ease;
+      pointer-events: none;
+      z-index: 3;
+    }
+
+    .risk-on .risk-label {
+      opacity: 0.9;
+    }
+
+    .graph-caption {
+      position: absolute;
+      left: 18px;
+      right: 18px;
+      bottom: 16px;
+      display: grid;
+      gap: 10px;
+    }
+
+    .legend {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 14px;
+      color: var(--txt-2);
+      font-size: 0.86rem;
+    }
+
+    .legend-item {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .legend-dot {
+      width: 11px;
+      height: 11px;
+      border-radius: 50%;
+      display: inline-block;
+    }
+
+    .legend-dot.normal {
+      background: var(--blue);
+      box-shadow: 0 0 12px rgba(96, 165, 250, 0.35);
+    }
+
+    .legend-dot.risk {
+      background: var(--red);
+      box-shadow: 0 0 12px rgba(248, 113, 113, 0.28);
+    }
+
+    .legend-dot.contract {
+      background: var(--violet);
+      box-shadow: 0 0 12px rgba(139, 92, 246, 0.28);
+    }
+
+    .callout {
+      color: var(--txt-2);
+      line-height: 1.75;
+    }
+
+    .callout strong {
+      color: var(--txt);
+    }
+
+    .risk-panel {
+      padding: 18px;
+      display: grid;
+      gap: 12px;
+      order: 1;
+    }
+
+    .risk-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(190px, 1fr));
+      gap: 10px;
+    }
+
+    .risk-panel-head {
+      display: grid;
+      gap: 6px;
+    }
+
+    .risk-card {
+      display: grid;
+      gap: 6px;
+      border-left: 3px solid rgba(248, 113, 113, 0.48);
+      opacity: 0.38;
+      transition: opacity 0.25s ease, border-color 0.25s ease, box-shadow 0.25s ease, transform 0.18s ease;
+      cursor: pointer;
+      padding: 14px 15px;
+      border-radius: 12px;
+      background: rgba(25, 34, 52, 0.75);
+      border: 1px solid rgba(248, 113, 113, 0.08);
+    }
+
+    .risk-on .risk-card {
+      opacity: 1;
+    }
+
+    .risk-card:hover {
+      transform: translateY(-1px);
+    }
+
+    .risk-card.active {
+      opacity: 1;
+      border-left-color: rgba(248, 113, 113, 0.92);
+      box-shadow: 0 0 0 1px rgba(248, 113, 113, 0.1) inset, 0 12px 30px rgba(36, 10, 14, 0.18);
+    }
+
+    .risk-card strong {
+      font-size: 0.94rem;
+      line-height: 1.5;
+    }
+
+    .risk-card p,
+    .risk-panel-head p {
+      display: none;
+    }
+
+    .risk-card .tag {
+      display: inline-flex;
+      align-items: center;
+      width: fit-content;
+      padding: 0.16rem 0.46rem;
+      border-radius: 999px;
+      background: rgba(248, 113, 113, 0.1);
+      color: var(--red-2);
+      font: 700 0.76rem var(--mono);
+    }
+
+    .risk-detail {
+      grid-column: 1 / -1;
+      min-height: 174px;
+      padding: 18px;
+      border-radius: var(--radius-md);
+      background: linear-gradient(180deg, rgba(248, 113, 113, 0.08), rgba(20, 28, 43, 0.96));
+      border: 1px solid rgba(248, 113, 113, 0.12);
+      display: grid;
+      align-items: start;
+    }
+
+    .risk-detail-empty {
+      color: var(--txt-2);
+      line-height: 1.8;
+    }
+
+    .risk-detail-item {
+      display: none;
+      gap: 10px;
+    }
+
+    .risk-detail-item.active {
+      display: grid;
+    }
+
+    .risk-detail-item .tag {
+      display: inline-flex;
+      align-items: center;
+      width: fit-content;
+      padding: 0.18rem 0.5rem;
+      border-radius: 999px;
+      background: rgba(248, 113, 113, 0.12);
+      color: var(--red-2);
+      font: 700 0.76rem var(--mono);
+    }
+
+    .risk-detail-item h4 {
+      margin: 0;
+      font-size: 1.06rem;
+      color: var(--txt);
+    }
+
+    .risk-detail-item p {
+      margin: 0;
+      color: var(--txt-2);
+      line-height: 1.8;
+    }
+
+    .contract-panel {
+      display: none;
+      margin-top: 0;
+      padding: 18px;
+      border-radius: var(--radius-md);
+      background: linear-gradient(180deg, rgba(139, 92, 246, 0.1), rgba(20, 28, 43, 0.96));
+      border: 1px solid rgba(139, 92, 246, 0.16);
+      gap: 12px;
+      order: 2;
+    }
+
+    .contract-panel.open {
+      display: grid;
+    }
+
+    .contract-panel-head {
+      display: grid;
+      gap: 8px;
+    }
+
+    .contract-panel-head h4 {
+      margin: 0;
+      color: var(--violet-2);
+      font-size: 1.08rem;
+    }
+
+    .contract-panel-head p {
+      margin: 0;
+      color: var(--txt-2);
+      line-height: 1.75;
+      font-size: 0.94rem;
+    }
+
+    .contract-grid {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 12px;
+    }
+
+    .contract-card {
+      padding: 14px 15px;
+      border-radius: 12px;
+      background: rgba(31, 24, 48, 0.78);
+      border: 1px solid rgba(139, 92, 246, 0.12);
+      border-left: 3px solid rgba(139, 92, 246, 0.48);
+      display: grid;
+      gap: 8px;
+      opacity: 0.9;
+      transition: opacity 0.25s ease, border-color 0.25s ease, box-shadow 0.25s ease, transform 0.18s ease;
+      cursor: pointer;
+    }
+
+    .contract-card:hover {
+      transform: translateY(-1px);
+    }
+
+    .contract-card.active {
+      opacity: 1;
+      border-left-color: rgba(139, 92, 246, 0.92);
+      box-shadow: 0 0 0 1px rgba(139, 92, 246, 0.12) inset, 0 12px 30px rgba(22, 10, 40, 0.2);
+    }
+
+    .contract-card .tag {
+      display: inline-flex;
+      align-items: center;
+      width: fit-content;
+      padding: 0.16rem 0.46rem;
+      border-radius: 999px;
+      background: rgba(139, 92, 246, 0.12);
+      color: var(--violet-2);
+      font: 700 0.74rem var(--mono);
+    }
+
+    .contract-card strong {
+      margin: 0;
+      font-size: 0.96rem;
+      color: var(--txt);
+    }
+
+    .contract-card p {
+      display: none;
+    }
+
+    .risk-on .risk-callout {
+      border-color: rgba(248, 113, 113, 0.2);
+      background: linear-gradient(180deg, rgba(248, 113, 113, 0.08), rgba(20, 28, 43, 0.96));
+    }
+
+    .graph-wrap.focusing .graph-line-risk,
+    .graph-wrap.focusing .node-risk,
+    .graph-wrap.focusing .risk-label {
+      opacity: 0.16;
+    }
+
+    .graph-wrap.focusing .is-highlight {
+      opacity: 1 !important;
+    }
+
+    .graph-line-risk.is-highlight {
+      stroke-width: 3.4;
+      filter: drop-shadow(0 0 14px rgba(248, 113, 113, 0.3));
+    }
+
+    .graph-node.is-highlight {
+      transform: translate(-50%, -50%) scale(1.03);
+      box-shadow: 0 20px 36px rgba(24, 8, 12, 0.32), 0 0 0 1px rgba(248, 113, 113, 0.16) inset;
+    }
+
+    .risk-label.is-highlight {
+      transform: translate(-50%, -50%) scale(1.04);
+      border-color: rgba(248, 113, 113, 0.34);
+      background: rgba(248, 113, 113, 0.2);
+    }
+
+    .sr-only {
+      position: absolute;
+      width: 1px;
+      height: 1px;
+      padding: 0;
+      margin: -1px;
+      overflow: hidden;
+      clip: rect(0, 0, 0, 0);
+      white-space: nowrap;
+      border: 0;
+    }
+
+    @media (max-width: 1160px) {
+      .hero,
+      .analysis-layout {
+        grid-template-columns: 1fr;
+      }
+
+      .graph-wrap {
+        grid-column: auto;
+      }
+    }
+
+    @media (max-width: 940px) {
+      .path-row {
+        grid-template-columns: 1fr 1fr;
+      }
+
+      .risk-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .contract-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .graph-stage {
+        min-height: 760px;
+      }
+    }
+
+    @media (max-width: 720px) {
+      .hero-points {
+        grid-template-columns: 1fr;
+      }
+
+      .topbar {
+        padding: 0 14px;
+        gap: 0.72rem;
+        overflow-x: auto;
+      }
+
+      .page {
+        padding: 68px 14px 40px;
+      }
+
+      .hero,
+      .section,
+      .graph-wrap,
+      .risk-panel {
+        padding-left: 16px;
+        padding-right: 16px;
+      }
+
+      .graph-stage {
+        min-height: 980px;
+      }
+
+      .graph-node {
+        width: 144px;
+      }
+
+      .node-contract {
+        width: 194px;
+      }
+
+    }
+  </style>
+</head>
+
+<body>
+  <div class="topbar">
+    <a class="back-btn" href="./lab-showcase.html">← 返回主页</a>
+    <span class="topbar-title">Web3组件的中心化安全风险</span>
+    <span class="topbar-venue">ACM WWW 2023 / IEEE TDSC</span>
+  </div>
+
+  <main class="page">
+    <section class="hero">
+      <div>
+        <h1>Web3组件的<span>中心化安全风险</span></h1>
+
+        <p class="hero-sub">
+          基于钱包与链上合约的大规模分析，中心化风险并非个别现象，而是 Web3 基础设施中的普遍问题。
+        </p>
+
+        <p class="hero-desc">
+          对 28 款以太坊官方推荐钱包的深入分析显示，27 款存在不同程度的中心化风险；对超过 11 万份以太坊链上合约的自动化检测显示，83.5% 存在不同程度的中心化风险，其中包括 260 个总市值超过 980 亿美元的高价值合约。
+        </p>
+      </div>
+
+      <div class="hero-points" aria-label="impact metrics">
+        <div class="demo-meta-item">
+          <div class="demo-meta-val">27/28</div>
+          <div class="demo-meta-lbl">官方推荐钱包存在风险</div>
+        </div>
+
+        <div class="demo-meta-item">
+          <div class="demo-meta-val">83.5%</div>
+          <div class="demo-meta-lbl">链上合约检出风险</div>
+        </div>
+      </div>
+
+    </section>
+
+    <section class="section" style="margin-top: 16px;">
+      <div class="controls">
+        <button class="btn-primary btn-active" id="showNormal">仅显示正常路径</button>
+        <button class="btn-danger" id="showRisk">显示钱包 / 合约风险</button>
+      </div>
+
+      <div class="analysis-layout">
+        <div class="graph-wrap" id="riskDemo">
+          <div class="graph-head">
+            <p>
+              用户通常只看到标准 Web3 链路；但一旦钱包连向注册信息、备份服务、RPC 或第三方服务，钱包就会成为数据传播节点。与此同时，若 DApp 依赖的 Smart Contract 保留过强 owner 权限，控制风险也会重新集中。</p>
+              <p>蓝色表示标准 Web3 交互链路；红色表示钱包侧风险路径；紫色表示 Smart Contract 中 overpowered owner 带来的中心化控制风险。</p>
+          </div>
+
+          <div class="graph-stage">
+            <svg class="graph-svg" viewBox="0 0 1000 620" preserveAspectRatio="none" aria-hidden="true">
+              <defs>
+                <marker id="arrowBlue" markerWidth="6" markerHeight="6" refX="5" refY="3" orient="auto">
+                  <path d="M0,0 L6,3 L0,6 Z" fill="#60a5fa"></path>
+                </marker>
+                <marker id="arrowRed" markerWidth="6" markerHeight="6" refX="5" refY="3" orient="auto">
+                  <path d="M0,0 L6,3 L0,6 Z" fill="#f87171"></path>
+                </marker>
+                <marker id="arrowViolet" markerWidth="6" markerHeight="6" refX="5" refY="3" orient="auto">
+                  <path d="M0,0 L6,3 L0,6 Z" fill="#8b5cf6"></path>
+                </marker>
+              </defs>
+
+              <path class="graph-line-normal" marker-end="url(#arrowBlue)" d="M185 310 L320 310"></path>
+              <path class="graph-line-normal" marker-end="url(#arrowBlue)" d="M415 310 L560 310"></path>
+              <path class="graph-line-normal" marker-end="url(#arrowBlue)" d="M655 310 L800 310"></path>
+
+              <path class="graph-line-risk risk-privacy" data-focus="sr1" marker-end="url(#arrowRed)" d="M140 150 L290 275"></path>
+              <path class="graph-line-risk risk-privacy" data-focus="sr1" marker-end="url(#arrowRed)" d="M280 120 L310 250"></path>
+              <path class="graph-line-risk risk-asset" data-focus="sr2" marker-end="url(#arrowRed)" d="M145 455 L290 365"></path>
+              <path class="graph-line-risk risk-privacy" data-focus="sr3" marker-end="url(#arrowRed)" d="M335 265 L470 130"></path>
+              <path class="graph-line-risk risk-privacy" data-focus="sr4" marker-end="url(#arrowRed)" d="M410 290 L715 130"></path>
+              <path class="graph-line-risk risk-privacy" data-focus="sr5" marker-end="url(#arrowRed)" d="M380 335 L480 460"></path>
+              <path class="graph-line-risk risk-asset" data-focus="sr2" marker-end="url(#arrowRed)" d="M335 345 L330 480"></path>
+              <path class="graph-line-contract" marker-end="url(#arrowViolet)" d="M640 346 L705 447"></path>
+              <path class="graph-line-contract" marker-end="url(#arrowViolet)" d="M835 346 L790 447"></path>
+            </svg>
+
+            <div class="graph-nodes">
+              <div class="graph-node node-risk" data-focus="sr1" style="left: 12%; top: 18%;">
+                <small>PII</small>
+                <strong>Email</strong>
+                <span>注册邮箱 / 身份线索</span>
+              </div>
+
+              <div class="graph-node node-risk" data-focus="sr1" style="left: 28%; top: 18%;">
+                <small>PII</small>
+                <strong>Phone</strong>
+                <span>手机号 / 账户恢复</span>
+              </div>
+
+              <div class="graph-node node-main" style="left: 13%; top: 50%;">
+                <small>Actor</small>
+                <strong>User</strong>
+                <span>发起交互与签名</span>
+              </div>
+
+              <div class="graph-node node-main wallet-node" data-focus="sr1 sr2 sr3 sr4 sr5" style="left: 37%; top: 50%;">
+                <small>Core / Aggregation Point</small>
+                <strong>钱包 Wallet</strong>
+                <span>签名入口 / 隐私与风险聚合点</span>
+              </div>
+
+              <div class="graph-node node-main" style="left: 61%; top: 50%;">
+                <small>App</small>
+                <strong>DApp</strong>
+                <span>链上应用与交互界面</span>
+              </div>
+
+              <div class="graph-node node-main" style="left: 85%; top: 50%;">
+                <small>Ledger</small>
+                <strong>Blockchain</strong>
+                <span>链上状态与交易记录</span>
+              </div>
+
+              <div class="graph-node node-risk" data-focus="sr3" style="left: 50%; top: 18%;">
+                <small>Service</small>
+                <strong>Built-in Service</strong>
+                <span>交易、购买、兑换等内置服务</span>
+              </div>
+
+              <div class="graph-node node-risk" data-focus="sr4" style="left: 75%; top: 18%;">
+                <small>Infra</small>
+                <strong>RPC Provider</strong>
+                <span>默认 RPC / 访问策略</span>
+              </div>
+
+              <div class="graph-node node-risk" data-focus="sr2" style="left: 10%; top: 82%;">
+                <small>Secret</small>
+                <strong>Private Key Backup</strong>
+                <span>云备份 / 恢复材料</span>
+              </div>
+
+              <div class="graph-node node-risk" data-focus="sr2" style="left: 32%; top: 82%;">
+                <small>Server</small>
+                <strong>Backup Server</strong>
+                <span>备份存储与恢复端点</span>
+              </div>
+
+              <div class="graph-node node-risk" data-focus="sr5" style="left: 50%; top: 82%;">
+                <small>Analytics</small>
+                <strong>Third-party Server</strong>
+                <span>SDK 上传 / 分析与日志端点</span>
+              </div>
+
+              <div class="graph-node node-contract" id="contractNode" style="left: 75%; top: 80%;">
+                <small>Smart Contract</small>
+                <strong>Overpowered Owner</strong>
+                <span>Owner Privilege Risk</span>
+                <div class="sub">Sub-risks shown below</div>
+              </div>
+
+              <div class="risk-label" data-focus="sr1" style="left: 20%; top: 30%;">PII</div>
+              <div class="risk-label" data-focus="sr1" style="left: 30%; top: 31%;">PII</div>
+              <div class="risk-label" data-focus="sr3" style="left: 40%; top: 34%;">交易行为 / 身份信息</div>
+              <div class="risk-label" data-focus="sr4" style="left: 60%; top: 30%;">请求 / 地址元数据</div>
+              <div class="risk-label" data-focus="sr5" style="left: 45%; top: 66%;">日志 / 设备信息</div>
+              <div class="risk-label" data-focus="sr2" style="left: 31%; top: 65%;">密钥备份 / 恢复材料</div>
+            </div>
+
+            <div class="graph-caption">
+              <div class="legend">
+                <div class="legend-item"><span class="legend-dot normal"></span>正常路径</div>
+                <div class="legend-item"><span class="legend-dot risk"></span>钱包潜在风险路径</div>
+                <div class="legend-item"><span class="legend-dot contract"></span>Contract Owner 相关风险</div>
+              </div>
+            </div>
+          </div>
+
+        </div>
+
+        <aside class="risk-panel">
+          <div class="risk-panel-head">
+            <h3>钱包侧风险说明</h3>
+          </div>
+
+          <div class="risk-grid">
+            <div class="risk-card" data-risk="sr1">
+              <span class="tag">SR#1 Anonymity Loss</span>
+              <strong>匿名性丧失 Anonymity Loss</strong>
+            </div>
+
+            <div class="risk-card" data-risk="sr2">
+              <span class="tag">SR#2 Private Key Leakage</span>
+              <strong>私钥泄露 Private Key Leakage</strong>
+            </div>
+
+            <div class="risk-card" data-risk="sr3">
+              <span class="tag">SR#3 Built-in Service</span>
+              <strong>内置中心化服务 Built-in Centralized Services</strong>
+            </div>
+
+            <div class="risk-card" data-risk="sr4">
+              <span class="tag">SR#4 RPC Services</span>
+              <strong>RPC 服务 RPC Services</strong>
+            </div>
+
+            <div class="risk-card" data-risk="sr5">
+              <span class="tag">SR#5 Third-party SDKs</span>
+              <strong>第三方 SDK 或脚本 Third-party SDKs or Scripts</strong>
+            </div>
+          </div>
+        </aside>
+
+        <div class="contract-panel" id="contractPanel">
+          <div class="contract-panel-head">
+            <h4>SR#6 智能合约 Overpowered Owner 子风险说明</h4>
+
+          </div>
+
+          <div class="contract-grid">
+            <div class="contract-card" data-contract="ll">
+              <span class="tag">Limited Liquidity</span>
+              <strong>流动性受限 Limited Liquidity</strong>
+            </div>
+
+            <div class="contract-card" data-contract="vs">
+              <span class="tag">Vulnerable Scarcity</span>
+              <strong>脆弱稀缺性 Vulnerable Scarcity</strong>
+            </div>
+
+            <div class="contract-card" data-contract="mm">
+              <span class="tag">Mutable Metadata</span>
+              <strong>可变元数据 Mutable Metadata</strong>
+            </div>
+
+            <div class="contract-card" data-contract="mp">
+              <span class="tag">Mutable Parameters</span>
+              <strong>可变参数 Mutable Parameters</strong>
+            </div>
+          </div>
+        </div>
+
+        <div class="risk-detail" id="riskDetail">
+          <div class="risk-detail-empty" id="riskDetailEmpty">
+            点击任一钱包侧风险或智能合约子风险卡片后，在这里显示对应说明。
+          </div>
+
+          <div class="risk-detail-item" data-detail="sr1">
+            <span class="tag">SR#1 Anonymity Loss</span>
+            <h4>去匿名化</h4>
+            <p>一些加密钱包要求用户注册，并在注册过程中会收集个人身份信息（Personally Identifiable Information, PII），如电子邮件地址和电话号码。例如，Bitcoin.com Wallet是一款知名的加密钱包，下载量超过500万次，它提供可选的注册功能。类似地，一些Web3网站支持社交登录，如Google和Facebook，这些中心化身份认证方式会将用户的身份信息与其公钥绑定，从而破坏公钥带来的匿名性。此外，攻击者可以利用泄露的个人身份信息发动钓鱼攻击。例如，Trezor钱包曾泄露106,856名用户的电子邮件地址，引发了大规模的钓鱼邮件攻击。
+            </p>
+          </div>
+
+          <div class="risk-detail-item" data-detail="sr2">
+            <span class="tag">SR#2 Private Key Leakage</span>
+            <h4>私钥泄露</h4>
+            <p>私钥是Web3生态的核心，用于管理用户的加密资产，必须安全存储在本地设备上。然而，一些钱包鼓励用户将私钥备份到第一方或第三方服务器。例如，Bitcoin.com Wallet在设置页面提供了私钥备份选项，允许用户将私钥上传至Bitcoin.com Wallet的服务器。另一个钱包ZenGo要求用户在使用前必须将私钥备份至Google Drive。这种做法可能导致私钥在传输或存储过程中被窃取。例如，若用户通过不安全的网络传输私钥，攻击者可通过中间人攻击拦截数据并获取私钥。一个真实案例是Slope钱包在传输过程中泄露用户私钥，导致约600万美元的代币被盗。</p>
+          </div>
+
+          <div class="risk-detail-item" data-detail="sr3">
+            <span class="tag">SR#3 Built-in Service</span>
+            <h4>内置中心化服务</h4>
+            <p>许多加密钱包内置中心化服务，例如，Trust Wallet内置了Binance交易所，以提供加密货币的购买服务。这些中心化服务通常受到政府监管，并可能要求用户提供身份信息，与监管机构共享。普通用户往往难以区分钱包内的中心化和去中心化服务，因此在用户使用中心化服务时，钱包应明确告知相关风险。这些中心化服务可能因监管或运营问题导致宕机或停止运营，给用户带来财务损失。例如，近年来已有75家交易所停止运营，其中Celsius Network拥有170万名用户，它以市场环境不佳为由暂停服务，造成了大量用户的经济损失。</p>
+          </div>
+
+          <div class="risk-detail-item" data-detail="sr4">
+            <span class="tag">SR#4 RPC Services</span>
+            <h4>RPC 服务</h4>
+            <p>加密钱包依赖RPC服务与区块链交互，用于查询链上数据或提交交易。然而，第三方RPC服务存在固有的中心化风险，例如拒绝服务攻击。此外，RPC服务提供商可以提前访问用户的交易信息，从而可能利用这一点发起MEV攻击，影响交易的公平性。因此，钱包应披露默认的RPC服务提供商，并允许用户自定义RPC服务。RPC服务的中心化已导致多起安全问题，例如，2022年3月，Infura因政策原因切断了对乌克兰用户的服务，由于钱包Metamask的默认RPC服务商是Infura，导致大量用户受到影响，无法访问区块链。</p>
+          </div>
+
+          <div class="risk-detail-item" data-detail="sr5">
+            <span class="tag">SR#5 Third-party SDKs</span>
+            <h4>第三方 SDKs</h4>
+            <p>加密钱包通常依赖第三方SDK实现通知、数据分析等功能，但在此过程中，钱包可能会向第三方服务提供商共享用户的PII、设备ID和崩溃日志等数据。例如，在Slope事件中，白帽黑客发现Slope钱包会将日志以明文形式传输至第三方漏洞分析服务商Sentry，其中包含用户大量的敏感信息。</p>
+          </div>
+
+          <div class="risk-detail-item" data-detail="ll">
+            <span class="tag">Limited Liquidity</span>
+            <h4>流动性限制</h4>
+            <p>在加密货币市场中，流动性指代币的自由交易能力。本文将流动性定义为：任何人均可自由转移（transfer）其持有的代币。如果合约所有者可以控制代币转账相关的函数，则认为该合约存在流动性限制风险。</p>
+          </div>
+
+          <div class="risk-detail-item" data-detail="vs">
+            <span class="tag">Vulnerable Scarcity</span>
+            <h4>稀缺性降低</h4>
+            <p>加密资产的价值通常受供应量影响。一些token或NFT的供应量是固定的，由于稀缺性，它们的市场价值也较高。然而，若Owner可随意增发代币，会导致代币稀缺性降低，从而损害现有持有者的利益。一个现实案例是Yearn.finance团队曾提议额外发行价值2.25亿美元的YFI代币以激励开发者，此举引发持有者强烈反对。</p>
+          </div>
+
+          <div class="risk-detail-item" data-detail="mm">
+            <span class="tag">Mutable Metadata</span>
+            <h4>可变元数据</h4>
+            <p>ERC20代币合约通常提供一组可选元数据，以标识代币的基本信息，包括名称（name）、符号（symbol）和小数位数（decimals）。这些元数据通常在合约部署后保持不变。然而，若Owner可以随意修改元数据，则可能导致用户误解代币属性，甚至影响市场交易。例如 ERC20代币如果合约允许Owner修改这些字段，则可能影响外部平台（如加密钱包和Web3网站）的正确显示，并可能对代币价值产生不利影响。</p>
+          </div>
+
+          <div class="risk-detail-item" data-detail="mp">
+            <span class="tag">Mutable Parameters</span>
+            <h4>可变参数</h4>
+            <p>ERC20代币的transfer()函数通常包含开发者定义的参数，如交易税（taxFee）、流动性费（liquidityFee）等。这些参数通常在合约开发阶段由参与者共同决定。然而，若Owner拥有随意更改这些参数的权限，可能导致用户在不知情的情况下支付额外费用或遭受不公平交易。例如，PAWTH是一个市值超过100万美元的ERC20，合约Owner可以随意修改taxFee、liquidityFee、burnFee等参数。</p>
+          </div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <script>
+    const root = document.getElementById("riskDemo");
+    const showNormal = document.getElementById("showNormal");
+    const showRisk = document.getElementById("showRisk");
+    const contractNode = document.getElementById("contractNode");
+    const contractPanel = document.getElementById("contractPanel");
+    const riskCards = [...document.querySelectorAll(".risk-card[data-risk]")];
+    const contractCards = [...document.querySelectorAll(".contract-card[data-contract]")];
+    const focusTargets = [...document.querySelectorAll("[data-focus]")];
+    const detailItems = [...document.querySelectorAll(".risk-detail-item[data-detail]")];
+    const detailEmpty = document.getElementById("riskDetailEmpty");
+    let activeRisk = null;
+    let activeDetail = null;
+    let contractOpen = false;
+
+    function applyFocus() {
+      root.classList.toggle("focusing", !!activeRisk);
+      focusTargets.forEach((el) => {
+        const keys = (el.dataset.focus || "").split(/\s+/).filter(Boolean);
+        const matched = !!activeRisk && keys.includes(activeRisk);
+        el.classList.toggle("is-highlight", matched);
+      });
+
+      riskCards.forEach((card) => {
+        card.classList.toggle("active", card.dataset.risk === activeRisk);
+      });
+
+      contractCards.forEach((card) => {
+        card.classList.toggle("active", card.dataset.contract === activeDetail);
+      });
+
+      if (detailEmpty) {
+        detailEmpty.style.display = activeDetail ? "none" : "block";
+      }
+
+      detailItems.forEach((item) => {
+        item.classList.toggle("active", item.dataset.detail === activeDetail);
+      });
+    }
+
+    function setMode(mode) {
+      const riskOn = mode === "risk";
+      root.classList.toggle("risk-on", riskOn);
+      document.body.classList.toggle("risk-on", riskOn);
+      showNormal.classList.toggle("btn-active", !riskOn);
+      showRisk.classList.toggle("btn-active", riskOn);
+
+      if (!riskOn) {
+        activeRisk = null;
+        activeDetail = null;
+        contractOpen = false;
+      } else {
+        contractOpen = true;
+      }
+
+      if (contractNode) {
+        contractNode.classList.toggle("open", riskOn && contractOpen);
+      }
+      if (contractPanel) {
+        contractPanel.classList.toggle("open", riskOn && contractOpen);
+      }
+
+      applyFocus();
+    }
+
+    if (showNormal) {
+      showNormal.addEventListener("click", () => setMode("normal"));
+    }
+    if (showRisk) {
+      showRisk.addEventListener("click", () => setMode("risk"));
+    }
+
+    riskCards.forEach((card) => {
+      card.addEventListener("click", () => {
+        if (!root.classList.contains("risk-on")) {
+          setMode("risk");
+        }
+
+        const key = card.dataset.risk;
+        const next = activeDetail === key ? null : key;
+        activeRisk = next;
+        activeDetail = next;
+        applyFocus();
+      });
+    });
+
+    contractCards.forEach((card) => {
+      card.addEventListener("click", () => {
+        if (!root.classList.contains("risk-on")) {
+          setMode("risk");
+        }
+
+        const key = card.dataset.contract;
+        activeDetail = activeDetail === key ? null : key;
+        activeRisk = null;
+        applyFocus();
+      });
+    });
+
+    if (contractNode) {
+      contractNode.addEventListener("click", () => {
+        if (!root.classList.contains("risk-on")) {
+          setMode("risk");
+        }
+
+        contractOpen = true;
+        contractNode.classList.toggle("open", true);
+
+        if (contractPanel) {
+          contractPanel.classList.toggle("open", true);
+          contractPanel.scrollIntoView({ behavior: "smooth", block: "nearest" });
+        }
+      });
+    }
+
+    setMode("risk");
+  </script>
+</body>
+
+</html>
