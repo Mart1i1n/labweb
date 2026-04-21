@@ -255,6 +255,13 @@ button:disabled {
   gap: 22px;
 }
 
+.layout > main > .hero {
+  background: transparent;
+  border: 0;
+  box-shadow: none;
+  padding: 0;
+}
+
 .hero-main {
   padding: 30px;
 }
@@ -648,6 +655,15 @@ pre {
   gap: 16px;
 }
 
+.case-head .start-btn {
+  min-width: 136px;
+  padding-inline: 24px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  white-space: nowrap;
+}
+
 .case.safe {
   border-top: 4px solid rgba(37, 99, 235, 0.72);
 }
@@ -849,6 +865,10 @@ pre {
   background: rgba(255, 255, 255, 0.94);
   border: 1px solid var(--line);
   box-shadow: none;
+}
+
+.wallet-actions button {
+  border-radius: 12px;
 }
 
 .wallet-actions #connectBtn:not(:disabled) {

@@ -971,7 +971,7 @@
               <p>用户访问网站 A，网站 A 前端向网站 A 后端请求登录消息，后端生成带随机 Nonce 的消息；前端唤起钱包签名，用户签名后，前端把地址、消息、签名交给网站 A 后端，网站 A
                 后端验证通过后返回登录成功。</p>
             </div>
-            <button class="btn-primary start-btn" data-case="normal">开始模拟</button>
+            <button class="btn-primary start-btn" data-case="normal">正常模拟</button>
           </div>
 
           <div class="case-body">
@@ -1025,7 +1025,7 @@ Issued At: 2026-04-05T13:20:00Z</pre>
               <p>用户访问诱导站点 M。该站点伪装成普通登录页面，但实际上诱导用户签署的是“网站 B 将接受的登录消息”。用户签名后，相关地址、消息和签名被转发给网站 B 后端，由网站 B 后端完成认证，最终导致网站
                 B 出现跨站数据访问/泄露风险。</p>
             </div>
-            <button class="btn-danger start-btn" data-case="attack">开始风险模拟</button>
+            <button class="btn-danger start-btn" data-case="attack">风险模拟</button>
           </div>
 
           <div class="case-body">
@@ -1097,7 +1097,7 @@ Issued At: 2026-04-05T13:22:30Z</pre>
               <p>用户仍然访问诱导站点 M。该站点尝试诱导用户签署网站 B 的登录消息，但这次消息中明确包含 <code>websiteB.com</code>。钱包识别该域名，再把它与当前页面
                 <code>malicious-site.com</code> 比较；由于两者不一致，钱包告警并阻止签名，相关风险链路在签名前被阻断。</p>
             </div>
-            <button class="btn-warn start-btn" data-case="defense">开始防护模拟</button>
+            <button class="btn-warn start-btn" data-case="defense">防护模拟</button>
           </div>
 
           <div class="case-body">
@@ -1162,7 +1162,7 @@ Issued At: 2026-04-05T13:24:10Z</pre>
         <div class="wallet-check" id="walletCheck">域名检查结果：暂无。</div>
 
         <div class="wallet-actions">
-          <button class="btn-primary" id="connectBtn">连接钱包</button>
+          <button class="btn-primary" id="connectBtn">连接</button>
           <button class="btn-subtle" id="signBtn">签名</button>
           <button class="btn-subtle" id="rejectBtn">拒绝</button>
         </div>
