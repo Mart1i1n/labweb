@@ -4,218 +4,11 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Web3 登录与盲消息攻击演示</title>
+  <title>Web3 登录盲消息风险演示</title>
   <style>
-    :root {
-      --bg: #0a0e17;
-      --bg-2: #0f1420;
-      --card: #141c2b;
-      --card-2: #192234;
-      --line: rgba(99, 179, 237, 0.12);
-      --line-strong: rgba(99, 179, 237, 0.28);
-      --blue: #60a5fa;
-      --blue-2: #93c5fd;
-      --green: #34d399;
-      --red: #f87171;
-      --amber: #fbbf24;
-      --txt: #e2e8f0;
-      --txt-2: #94a3b8;
-      --txt-3: #64748b;
-      --shadow: 0 24px 60px rgba(3, 8, 20, 0.34);
-      --radius-lg: 18px;
-      --radius-md: 14px;
-      --radius-sm: 10px;
-      --sans: "Noto Sans SC", "PingFang SC", "Microsoft YaHei", sans-serif;
-      --mono: "JetBrains Mono", "Consolas", monospace;
-    }
-
-    * {
-      box-sizing: border-box;
-    }
-
-    html {
-      scroll-behavior: smooth;
-    }
-
-    body {
-      margin: 0;
-      font-family: var(--sans);
-      color: var(--txt);
-      background:
-        radial-gradient(circle at top right, rgba(96, 165, 250, 0.08), transparent 24%),
-        radial-gradient(circle at bottom left, rgba(52, 211, 153, 0.06), transparent 20%),
-        var(--bg);
-      overflow-x: hidden;
-    }
-
-    body::before {
-      content: "";
-      position: fixed;
-      inset: 0;
-      pointer-events: none;
-      background-image:
-        linear-gradient(rgba(96, 165, 250, 0.02) 1px, transparent 1px),
-        linear-gradient(90deg, rgba(96, 165, 250, 0.02) 1px, transparent 1px);
-      background-size: 50px 50px;
-      mask-image: radial-gradient(ellipse 72% 62% at 50% 26%, black, transparent);
-    }
-
-    .page {
-      position: relative;
-      z-index: 1;
-      max-width: 1360px;
-      margin: 0 auto;
-      padding: 72px 24px 56px;
-    }
-
-    .topbar {
-      position: fixed;
-      top: 0;
-      left: 0;
-      right: 0;
-      z-index: 100;
-      height: 52px;
-      display: flex;
-      align-items: center;
-      padding: 0 2rem;
-      gap: 1rem;
-      background: rgba(10, 14, 23, 0.9);
-      backdrop-filter: blur(20px);
-      border-bottom: 1px solid var(--line);
-    }
-
-    .topbar-title {
-      font-size: 1.1rem;
-      font-weight: 600;
-      color: var(--txt);
-    }
-
-    .back-btn {
-      color: var(--txt-2);
-      text-decoration: none;
-      font-size: 1.05rem;
-      display: flex;
-      align-items: center;
-      gap: 0.3rem;
-      transition: color 0.3s;
-    }
-
-    .back-btn:hover {
-      color: var(--blue-2);
-    }
-
-    .topbar-venue {
-      font-family: var(--mono);
-      font-size: 0.85rem;
-      padding: 0.12rem 0.4rem;
-      border-radius: 3px;
-      background: rgba(248, 113, 113, 0.1);
-      color: var(--red);
-      font-weight: 600;
-    }
-
-    .sr-only {
-      position: absolute;
-      width: 1px;
-      height: 1px;
-      padding: 0;
-      margin: -1px;
-      overflow: hidden;
-      clip: rect(0, 0, 0, 0);
-      white-space: nowrap;
-      border: 0;
-    }
-
     .layout {
-      display: grid;
       grid-template-columns: minmax(0, 1fr) 340px;
-      gap: 20px;
-      align-items: start;
       margin-top: 24px;
-    }
-
-    main {
-      display: grid;
-      gap: 20px;
-    }
-
-    .hero-main,
-    .hero-side,
-    .toolbar,
-    .section,
-    .case,
-    .wallet {
-      background: rgba(20, 28, 43, 0.88);
-      border: 1px solid var(--line);
-      border-radius: var(--radius-lg);
-      box-shadow: var(--shadow);
-    }
-
-    .hero-main {
-      padding: 30px;
-    }
-
-    .hero-side {
-      padding: 22px;
-      display: grid;
-      gap: 12px;
-    }
-
-    .kicker {
-      display: inline-flex;
-      align-items: center;
-      gap: 10px;
-      padding: 0.28rem 0.8rem;
-      border-radius: 999px;
-      background: rgba(96, 165, 250, 0.08);
-      border: 1px solid rgba(96, 165, 250, 0.12);
-      color: var(--blue-2);
-      font-size: 0.9rem;
-      font-weight: 700;
-    }
-
-    .kicker::before {
-      content: "";
-      width: 7px;
-      height: 7px;
-      border-radius: 50%;
-      background: var(--green);
-      box-shadow: 0 0 12px rgba(52, 211, 153, 0.4);
-    }
-
-    h1,
-    h2,
-    h3,
-    p {
-      margin: 0;
-    }
-
-    .hero h1 {
-      margin-top: 16px;
-      font-size: clamp(2.45rem, 4vw, 3.8rem);
-      line-height: 1.16;
-      letter-spacing: -0.04em;
-    }
-
-    .hero h1 span {
-      background: linear-gradient(135deg, var(--blue-2), var(--green));
-      -webkit-background-clip: text;
-      -webkit-text-fill-color: transparent;
-      background-clip: text;
-    }
-
-    .hero-sub {
-      margin-top: 14px;
-      font-size: 1.18rem;
-      line-height: 1.7;
-      color: var(--txt-2);
-      font-weight: 300;
-    }
-
-    .hero-desc {
-      margin-top: 16px;
-      color: var(--txt-2);
-      line-height: 1.84;
     }
 
     .hero-points {
@@ -225,158 +18,9 @@
       margin-top: 18px;
     }
 
-    .hero .demo-meta-item {
-      border-left: 2px solid var(--blue);
-      padding-left: 0.8rem;
-    }
-
-    .hero .demo-meta-val {
-      font-family: var(--mono);
-      font-size: 1.5rem;
-      font-weight: 700;
-      color: var(--blue-2);
-      line-height: 1.1;
-    }
-
-    .hero .demo-meta-lbl {
-      font-size: 0.95rem;
-      color: var(--txt-2);
-      line-height: 1.45;
-    }
-
-    .hero-point,
-    .side-item,
-    .mini-card,
-    .message-card,
-    .detail-card,
-    .compare-card,
-    .result-card,
-    .callout {
-      border-radius: var(--radius-md);
-      border: 1px solid rgba(99, 179, 237, 0.1);
-      background: rgba(15, 20, 32, 0.7);
-    }
-
-    .hero-point {
-      padding: 14px;
-      border-left: 2px solid var(--blue);
-    }
-
-    .hero-point strong {
-      display: block;
-      margin-bottom: 8px;
-      font: 700 0.98rem var(--mono);
-      color: var(--blue-2);
-    }
-
-    .hero-point span {
-      color: var(--txt-2);
-      font-size: 0.92rem;
-      line-height: 1.62;
-    }
-
-    .side-item {
-      padding: 14px 16px;
-    }
-
-    .side-item small {
-      display: block;
-      margin-bottom: 8px;
-      color: var(--txt-3);
-      font: 600 0.78rem var(--mono);
-      letter-spacing: 0.08em;
-      text-transform: uppercase;
-    }
-
-    .side-item div {
-      color: var(--txt-2);
-      line-height: 1.7;
-      font-size: 0.95rem;
-    }
-
-    .toolbar {
-      padding: 18px 20px;
-      display: flex;
-      justify-content: space-between;
-      gap: 12px;
-      align-items: center;
-    }
-
     .toolbar p {
       color: var(--txt-2);
       line-height: 1.7;
-    }
-
-    .btn-row {
-      display: flex;
-      gap: 10px;
-      flex-wrap: wrap;
-    }
-
-    button {
-      border: 0;
-      border-radius: 999px;
-      padding: 11px 16px;
-      font: 700 0.94rem var(--sans);
-      cursor: pointer;
-      transition: transform 0.18s ease, opacity 0.18s ease;
-    }
-
-    button:hover:not(:disabled) {
-      transform: translateY(-1px);
-    }
-
-    button:disabled {
-      opacity: 0.45;
-      cursor: not-allowed;
-    }
-
-    .btn-primary {
-      color: white;
-      background: linear-gradient(135deg, #2563eb, #1d4ed8);
-    }
-
-    .btn-danger {
-      color: white;
-      background: linear-gradient(135deg, #dc2626, #ea580c);
-    }
-
-    .btn-warn {
-      color: #1f2937;
-      background: linear-gradient(135deg, #fde68a, #facc15);
-    }
-
-    .btn-subtle {
-      color: var(--txt);
-      background: rgba(15, 20, 32, 0.86);
-      border: 1px solid var(--line);
-    }
-
-    @keyframes walletActionPulse {
-      0%,
-      100% {
-        box-shadow: 0 0 0 1px rgba(96, 165, 250, 0.14), 0 0 0 rgba(59, 130, 246, 0);
-      }
-
-      50% {
-        box-shadow: 0 0 0 1px rgba(96, 165, 250, 0.26), 0 0 0 8px rgba(59, 130, 246, 0.14);
-      }
-    }
-
-    .section {
-      padding: 24px;
-    }
-
-    .section h2 {
-      margin-top: 12px;
-      font-size: 1.78rem;
-      line-height: 1.28;
-    }
-
-    .section p {
-      margin-top: 12px;
-      color: var(--txt-2);
-      line-height: 1.82;
     }
 
     .grid-2 {
@@ -385,20 +29,6 @@
       gap: 16px;
       align-items: start;
       margin-top: 16px;
-    }
-
-    .mini-card,
-    .callout {
-      padding: 16px;
-    }
-
-    .mini-card strong,
-    .message-card strong,
-    .compare-card strong,
-    .result-card strong {
-      display: block;
-      margin-bottom: 12px;
-      font-size: 0.96rem;
     }
 
     .flow {
@@ -438,62 +68,6 @@
       font-weight: 800;
     }
 
-    .bullet-list {
-      display: grid;
-      gap: 10px;
-      margin-top: 12px;
-    }
-
-    .bullet-list div {
-      position: relative;
-      padding-left: 18px;
-      color: var(--txt-2);
-      line-height: 1.76;
-    }
-
-    .bullet-list div::before {
-      content: "";
-      position: absolute;
-      left: 0;
-      top: 11px;
-      width: 7px;
-      height: 7px;
-      border-radius: 50%;
-      background: var(--blue);
-    }
-
-    .callout {
-      border-left: 4px solid rgba(248, 113, 113, 0.72);
-      background: rgba(38, 17, 17, 0.55);
-      line-height: 1.8;
-      color: var(--txt-2);
-    }
-
-    .case {
-      padding: 24px;
-      display: grid;
-      gap: 16px;
-    }
-
-    .case.safe {
-      border-top: 4px solid rgba(96, 165, 250, 0.72);
-    }
-
-    .case.attack {
-      border-top: 4px solid rgba(248, 113, 113, 0.72);
-    }
-
-    .case.defense {
-      border-top: 4px solid rgba(251, 191, 36, 0.82);
-    }
-
-    .case-head {
-      display: flex;
-      justify-content: space-between;
-      gap: 16px;
-      align-items: flex-start;
-    }
-
     .case-head h2 {
       margin-top: 10px;
       font-size: 1.5rem;
@@ -504,12 +78,6 @@
       margin-top: 10px;
       color: var(--txt-2);
       line-height: 1.8;
-    }
-
-    .case-body {
-      display: flex;
-      flex-direction: column;
-      gap: 12px;
     }
 
     .diagram {
@@ -617,46 +185,11 @@
       padding: 16px;
     }
 
-    pre {
-      margin: 0;
-      white-space: pre-wrap;
-      word-break: break-word;
-      line-height: 1.68;
-      color: var(--blue-2);
-      font: 0.9rem var(--mono);
-    }
-
     .detail-card,
     .compare-card,
     .result-card {
       color: var(--txt-2);
       line-height: 1.76;
-    }
-
-    .status {
-      padding: 14px 16px;
-      border-radius: var(--radius-md);
-      border: 1px solid rgba(99, 179, 237, 0.12);
-      font-weight: 700;
-      line-height: 1.7;
-    }
-
-    .status.safe {
-      color: var(--blue-2);
-      background: rgba(30, 58, 138, 0.26);
-      border-color: rgba(96, 165, 250, 0.22);
-    }
-
-    .status.attack {
-      color: #fca5a5;
-      background: rgba(127, 29, 29, 0.28);
-      border-color: rgba(248, 113, 113, 0.24);
-    }
-
-    .status.warn {
-      color: #fcd34d;
-      background: rgba(120, 86, 0, 0.26);
-      border-color: rgba(251, 191, 36, 0.24);
     }
 
     .steps {
@@ -742,26 +275,6 @@
       margin-top: 10px;
     }
 
-    code {
-      font-family: var(--mono);
-    }
-
-    .highlight {
-      color: #fca5a5;
-      font-weight: 800;
-    }
-
-    .tag {
-      display: inline-flex;
-      align-items: center;
-      padding: 0.3rem 0.65rem;
-      border-radius: 999px;
-      background: rgba(251, 191, 36, 0.14);
-      border: 1px solid rgba(251, 191, 36, 0.24);
-      color: #fcd34d;
-      font: 600 0.82rem var(--mono);
-    }
-
     .result-card {
       opacity: 0.56;
       transition: 0.2s ease;
@@ -771,21 +284,6 @@
       opacity: 1;
       border-color: rgba(248, 113, 113, 0.22);
       background: rgba(38, 17, 17, 0.5);
-    }
-
-    .wallet {
-      position: sticky;
-      top: 56px;
-      padding: 18px;
-      display: grid;
-      gap: 14px;
-    }
-
-    .wallet-head {
-      display: flex;
-      justify-content: space-between;
-      gap: 12px;
-      align-items: flex-start;
     }
 
     .wallet-head h3 {
@@ -798,45 +296,6 @@
       color: var(--txt-2);
       font-size: 0.9rem;
       line-height: 1.58;
-    }
-
-    .wallet-state {
-      padding: 0.42rem 0.72rem;
-      border-radius: 999px;
-      background: rgba(15, 20, 32, 0.84);
-      border: 1px solid var(--line);
-      font-weight: 800;
-      font-size: 0.85rem;
-      white-space: nowrap;
-    }
-
-    .wallet-state.safe {
-      color: var(--blue-2);
-      border-color: rgba(96, 165, 250, 0.26);
-      background: rgba(30, 58, 138, 0.26);
-    }
-
-    .wallet-state.success {
-      color: #6ee7b7;
-      border-color: rgba(52, 211, 153, 0.24);
-      background: rgba(15, 45, 37, 0.34);
-    }
-
-    .wallet-state.attack {
-      color: #fca5a5;
-      border-color: rgba(248, 113, 113, 0.24);
-      background: rgba(127, 29, 29, 0.32);
-    }
-
-    .wallet-state.warn {
-      color: #fcd34d;
-      border-color: rgba(251, 191, 36, 0.28);
-      background: rgba(120, 86, 0, 0.3);
-    }
-
-    .wallet-grid {
-      display: grid;
-      gap: 10px;
     }
 
     .wallet-row {
@@ -871,57 +330,8 @@
       font-size: 0.9rem;
     }
 
-    .wallet-check.safe {
-      color: var(--blue-2);
-      border-color: rgba(96, 165, 250, 0.22);
-      background: rgba(30, 58, 138, 0.26);
-    }
-
-    .wallet-check.warn {
-      color: #fcd34d;
-      border-color: rgba(251, 191, 36, 0.24);
-      background: rgba(120, 86, 0, 0.3);
-      font-weight: 700;
-    }
-
-    .wallet-actions {
-      display: grid;
-      grid-template-columns: repeat(3, minmax(0, 1fr));
-      gap: 10px;
-    }
-
-    .wallet-actions button:disabled {
-      opacity: 0.45;
-      color: var(--txt);
-      background: rgba(15, 20, 32, 0.86);
-      border: 1px solid var(--line);
-      box-shadow: none;
-      animation: none;
-    }
-
     .wallet-actions .btn-subtle {
       transition: transform 0.18s ease, opacity 0.18s ease, box-shadow 0.18s ease, border-color 0.18s ease, background 0.18s ease;
-    }
-
-    .wallet-actions button:not(:disabled) {
-      color: #fff;
-      border-color: transparent;
-      animation: walletActionPulse 1.6s ease-in-out infinite;
-    }
-
-    .wallet-actions #connectBtn:not(:disabled) {
-      background: linear-gradient(135deg, #2563eb, #1d4ed8);
-      box-shadow: 0 16px 34px rgba(37, 99, 235, 0.3);
-    }
-
-    .wallet-actions #signBtn:not(:disabled) {
-      background: linear-gradient(135deg, #16a34a, #0f766e);
-      box-shadow: 0 16px 34px rgba(22, 163, 74, 0.28);
-    }
-
-    .wallet-actions #rejectBtn:not(:disabled) {
-      background: linear-gradient(135deg, #f59e0b, #dc2626);
-      box-shadow: 0 16px 34px rgba(220, 38, 38, 0.26);
     }
 
     .wallet-hint {
@@ -932,13 +342,6 @@
       color: var(--txt-2);
       line-height: 1.66;
       font-size: 0.9rem;
-    }
-
-    .footer {
-      padding: 18px 22px;
-      color: var(--txt-2);
-      line-height: 1.8;
-      font-size: 0.94rem;
     }
 
     @media (max-width: 1160px) {
@@ -1009,23 +412,24 @@
       }
     }
   </style>
+  <link rel="stylesheet" href="./style.css">
 </head>
 
 <body>
   <div class="page">
     <div class="topbar">
       <a class="back-btn" href="./lab-showcase.html">← 返回主页</a>
-      <span class="topbar-title" id="topTitle">Web3 登录与盲消息攻击演示</span>
+      <span class="topbar-title" id="topTitle">Web3 登录盲消息风险演示</span>
       <span class="topbar-venue" id="topVenue">ACM CCS 2024</span>
     </div>
-    <span class="sr-only" id="globalStatus">当前未播放演示</span>
+    <span class="sr-only" id="globalStatus">当前未开始模拟演示</span>
 
     <div class="layout">
       <main>
         <section class="hero">
           <div class="hero-main">
 
-            <h1>Web3 登录与<span>盲消息攻击</span>演示</h1>
+            <h1>Web3 登录<span>盲消息风险</span>演示</h1>
             <!--<div class="hero-points">
               <div class="hero-point"><strong>01 / 正常流程</strong><span>先看前端、钱包、后端三者如何完成一次标准 Web3 登录。</span></div>
               <div class="hero-point"><strong>02 / 攻击链路</strong><span>重点展示“诱导签名 -> 转用于网站 B 后端 -> 数据访问”这条完整路径。</span>
@@ -1033,35 +437,35 @@
               <div class="hero-point"><strong>03 / 安全防护</strong><span>通过域名绑定和钱包提示，把消息真实目标站点变成可见信息。</span></div>
             </div> -->
 
-          <p class="hero-desc">Web3 登录通常基于钱包地址和签名。前端负责交互，后端负责生成消息与校验签名，钱包负责展示消息并完成签名；只有后端验证通过后，用户才能访问站内的 off-chain 数据。</p>
+          <p class="hero-desc">Web3 登录通常基于钱包地址与签名。前端发起交互，后端生成并校验消息，钱包负责展示与签名；校验通过后，用户才能访问站内 off-chain 数据。</p>
 
 
          
             <div class="bullet-list">
-              <div>前端负责交互与传递。</div>
-              <div>后端负责生成消息、校验签名并决定登录结果。</div>
-              <div>钱包负责签名，也决定用户能否看清消息究竟将用于哪个网站。</div>
+              <div>前端发起登录请求。</div>
+              <div>后端生成消息并校验签名。</div>
+              <div>钱包展示消息并完成签名。</div>
             </div>
                        <p class="hero-desc">
-              本页面展示 Web3 登录的基本机制、Blind Message Attack 的完整链路，以及一种基于钱包检测域名不一致的缓解思路。
+              本页面展示 Web3 登录基本流程、盲消息风险链路，以及基于域名校验的缓解方案。
             </p>
 
             <p class="hero-desc">
-              对 27 个知名网站的检测显示，75.8% 的 Web3 登录存在不同程度的盲消息攻击风险，影响用户超过 200 万。为降低这类风险，本文在 MetaMask 中实现了 Web3AuthGuard，可在登录签名前自动检查消息来源，并提醒用户可疑的 Web3 登录；评估结果显示，该工具成功检测出 80% 的潜在攻击。
+              对 27 个知名网站的检测显示，75.8% 的 Web3 登录存在盲消息风险，相关用户规模超过 200 万。为降低风险，本工作实现了 Web3AuthGuard，可在签名前检查消息来源；评估显示可识别 80% 的潜在风险场景。
             </p>
 
             <div class="hero-points" aria-label="impact metrics">
               <div class="demo-meta-item">
                 <div class="demo-meta-val">75.8%</div>
-                <div class="demo-meta-lbl">Web3 登录存在风险</div>
+                <div class="demo-meta-lbl">Web3 登录存在相关风险</div>
               </div>
               <div class="demo-meta-item">
                 <div class="demo-meta-val">200万+</div>
-                <div class="demo-meta-lbl">受影响用户规模</div>
+                <div class="demo-meta-lbl">相关用户规模</div>
               </div>
               <div class="demo-meta-item">
                 <div class="demo-meta-val">80%</div>
-                <div class="demo-meta-lbl">Web3AuthGuard 检测潜在攻击</div>
+                <div class="demo-meta-lbl">应对潜在风险场景</div>
               </div>
             </div>
    
@@ -1070,8 +474,8 @@
         </section>
 
         <section class="toolbar">
-          <p>三个案例共享同一个 Demo Wallet 面板；开始新的演示会自动清空上一个演示状态。</p>
-          <div class="btn-row"><button class="btn-subtle" id="resetAll">重置演示</button></div>
+          三个案例共用同一示例钱包；切换案例会自动重置状态。
+          <div class="btn-row"><button class="btn-subtle" id="resetAll">重置模拟</button></div>
         </section>
 
 
@@ -1081,10 +485,9 @@
           <div class="case-head">
             <div>
               <div class="kicker">案例一：正常的 Web3 登录流程</div>
-              <p>用户访问网站 A，网站 A 前端向网站 A 后端请求登录消息，后端生成带随机 Nonce 的消息；前端唤起钱包签名，用户签名后，前端把地址、消息、签名交给网站 A 后端，网站 A
-                后端验证通过后返回登录成功。</p>
+              <p>用户访问网站 A。前端向后端请求登录消息，后端返回需要签名的消息；用户使用钱包签名后，前端将地址、消息和签名提交给后端，校验通过后登录成功。</p>
             </div>
-            <button class="btn-primary start-btn" data-case="normal">开始演示</button>
+            <button class="btn-primary start-btn" data-case="normal">正常模拟</button>
           </div>
 
           <div class="case-body">
@@ -1112,8 +515,8 @@
 Nonce: 483921
 Issued At: 2026-04-05T13:20:00Z</pre>
               </div>
-              <div class="detail-card" id="detail-normal">点击“开始演示”后，将按顺序展示从连接钱包、请求消息、签名到后端校验的完整链路。</div>
-              <div class="status safe" id="status-normal">等待开始。这个案例用于建立对 Web3 登录基本机制的正确理解。</div>
+              <div class="detail-card" id="detail-normal">展示从连接钱包到后端校验的完整登录流程。</div>
+              <div class="status safe" id="status-normal">等待开始。</div>
             </div>
           </div>
 
@@ -1121,62 +524,61 @@ Issued At: 2026-04-05T13:20:00Z</pre>
         </section>
 
         <section class="section">
-          <h2>盲消息攻击 Blind Message Attack</h2>
+          <h2>盲消息安全风险 Blind Message Attack</h2>
           <p>
-            用户以为自己只是在当前网站完成一次普通登录，但恶意网站实际向用户展示的是“另一个目标网站”的登录消息。由于用户或钱包难以判断该消息真正服务于哪个网站，用户会盲目签名；攻击者拿到签名后，再把它提交给目标网站后端，最终在目标网站完成未授权登录并访问用户数据。
+            用户以为自己在当前网站完成普通登录，但诱导站点实际展示的是“另一个目标网站”的登录消息。由于消息来源没有和网站绑定，签名可能被用于登录目标网站，带来跨站数据访问/泄露风险。
           </p>
 
           <div class="callout">
-            <strong>核心问题：用户签的是消息，但很难确认这个消息究竟属于哪个网站。</strong><br>问题不在于签名算法失效，而在于“签名内容与来源之间缺乏清晰绑定”，导致用户在恶意网站上完成的签名，能够被转用于另一个站点的后端认证。
+            <strong>核心问题：用户签名的消息没有和登录的网站绑定。</strong><br>问题不在签名算法本身，而在于“签名内容与来源缺乏清晰绑定”，导致签名可能被转用于另一个站点的后端认证。
           </div>
         </section>
 
         <section class="case attack" id="case-attack">
           <div class="case-head">
             <div>
-              <div class="kicker">案例二：盲消息攻击链路</div>
-              <p>用户访问恶意网站 M。恶意网站伪装成普通登录页面，但实际上诱导用户签署的是“网站 B 将接受的登录消息”。用户签名后，恶意网站把地址、消息、签名转发给网站 B 后端，由网站 B 后端完成认证，最终导致网站
-                B 登录成功（未授权）并开放数据访问。</p>
+              <div class="kicker">案例二：盲消息风险链路模拟</div>
+              <p>用户访问诱导站点 M。该站点展示的是“网站 B 的登录消息”。用户签名后，签名内容由站点 M 提交给网站 B ，从而实现未授权访问用户在网站 B 的数据，造成数据泄露。</p>
             </div>
-            <button class="btn-danger start-btn" data-case="attack">开始攻击演示</button>
+            <button class="btn-danger start-btn" data-case="attack">风险模拟</button>
           </div>
 
           <div class="case-body">
             <div class="diagram">
-              <h3>攻击链路节点</h3>
+              <h3>风险演示</h3>
               <div class="nodes" id="nodes-attack">
                 <div class="node" data-node="user"><small>Actor</small><strong>用户</strong><span>01</span></div>
                 <div class="node-arrow">→</div>
                 <div class="node" data-node="wallet"><small>Wallet</small><strong>钱包</strong><span>02 / 04</span></div>
                 <div class="node-arrow">→</div>
-                <div class="node" data-node="m"><small>Malicious Site M</small><strong>恶意网站 M</strong><span>01 / 02 / 03
+                <div class="node" data-node="m"><small>Site M</small><strong>诱导站点 M</strong><span>01 / 02 / 03
                     / 04 / 05 / 06</span></div>
                 <div class="node-arrow">→</div>
                 <div class="node" data-node="b"><small>Website B</small><strong>网站 B 后端</strong><span>03 / 06 /
                     07</span></div>
                 <div class="node-arrow">→</div>
-                <div class="node" data-node="data"><small>Outcome</small><strong>用户数据被访问</strong><span>08</span></div>
+                <div class="node" data-node="data"><small>Outcome</small><strong>数据泄露风险</strong><span>08</span></div>
               </div>
             </div>
 
           <div class="side-col">
               <div class="message-card">
-                <strong>用户在钱包里看到的消息</strong>
+                <strong>钱包显示的消息（用户难以验证来源）</strong>
                 <pre>Login Request
 Nonce: 774183
 Purpose: Authentication Session
 Issued At: 2026-04-05T13:22:30Z</pre>
               </div>
-              <div class="detail-card" id="detail-attack">这个案例会完整展示：恶意网站诱导签名 -> 转发到网站 B 后端 -> 网站 B 建立会话 -> 读取用户数据。</div>
-              <div class="status attack" id="status-attack">等待开始。重点观察“签名被转用于网站 B 后端认证”这一关键步骤。</div>
+              <div class="detail-card" id="detail-attack">展示签名被转用于网站 B 后端并形成风险的过程。</div>
+              <div class="status attack" id="status-attack">等待开始。重点观察签名如何被转用。</div>
             </div>
           </div>
 
           <div class="steps" id="steps-attack"></div>
 
           <div class="result-card" id="attackResult">
-            <strong>攻击结果面板</strong>
-            <p>这些数据原本只应在用户本人成功登录网站 B 后可见。演示中，恶意网站 M 通过把签名提交给网站 B 后端，获得了对这些数据的访问能力。</p>
+            <strong>模拟演示结果</strong>
+            <p>这些数据原本只应在用户本人登录网站 B 后可见。模拟演示中，诱导站点 M 通过转用签名获取了访问能力，展示了跨站数据访问/泄露风险。</p>
             <div class="result-row"><span>用户资料</span><code>Alice Research / UID-B-2048</code></div>
             <div class="result-row"><span>邮箱</span><code>alice.web3@example.com</code></div>
             <div class="result-row"><span>账户偏好</span><code>通知开启 / 导出权限开启</code></div>
@@ -1189,15 +591,15 @@ Issued At: 2026-04-05T13:22:30Z</pre>
 
           <h2>缓解思路：消息绑定域名 + 钱包侧一致性检查</h2>
           <p>
-            如果登录消息中明确包含目标域名，钱包就可以在签名中检查该域名，把它与当前访问页面域名进行对比。一旦发现不一致，钱包就直接告警并中止签名。
+            如果登录消息中明确包含目标域名，钱包就可以将其与当前页面域名比对；一旦不一致，即可告警并中止签名。
           </p>
 
 
               <div class="bullet-list">
-                <div>消息中明确写入目标域名，例如 <code>Domain: websiteB.com</code>。</div>
-                <div>钱包高亮显示该域名，避免用户忽略。</div>
-                <div>钱包同时展示当前访问页面域名并执行比对。</div>
-                <div>若域名不一致，则直接阻止签名。</div>
+              <div>消息中写入目标域名，例如 <code>Domain: websiteB.com</code>。</div>
+              <div>钱包高亮显示目标域名。</div>
+              <div>钱包同时展示当前页面域名并进行比对。</div>
+              <div>域名不一致时直接阻止签名。</div>
               </div>
 
 
@@ -1206,11 +608,11 @@ Issued At: 2026-04-05T13:22:30Z</pre>
         <section class="case defense" id="case-defense">
           <div class="case-head">
             <div>
-              <div class="kicker">案例三：基于钱包的安全防护流程</div>
-              <p>用户仍然访问恶意网站 M。恶意网站尝试诱导用户签署网站 B 的登录消息，但这次消息中明确包含 <code>websiteB.com</code>。钱包识别该域名，再把它与当前页面
-                <code>malicious-site.com</code> 比较；由于两者不一致，钱包告警并阻止签名，攻击在签名前被拦截。</p>
+              <div class="kicker">案例三：基于钱包的防护机制模拟</div>
+              <p>用户仍然访问诱导站点 M。该站点尝试诱导用户签署网站 B 的登录消息，但这次消息中明确包含 <code>websiteB.com</code>。钱包将其与当前页面
+                <code>malicious-site.com</code> 比对后，告警并阻止签名，风险链路在签名前被阻断。</p>
             </div>
-            <button class="btn-warn start-btn" data-case="defense">开始防护演示</button>
+            <button class="btn-warn start-btn" data-case="defense">防护模拟</button>
           </div>
 
           <div class="case-body">
@@ -1221,10 +623,10 @@ Issued At: 2026-04-05T13:22:30Z</pre>
                 <div class="node-arrow">→</div>
                 <div class="node" data-node="wallet"><small>Wallet</small><strong>钱包</strong><span>02 / 04</span></div>
                 <div class="node-arrow">→</div>
-                <div class="node" data-node="mitigation"><small>Wallet Mitigation</small><strong>钱包缓解模块</strong><span>05 / 06 / 07 / 08</span>
+                <div class="node" data-node="mitigation"><small>Wallet Mitigation</small><strong>钱包安全模块</strong><span>05 / 06 / 07 / 08</span>
                 </div>
                 <div class="node-arrow">→</div>
-                <div class="node" data-node="m"><small>Malicious Site M</small><strong>恶意网站 M</strong><span>01 / 02 /
+                <div class="node" data-node="m"><small>Site M</small><strong>诱导站点 M</strong><span>01 / 02 /
                     03</span></div>
               </div>
             </div>
@@ -1245,8 +647,8 @@ Issued At: 2026-04-05T13:24:10Z</pre>
                 <div class="compare-row"><span>检查结果</span><span class="tag">域名不一致</span></div>
               </div>
 
-              <div class="detail-card" id="detail-defense">这个案例会在钱包阶段直接显示域名差异，并在签名前中止流程，因此攻击不会进入网站 B 后端。</div>
-              <div class="status warn" id="status-defense">等待开始。这个案例用于说明“提升可见性 + 钱包拦截”如何阻断本演示攻击。</div>
+              <div class="detail-card" id="detail-defense">展示钱包如何通过域名比对在签名前阻断风险链路。</div>
+              <div class="status warn" id="status-defense">等待开始。</div>
             </div>
           </div>
 
@@ -1259,8 +661,8 @@ Issued At: 2026-04-05T13:24:10Z</pre>
       <aside class="wallet">
         <div class="wallet-head">
           <div>
-            <h3>Demo Wallet</h3>
-            <p>示例钱包</p>
+            <h3>示例钱包</h3>
+            <p>用于模拟签名流程</p>
           </div>
           <div class="wallet-state" id="walletState">未连接</div>
         </div>
@@ -1271,16 +673,16 @@ Issued At: 2026-04-05T13:24:10Z</pre>
           <div class="wallet-row"><span>消息目标域名</span><strong id="walletTarget">-</strong></div>
         </div>
 
-        <div class="wallet-message" id="walletMessage">当前没有待签名消息。请选择一个案例开始演示。</div>
+        <div class="wallet-message" id="walletMessage">当前没有待签名消息。请选择一个案例开始模拟。</div>
         <div class="wallet-check" id="walletCheck">域名检查结果：暂无。</div>
 
         <div class="wallet-actions">
-          <button class="btn-primary" id="connectBtn">连接钱包</button>
+          <button class="btn-primary" id="connectBtn">连接</button>
           <button class="btn-subtle" id="signBtn">签名</button>
           <button class="btn-subtle" id="rejectBtn">拒绝</button>
         </div>
 
-        <div class="wallet-hint" id="walletHint">操作提示：点击任一案例的开始按钮后，钱包会根据场景进入“等待消息”“待签名”“已签名”“域名不一致，已阻止”等不同状态。</div>
+        <div class="wallet-hint" id="walletHint">等待开始演示。</div>
       </aside>
     </div>
   </div>
@@ -1295,50 +697,50 @@ Issued At: 2026-04-05T13:24:10Z</pre>
         status: document.getElementById("status-normal"),
         result: null,
         steps: [
-          { title: "用户访问网站 A 前端", desc: "用户进入 website-a.com，准备使用钱包登录网站 A。", nodes: ["user", "front"], await: "connect", wallet: { status: "未连接", cls: "", page: "website-a.com", target: "-", msg: "当前无待签名消息。\n请先连接钱包以继续网站 A 的登录流程。", check: "域名检查结果：本案例不启用钱包侧域名一致性拦截。", checkCls: "safe", hint: "请点击“连接钱包”，模拟用户在网站 A 上连接 Demo Wallet。" }, banner: "步骤 1/8：用户位于网站 A 前端，准备连接钱包。", bannerCls: "safe" },
-          { title: "钱包连接完成", desc: "用户已连接 Demo Wallet，网站 A 前端可以继续发起登录流程。", nodes: ["user", "wallet", "front"], wallet: { status: "已连接", cls: "safe", page: "website-a.com", target: "-", msg: "钱包已连接到 website-a.com。", check: "域名检查结果：无额外检查。", checkCls: "safe", hint: "连接完成后，前端将向网站 A 后端请求登录消息。" }, banner: "步骤 2/8：钱包已连接，前端准备请求网站 A 后端生成消息。", bannerCls: "safe" },
-          { title: "网站 A 前端请求网站 A 后端生成消息", desc: "前端向网站 A 后端请求一条带随机 Nonce 的登录消息。", nodes: ["front", "back"], wallet: { status: "等待消息", cls: "safe", page: "website-a.com", target: "-", msg: "前端正在向网站 A 后端请求登录消息...", check: "域名检查结果：无额外检查。", checkCls: "safe", hint: "真正的登录消息由后端生成，而不是由前端随意拼接。" }, banner: "步骤 3/8：网站 A 前端向网站 A 后端请求登录消息。", bannerCls: "safe" },
-          { title: "网站 A 后端返回带 Nonce 的登录消息", desc: "后端生成消息并返回给前端，供钱包签名使用。", nodes: ["back", "front"], wallet: { status: "等待消息", cls: "safe", page: "website-a.com", target: "-", msg: "Sign in to Website A\nNonce: 483921\nIssued At: 2026-04-05T13:20:00Z", check: "域名检查结果：无额外检查。", checkCls: "safe", hint: "消息已经回到前端，下一步将唤起钱包签名窗口。" }, banner: "步骤 4/8：网站 A 后端把登录消息返回给网站 A 前端。", bannerCls: "safe" },
-          { title: "前端唤起钱包签名窗口", desc: "前端把消息交给钱包，钱包进入待签名状态。", nodes: ["front", "wallet"], wallet: { status: "待签名", cls: "safe", page: "website-a.com", target: "-", msg: "Sign in to Website A\nNonce: 483921\nIssued At: 2026-04-05T13:20:00Z", check: "域名检查结果：当前案例仅展示正常登录，不做域名拦截。", checkCls: "safe", hint: "钱包已展示消息。请点击“签名”继续演示，或点击“拒绝”停止演示。" }, await: "sign", banner: "步骤 5/8：钱包展示消息，等待用户签名。", bannerCls: "safe" },
-          { title: "前端提交地址 + 消息 + 签名给网站 A 后端", desc: "用户签名后，前端将地址、消息和签名提交给网站 A 后端。", nodes: ["front", "back"], wallet: { status: "已签名", cls: "success", page: "website-a.com", target: "website-a.com", msg: "Sign in to Website A\nNonce: 483921\nIssued At: 2026-04-05T13:20:00Z\nSignature: 0xsig-demo-normal", check: "域名检查结果：正常流程。", checkCls: "safe", hint: "现在由网站 A 后端决定这次登录是否成立。" }, banner: "步骤 6/8：前端把地址、消息和签名交回网站 A 后端。", bannerCls: "safe" },
-          { title: "网站 A 后端完成校验", desc: "后端验证地址、消息和 Signature 的对应关系，并检查 Nonce 是否有效。", nodes: ["back"], wallet: { status: "已签名", cls: "success", page: "website-a.com", target: "website-a.com", msg: "服务器正在校验地址、消息和 Signature 的对应关系。", check: "域名检查结果：正常流程。", checkCls: "safe", hint: "后端验证通过后，才会真正返回登录成功。" }, banner: "步骤 7/8：网站 A 后端完成校验。", bannerCls: "safe" },
-          { title: "登录成功", desc: "网站 A 后端创建会话，用户获得对网站 A off-chain 资源的访问权限。", nodes: ["back", "ok"], wallet: { status: "已签名", cls: "success", page: "website-a.com", target: "website-a.com", msg: "登录成功。网站 A 已接受本次签名，并建立会话。", check: "域名检查结果：本次流程是正常登录场景。", checkCls: "safe", hint: "正常登录演示结束。可以切换到攻击或防护案例继续查看。" }, stop: true, banner: "步骤 8/8：网站 A 登录成功。", bannerCls: "safe" }
+          { title: "访问网站 A", desc: "用户进入 website-a.com，准备使用钱包登录。", nodes: ["user", "front"], await: "connect", wallet: { status: "未连接", cls: "", page: "website-a.com", target: "-", msg: "当前无待签名消息。\n请先连接钱包。", check: "域名检查结果：本案例不启用域名一致性拦截。", checkCls: "safe", hint: "点击“连接钱包”，开始正常登录流程。" }, banner: "步骤 1/8：用户访问网站 A。", bannerCls: "safe" },
+          { title: "连接钱包", desc: "用户完成钱包连接，前端可以继续发起登录。", nodes: ["user", "wallet", "front"], wallet: { status: "已连接", cls: "safe", page: "website-a.com", target: "-", msg: "钱包已连接到 website-a.com。", check: "域名检查结果：无额外检查。", checkCls: "safe", hint: "下一步由前端请求登录消息。" }, banner: "步骤 2/8：钱包已连接。", bannerCls: "safe" },
+          { title: "请求登录消息", desc: "前端向后端请求一条带随机 Nonce 的登录消息。", nodes: ["front", "back"], wallet: { status: "等待消息", cls: "safe", page: "website-a.com", target: "-", msg: "前端正在请求登录消息...", check: "域名检查结果：无额外检查。", checkCls: "safe", hint: "登录消息由后端生成。", }, banner: "步骤 3/8：前端请求登录消息。", bannerCls: "safe" },
+          { title: "返回登录消息", desc: "后端生成消息并返回给前端。", nodes: ["back", "front"], wallet: { status: "等待消息", cls: "safe", page: "website-a.com", target: "-", msg: "Sign in to Website A\nNonce: 483921\nIssued At: 2026-04-05T13:20:00Z", check: "域名检查结果：无额外检查。", checkCls: "safe", hint: "下一步唤起钱包签名。", }, banner: "步骤 4/8：后端返回登录消息。", bannerCls: "safe" },
+          { title: "钱包签名", desc: "前端将消息交给钱包，等待用户签名。", nodes: ["front", "wallet"], wallet: { status: "待签名", cls: "safe", page: "website-a.com", target: "-", msg: "Sign in to Website A\nNonce: 483921\nIssued At: 2026-04-05T13:20:00Z", check: "域名检查结果：本案例不做域名拦截。", checkCls: "safe", hint: "点击“签名”继续，或点击“拒绝”停止。", }, await: "sign", banner: "步骤 5/8：钱包等待签名。", bannerCls: "safe" },
+          { title: "提交签名材料", desc: "前端将地址、消息和签名提交给后端。", nodes: ["front", "back"], wallet: { status: "已签名", cls: "success", page: "website-a.com", target: "website-a.com", msg: "Sign in to Website A\nNonce: 483921\nIssued At: 2026-04-05T13:20:00Z\nSignature: 0xsig-demo-normal", check: "域名检查结果：正常流程。", checkCls: "safe", hint: "后端开始校验登录材料。", }, banner: "步骤 6/8：前端提交签名材料。", bannerCls: "safe" },
+          { title: "后端校验", desc: "后端校验地址、消息和签名，并检查 Nonce。", nodes: ["back"], wallet: { status: "已签名", cls: "success", page: "website-a.com", target: "website-a.com", msg: "服务器正在校验地址、消息和 Signature。", check: "域名检查结果：正常流程。", checkCls: "safe", hint: "校验通过后返回登录成功。", }, banner: "步骤 7/8：后端校验。", bannerCls: "safe" },
+          { title: "登录成功", desc: "后端创建会话，用户获得访问权限。", nodes: ["back", "ok"], wallet: { status: "已签名", cls: "success", page: "website-a.com", target: "website-a.com", msg: "登录成功。网站 A 已建立会话。", check: "域名检查结果：正常登录场景。", checkCls: "safe", hint: "正常登录流程结束。", }, stop: true, banner: "步骤 8/8：网站 A 登录成功。", bannerCls: "safe" }
         ]
       },
       attack: {
-        name: "案例二：盲消息攻击",
+        name: "案例二：盲消息风险链路模拟",
         nodeRoot: document.getElementById("nodes-attack"),
         stepsRoot: document.getElementById("steps-attack"),
         detail: document.getElementById("detail-attack"),
         status: document.getElementById("status-attack"),
         result: document.getElementById("attackResult"),
         steps: [
-          { title: "用户访问恶意网站 M", desc: "用户当前位于 malicious-site.com，以为自己只是在当前网站做普通登录。", nodes: ["user", "m"], await: "connect", wallet: { status: "未连接", cls: "", page: "malicious-site.com", target: "-", msg: "恶意网站 M 正在伪装成普通登录入口。\n请先连接钱包以继续演示。", check: "域名检查结果：钱包尚未识别消息目标域名，无法给出风险提示。", checkCls: "", hint: "请点击“连接钱包”，模拟用户在恶意网站上继续操作。" }, banner: "步骤 1/8：用户访问恶意网站 M。", bannerCls: "attack" },
-          { title: "钱包连接完成", desc: "用户已经在恶意网站 M 上连接了 Demo Wallet。", nodes: ["user", "wallet", "m"], wallet: { status: "已连接", cls: "attack", page: "malicious-site.com", target: "-", msg: "钱包已连接到 malicious-site.com。", check: "域名检查结果：暂无可见的目标站点信息。", checkCls: "", hint: "连接完成后，恶意网站开始准备网站 B 的登录消息。" }, banner: "步骤 2/8：用户在恶意网站 M 上完成钱包连接。", bannerCls: "attack" },
-          { title: "恶意网站获取属于网站 B 的登录消息", desc: "恶意网站不是直接盗数据，而是先准备一条最终会被网站 B 后端接受的登录消息。", nodes: ["m", "b"], wallet: { status: "等待消息", cls: "attack", page: "malicious-site.com", target: "websiteB.com", msg: "恶意网站 M 已拿到将被网站 B 后端接受的登录消息。", check: "域名检查结果：钱包没有把目标域名清楚展示给用户。", checkCls: "", hint: "这是攻击链的关键准备阶段：先拿到网站 B 的认证消息。" }, banner: "步骤 3/8：恶意网站 M 已获取网站 B 的登录消息。", bannerCls: "attack" },
-          { title: "恶意网站把消息伪装成普通登录请求送入钱包", desc: "用户看到的是看似普通的 Login Request，难以判断它实际将被用于网站 B。", nodes: ["m", "wallet"], wallet: { status: "待签名", cls: "attack", page: "malicious-site.com", target: "websiteB.com", msg: "Login Request\nNonce: 774183\nPurpose: Authentication Session\nIssued At: 2026-04-05T13:22:30Z", check: "域名检查结果：没有清晰的目标域名提示，用户难以确认消息真正属于哪个网站。", checkCls: "", hint: "请点击“签名”，模拟用户在不清楚消息真实目标站点时盲目签名。" }, await: "sign", banner: "步骤 4/8：钱包弹出签名框，但来源和用途没有被清楚绑定。", bannerCls: "attack" },
-          { title: "恶意网站拿到地址 + 消息 + 签名", desc: "用户一旦签名，恶意网站就拿到了完整认证材料。", nodes: ["m", "wallet"], wallet: { status: "已签名", cls: "attack", page: "malicious-site.com", target: "websiteB.com", msg: "Login Request\nNonce: 774183\nPurpose: Authentication Session\nIssued At: 2026-04-05T13:22:30Z\nSignature: 0xsig-demo-attack", check: "域名检查结果：签名前没有阻断，因此恶意网站已经得到可转用的签名。", checkCls: "", hint: "危险已经形成：恶意网站可以把这些材料提交给网站 B 后端。" }, banner: "步骤 5/8：恶意网站 M 已拿到地址、消息和签名。", bannerCls: "attack" },
-          { title: "恶意网站把材料转发给网站 B 后端", desc: "签名被从恶意网站 M 转用于网站 B 后端认证。", nodes: ["m", "b"], wallet: { status: "已签名", cls: "attack", page: "malicious-site.com", target: "websiteB.com", msg: "Forwarding to websiteB.com backend:\nAddress: 0x71C...9Af2\nMessage: Login Request / Nonce 774183\nSignature: 0xsig-demo-attack", check: "域名检查结果：钱包未阻止，攻击者得以把签名提交给网站 B 后端。", checkCls: "", hint: "真正导致未授权访问的不是签名本身，而是网站 B 后端接受了这份签名。" }, banner: "步骤 6/8：恶意网站 M 正在把签名材料提交给网站 B 后端。", bannerCls: "attack" },
-          { title: "网站 B 后端校验通过并建立会话", desc: "网站 B 后端只看到一组合法的地址、消息和签名，于是误认为用户本人在登录网站 B。", nodes: ["b"], wallet: { status: "已签名", cls: "attack", page: "malicious-site.com", target: "websiteB.com", msg: "websiteB.com backend verification passed.\nSession issued for 0x71C...9Af2", check: "域名检查结果：后端并不知道用户实际上是在 malicious-site.com 上完成签名。", checkCls: "", hint: "一旦网站 B 创建会话，攻击就从“签名误用”变成了“数据访问能力被窃取”。" }, banner: "步骤 7/8：网站 B 后端完成校验并创建会话。", bannerCls: "attack" },
-          { title: "攻击者读取网站 B 的用户数据", desc: "攻击者利用网站 B 会话访问用户资料、邮箱、偏好设置等 off-chain 数据。", nodes: ["b", "data"], wallet: { status: "已签名", cls: "attack", page: "malicious-site.com", target: "websiteB.com", msg: "Blind Message Attack Success\nWebsite B login accepted.\nUnauthorized data access enabled.", check: "域名检查结果：由于签名前缺乏清晰绑定，攻击链路已经完整闭合。", checkCls: "warn", hint: "攻击演示结束。请注意：恶意网站是先借用签名通过网站 B 的认证，再读取数据。" }, stop: true, reveal: true, banner: "步骤 8/8：Blind Message Attack 成功，网站 B 登录成功（未授权），攻击者获得对用户数据的访问能力。", bannerCls: "attack" }
+          { title: "访问诱导站点 M", desc: "用户位于 malicious-site.com，以为自己在做普通登录。", nodes: ["user", "m"], await: "connect", wallet: { status: "未连接", cls: "", page: "malicious-site.com", target: "-", msg: "诱导站点 M 正在伪装成普通登录入口。\n请先连接钱包。", check: "域名检查结果：尚未识别消息目标域名。", checkCls: "", hint: "点击“连接钱包”，继续风险链路模拟。" }, banner: "步骤 1/8：用户访问诱导站点 M。", bannerCls: "attack" },
+          { title: "连接钱包", desc: "用户在诱导站点 M 上连接了示例钱包。", nodes: ["user", "wallet", "m"], wallet: { status: "已连接", cls: "attack", page: "malicious-site.com", target: "-", msg: "钱包已连接到 malicious-site.com。", check: "域名检查结果：暂无目标站点信息。", checkCls: "", hint: "下一步准备网站 B 的登录消息。" }, banner: "步骤 2/8：钱包已连接。", bannerCls: "attack" },
+          { title: "获取目标消息", desc: "诱导站点准备一条可被网站 B 接受的登录消息。", nodes: ["m", "b"], wallet: { status: "等待消息", cls: "attack", page: "malicious-site.com", target: "websiteB.com", msg: "诱导站点 M 已拿到网站 B 的登录消息。", check: "域名检查结果：钱包未清楚展示目标域名。", checkCls: "", hint: "这是风险链路的准备阶段。", }, banner: "步骤 3/8：诱导站点获取网站 B 的登录消息。", bannerCls: "attack" },
+          { title: "送入钱包签名", desc: "用户看到的是普通的 Login Request，难以判断其真实用途。", nodes: ["m", "wallet"], wallet: { status: "待签名", cls: "attack", page: "malicious-site.com", target: "websiteB.com", msg: "Login Request\nNonce: 774183\nPurpose: Authentication Session\nIssued At: 2026-04-05T13:22:30Z", check: "域名检查结果：目标站点不清晰。", checkCls: "", hint: "点击“签名”，模拟用户继续操作。", }, await: "sign", banner: "步骤 4/8：钱包等待签名。", bannerCls: "attack" },
+          { title: "获取签名材料", desc: "用户签名后，诱导站点获得完整认证材料。", nodes: ["m", "wallet"], wallet: { status: "已签名", cls: "attack", page: "malicious-site.com", target: "websiteB.com", msg: "Login Request\nNonce: 774183\nPurpose: Authentication Session\nIssued At: 2026-04-05T13:22:30Z\nSignature: 0xsig-demo-attack", check: "域名检查结果：签名前未阻断。", checkCls: "", hint: "签名材料已可被转用。", }, banner: "步骤 5/8：诱导站点获得签名材料。", bannerCls: "attack" },
+          { title: "转交网站 B", desc: "签名材料被转交给网站 B 后端。", nodes: ["m", "b"], wallet: { status: "已签名", cls: "attack", page: "malicious-site.com", target: "websiteB.com", msg: "Forwarding to websiteB.com backend:\nAddress: 0x71C...9Af2\nMessage: Login Request / Nonce 774183\nSignature: 0xsig-demo-attack", check: "域名检查结果：钱包未阻止转用。", checkCls: "", hint: "风险开始扩展到网站 B 后端。 ", }, banner: "步骤 6/8：签名材料被转交给网站 B。", bannerCls: "attack" },
+          { title: "后端建立会话", desc: "网站 B 后端校验通过，并误以为用户本人正在登录。", nodes: ["b"], wallet: { status: "已签名", cls: "attack", page: "malicious-site.com", target: "websiteB.com", msg: "websiteB.com backend verification passed.\nSession issued for 0x71C...9Af2", check: "域名检查结果：后端不知道签名发生在 malicious-site.com。", checkCls: "", hint: "会话一旦建立，即可能产生数据风险。", }, banner: "步骤 7/8：网站 B 后端建立会话。", bannerCls: "attack" },
+          { title: "形成数据风险", desc: "签名被转用后，网站 B 出现跨站数据访问/泄露风险。", nodes: ["b", "data"], wallet: { status: "已签名", cls: "attack", page: "malicious-site.com", target: "websiteB.com", msg: "风险链路已形成\nWebsite B login accepted.\nCross-site data access risk enabled.", check: "域名检查结果：风险链路已闭合。", checkCls: "warn", hint: "风险模拟结束。", }, stop: true, reveal: true, banner: "步骤 8/8：网站 B 出现跨站数据访问/泄露风险。", bannerCls: "attack" }
         ]
       },
       defense: {
-        name: "案例三：域名绑定防护",
+        name: "案例三：基于钱包的防护机制模拟",
         nodeRoot: document.getElementById("nodes-defense"),
         stepsRoot: document.getElementById("steps-defense"),
         detail: document.getElementById("detail-defense"),
         status: document.getElementById("status-defense"),
         result: null,
         steps: [
-          { title: "用户访问恶意网站 M", desc: "用户仍在 malicious-site.com 上操作，但这次钱包支持域名识别与一致性检查。", nodes: ["user", "m"], await: "connect", wallet: { status: "未连接", cls: "", page: "malicious-site.com", target: "-", msg: "当前页面为 malicious-site.com。\n请先连接钱包，观察带域名绑定的防护流程。", check: "域名检查结果：等待消息载入后执行。", checkCls: "", hint: "请点击“连接钱包”，模拟用户继续在恶意站点上尝试登录。" }, banner: "步骤 1/8：用户访问恶意网站 M。", bannerCls: "warn" },
-          { title: "钱包连接完成", desc: "用户仍然在恶意网站 M 上连接了 Demo Wallet。", nodes: ["user", "wallet", "m"], wallet: { status: "已连接", cls: "safe", page: "malicious-site.com", target: "-", msg: "钱包已连接到 malicious-site.com。", check: "域名检查结果：等待消息目标域名载入。", checkCls: "", hint: "连接完成后，恶意网站将尝试发起网站 B 的登录消息。" }, banner: "步骤 2/8：钱包已连接，恶意网站准备发起目标消息。", bannerCls: "warn" },
-          { title: "恶意网站发起包含 websiteB.com 的登录消息", desc: "恶意网站仍试图让用户签署网站 B 的登录消息，但消息中这次明确写出了目标域名。", nodes: ["m"], wallet: { status: "等待消息", cls: "warn", page: "malicious-site.com", target: "websiteB.com", msg: "Sign in to websiteB.com\nDomain: websiteB.com\nNonce: 912734\nIssued At: 2026-04-05T13:24:10Z", check: "域名检查结果：钱包已提取出目标域名 websiteB.com，准备与当前页面比较。", checkCls: "safe", hint: "目标域名成为显式可见信息。" }, banner: "步骤 3/8：恶意网站发起网站 B 的登录消息。", bannerCls: "warn" },
-          { title: "钱包高亮消息中的目标域名", desc: "钱包明确显示消息目标域名是 websiteB.com，避免用户忽略签名将被用于哪个站点。", nodes: ["wallet"], wallet: { status: "待签名", cls: "warn", page: "malicious-site.com", target: "websiteB.com", msg: "Sign in to websiteB.com\nDomain: websiteB.com\nNonce: 912734\nIssued At: 2026-04-05T13:24:10Z", check: "域名检查结果：已识别消息中的目标域名 websiteB.com。", checkCls: "safe", hint: "此时钱包不会直接让用户签名，而是先进行域名一致性检查。" }, banner: "步骤 4/8：钱包高亮展示消息中的目标域名。", bannerCls: "warn" },
-          { title: "钱包展示当前访问页面 malicious-site.com", desc: "钱包同时展示当前页面域名，帮助用户把“当前页面”与“签名目标站点”比较。", nodes: ["wallet", "mitigation"], wallet: { status: "待签名", cls: "warn", page: "malicious-site.com", target: "websiteB.com", msg: "Sign in to websiteB.com\nDomain: websiteB.com\nNonce: 912734\nIssued At: 2026-04-05T13:24:10Z", check: "当前访问页面：malicious-site.com；消息目标域名：websiteB.com。", checkCls: "safe", hint: "钱包正在进行域名一致性检查。" }, banner: "步骤 5/8：钱包同时展示当前页面域名和消息目标域名。", bannerCls: "warn" },
-          { title: "域名比对失败", desc: "当前页面是 malicious-site.com，但消息目标域名是 websiteB.com，两者不一致。", nodes: ["wallet", "mitigation"], wallet: { status: "域名不一致，已阻止", cls: "warn", page: "malicious-site.com", target: "websiteB.com", msg: "Sign in to websiteB.com\nDomain: websiteB.com\nNonce: 912734\nIssued At: 2026-04-05T13:24:10Z", check: "检测到域名不一致：当前页面为 malicious-site.com，但签名消息目标为 websiteB.com。", checkCls: "warn", hint: "钱包将直接阻止签名，不再继续后续流程。" }, banner: "步骤 6/8：域名比对失败，钱包发出高亮告警。", bannerCls: "warn" },
-          { title: "钱包阻止签名", desc: "由于域名不一致，钱包中止签名，恶意网站无法获得可提交给网站 B 后端的认证材料。", nodes: ["wallet", "mitigation"], wallet: { status: "域名不一致，已阻止", cls: "warn", page: "malicious-site.com", target: "websiteB.com", msg: "Attack Blocked\nNo signature generated.\nWebsite B backend never receives valid auth material.", check: "域名检查结果：已阻止继续签名。", checkCls: "warn", hint: "攻击在签名前被截断，无法进入网站 B 后端认证阶段。" }, banner: "步骤 7/8：钱包阻止签名请求。", bannerCls: "warn" },
-          { title: "攻击失败", desc: "恶意网站没有拿到签名，因此无法把认证材料提交给网站 B 后端，攻击链路在钱包阶段结束。", nodes: ["mitigation"], wallet: { status: "域名不一致，已阻止", cls: "warn", page: "malicious-site.com", target: "websiteB.com", msg: "Attack Blocked\nNo signature generated.\nWebsite B backend never receives valid auth material.", check: "域名检查结果：钱包已拦截本演示中的 Blind Message Attack。", checkCls: "warn", hint: "防护演示结束。攻击没有进入网站 B 后端，因此也无法访问任何用户数据。" }, stop: true, banner: "步骤 8/8：攻击被拦截。域名绑定 + 钱包侧一致性检查阻断了本演示攻击。", bannerCls: "warn" }
+          { title: "访问诱导站点 M", desc: "用户仍在 malicious-site.com 上操作，但这次钱包支持域名一致性检查。", nodes: ["user", "m"], await: "connect", wallet: { status: "未连接", cls: "", page: "malicious-site.com", target: "-", msg: "当前页面为 malicious-site.com。\n请先连接钱包。", check: "域名检查结果：等待消息载入。", checkCls: "", hint: "点击“连接钱包”，开始防护流程。", }, banner: "步骤 1/8：用户访问诱导站点 M。", bannerCls: "warn" },
+          { title: "连接钱包", desc: "用户在诱导站点 M 上连接了示例钱包。", nodes: ["user", "wallet", "m"], wallet: { status: "已连接", cls: "safe", page: "malicious-site.com", target: "-", msg: "钱包已连接到 malicious-site.com。", check: "域名检查结果：等待目标域名载入。", checkCls: "", hint: "下一步发起网站 B 的登录消息。", }, banner: "步骤 2/8：钱包已连接。", bannerCls: "warn" },
+          { title: "发起目标消息", desc: "诱导站点发起一条包含 websiteB.com 的登录消息。", nodes: ["m"], wallet: { status: "等待消息", cls: "warn", page: "malicious-site.com", target: "websiteB.com", msg: "Sign in to websiteB.com\nDomain: websiteB.com\nNonce: 912734\nIssued At: 2026-04-05T13:24:10Z", check: "域名检查结果：已提取目标域名 websiteB.com。", checkCls: "safe", hint: "目标域名已成为显式信息。", }, banner: "步骤 3/8：诱导站点发起目标消息。", bannerCls: "warn" },
+          { title: "高亮目标域名", desc: "钱包高亮展示消息中的目标域名。", nodes: ["wallet"], wallet: { status: "待签名", cls: "warn", page: "malicious-site.com", target: "websiteB.com", msg: "Sign in to websiteB.com\nDomain: websiteB.com\nNonce: 912734\nIssued At: 2026-04-05T13:24:10Z", check: "域名检查结果：已识别消息目标域名。", checkCls: "safe", hint: "下一步进行域名一致性检查。", }, banner: "步骤 4/8：钱包高亮目标域名。", bannerCls: "warn" },
+          { title: "展示当前页面", desc: "钱包同时展示当前页面域名与目标域名。", nodes: ["wallet", "mitigation"], wallet: { status: "待签名", cls: "warn", page: "malicious-site.com", target: "websiteB.com", msg: "Sign in to websiteB.com\nDomain: websiteB.com\nNonce: 912734\nIssued At: 2026-04-05T13:24:10Z", check: "当前页面：malicious-site.com；目标域名：websiteB.com。", checkCls: "safe", hint: "钱包正在比较两个域名。", }, banner: "步骤 5/8：钱包展示两个域名。", bannerCls: "warn" },
+          { title: "域名不一致", desc: "当前页面与消息目标域名不一致。", nodes: ["wallet", "mitigation"], wallet: { status: "域名不一致，已阻止", cls: "warn", page: "malicious-site.com", target: "websiteB.com", msg: "Sign in to websiteB.com\nDomain: websiteB.com\nNonce: 912734\nIssued At: 2026-04-05T13:24:10Z", check: "检测到域名不一致：malicious-site.com ≠ websiteB.com。", checkCls: "warn", hint: "钱包将直接阻止签名。", }, banner: "步骤 6/8：检测到域名不一致。", bannerCls: "warn" },
+          { title: "阻止签名", desc: "钱包中止签名，诱导站点无法继续提交认证材料。", nodes: ["wallet", "mitigation"], wallet: { status: "域名不一致，已阻止", cls: "warn", page: "malicious-site.com", target: "websiteB.com", msg: "风险已阻断\nNo signature generated.\nWebsite B backend never receives valid auth material.", check: "域名检查结果：已阻止继续签名。", checkCls: "warn", hint: "风险链路在签名前被截断。", }, banner: "步骤 7/8：钱包阻止签名。", bannerCls: "warn" },
+          { title: "风险被阻断", desc: "诱导站点未获得签名，风险链路在钱包阶段结束。", nodes: ["mitigation"], wallet: { status: "域名不一致，已阻止", cls: "warn", page: "malicious-site.com", target: "websiteB.com", msg: "风险已阻断\nNo signature generated.\nWebsite B backend never receives valid auth material.", check: "域名检查结果：钱包已拦截本次风险链路。", checkCls: "warn", hint: "防护模拟结束。", }, stop: true, banner: "步骤 8/8：风险链路被阻断。", bannerCls: "warn" }
         ]
       }
     };
@@ -1398,7 +800,7 @@ Issued At: 2026-04-05T13:24:10Z</pre>
       els.walletMessage.textContent = view.msg || "当前没有待签名消息。";
       els.walletCheck.textContent = view.check || "域名检查结果：暂无。";
       els.walletCheck.className = "wallet-check" + (view.checkCls ? ` ${view.checkCls}` : "");
-      els.walletHint.textContent = view.hint || "请选择一个案例开始演示。";
+      els.walletHint.textContent = view.hint || "请选择一个案例开始模拟。";
     }
 
     function resetViews() {
@@ -1408,14 +810,14 @@ Issued At: 2026-04-05T13:24:10Z</pre>
         if (demo.result) demo.result.classList.remove("show");
       });
 
-      demos.normal.detail.textContent = "点击“开始演示”后，将按顺序展示从连接钱包、请求消息、签名到后端校验的完整链路。";
-      demos.normal.status.textContent = "等待开始。这个案例用于建立对 Web3 登录基本机制的正确理解。";
+      demos.normal.detail.textContent = "展示从连接钱包到后端校验的完整登录流程。";
+      demos.normal.status.textContent = "等待开始。用于说明 Web3 登录的基本机制。";
       demos.normal.status.className = "status safe";
-      demos.attack.detail.textContent = "这个案例会完整展示：恶意网站诱导签名 -> 转发到网站 B 后端 -> 网站 B 建立会话 -> 读取用户数据。";
-      demos.attack.status.textContent = "等待开始。重点观察“签名被转用于网站 B 后端认证”这一关键步骤。";
+      demos.attack.detail.textContent = "展示签名被转用于网站 B 后端并形成风险的过程。";
+      demos.attack.status.textContent = "等待开始。重点观察签名如何被转用。";
       demos.attack.status.className = "status attack";
-      demos.defense.detail.textContent = "这个案例会在钱包阶段直接显示域名差异，并在签名前中止流程，因此攻击不会进入网站 B 后端。";
-      demos.defense.status.textContent = "等待开始。这个案例用于说明“提升可见性 + 钱包拦截”如何阻断本演示攻击。";
+      demos.defense.detail.textContent = "展示钱包如何通过域名比对在签名前阻断风险链路。";
+      demos.defense.status.textContent = "等待开始。用于说明域名校验的防护效果。";
       demos.defense.status.className = "status warn";
     }
 
@@ -1424,9 +826,9 @@ Issued At: 2026-04-05T13:24:10Z</pre>
       state.current = null;
       state.step = -1;
       resetViews();
-      setWallet({ status: "未连接", cls: "", page: "-", target: "-", msg: "当前没有待签名消息。请选择一个案例开始演示。", check: "域名检查结果：暂无。", checkCls: "", hint: "操作提示：点击任一案例的开始按钮后，钱包会根据场景进入“等待消息”“待签名”“已签名”“域名不一致，已阻止”等不同状态。" });
+      setWallet({ status: "未连接", cls: "", page: "-", target: "-", msg: "当前没有待签名消息。请选择一个案例开始模拟。", check: "域名检查结果：暂无。", checkCls: "", hint: "等待开始演示。" });
       walletActions(false, false, false);
-      setGlobal("当前未播放演示", false);
+      setGlobal("当前未开始模拟演示", false);
     }
     function renderProgress(id, index) {
       const demo = demos[id];
@@ -1466,7 +868,7 @@ Issued At: 2026-04-05T13:24:10Z</pre>
       if (step.await === "sign") return walletActions(false, true, true);
 
       walletActions(false, false, false);
-      if (step.stop) return setGlobal(`演示完成：${demo.name}`, true);
+      if (step.stop) return setGlobal(`模拟演示完成：${demo.name}`, true);
 
       stopTimer();
       state.timer = setTimeout(nextStep, 1200);
@@ -1476,7 +878,7 @@ Issued At: 2026-04-05T13:24:10Z</pre>
       if (!state.current) return;
       const demo = demos[state.current];
       const next = state.step + 1;
-      if (next >= demo.steps.length) return setGlobal(`演示完成：${demo.name}`, true);
+      if (next >= demo.steps.length) return setGlobal(`模拟演示完成：${demo.name}`, true);
       runStep(state.current, next);
     }
 
@@ -1491,7 +893,7 @@ Issued At: 2026-04-05T13:24:10Z</pre>
       const step = demos[state.current].steps[state.step];
       if (step.await !== "connect") return;
       const cls = state.current === "attack" ? "attack" : "safe";
-      setWallet({ ...step.wallet, status: "已连接", cls, hint: "钱包已连接。演示将继续推进到下一步。" });
+      setWallet({ ...step.wallet, status: "已连接", cls, hint: "钱包已连接，流程继续。" });
       walletActions(false, false, false);
       stopTimer();
       state.timer = setTimeout(nextStep, 650);
@@ -1503,8 +905,8 @@ Issued At: 2026-04-05T13:24:10Z</pre>
       if (step.await !== "sign") return;
       const cls = state.current === "attack" ? "attack" : "success";
       const hint = state.current === "attack"
-        ? "用户已经签名。恶意网站将继续把签名转用于网站 B 后端。"
-        : "用户已经签名。前端将把地址、消息和签名提交给网站 A 后端。";
+        ? "用户已签名，签名材料将继续被转用。"
+        : "用户已签名，前端将提交登录材料。";
       setWallet({ ...step.wallet, status: "已签名", cls, hint });
       walletActions(false, false, false);
       stopTimer();
@@ -1517,11 +919,11 @@ Issued At: 2026-04-05T13:24:10Z</pre>
       const step = demo.steps[state.step];
       if (step.await !== "sign") return;
       stopTimer();
-      setWallet({ ...step.wallet, status: "已拒绝", cls: "warn", hint: "用户拒绝签名，当前演示已停止。可重新开始任一案例。" });
+      setWallet({ ...step.wallet, status: "已拒绝", cls: "warn", hint: "用户已拒绝签名，当前流程停止。" });
       walletActions(false, false, false);
-      demo.status.textContent = "用户在钱包中拒绝签名，当前链路已停止。可以重新开始该案例或切换到其他案例。";
+      demo.status.textContent = "用户拒绝签名，当前流程已停止。";
       demo.status.className = "status warn";
-      setGlobal(`演示暂停：${demo.name}`, true);
+      setGlobal(`模拟演示暂停：${demo.name}`, true);
     }
 
     document.querySelectorAll(".start-btn").forEach((btn) => btn.addEventListener("click", () => startDemo(btn.dataset.case)));
