@@ -592,6 +592,26 @@ pre {
   border: 1px solid rgba(220, 38, 38, 0.08);
   border-left: 3px solid rgba(220, 38, 38, 0.44);
   box-shadow: var(--shadow-soft);
+  padding: 10px 12px;
+  gap: 3px;
+}
+
+.risk-panel {
+  background: linear-gradient(180deg, rgba(254, 242, 242, 0.98), rgba(255, 255, 255, 0.98));
+  border: 1px solid rgba(220, 38, 38, 0.12);
+  padding: 14px;
+}
+
+.risk-panel-head h3 {
+  color: var(--red-2);
+}
+
+.risk-panel-head {
+  gap: 4px;
+}
+
+.risk-grid {
+  gap: 8px;
 }
 
 .risk-card.active {
@@ -606,17 +626,26 @@ pre {
 }
 
 .risk-detail {
-  background: linear-gradient(180deg, rgba(254, 242, 242, 0.98), rgba(255, 255, 255, 0.98));
-  border: 1px solid rgba(220, 38, 38, 0.1);
+  background: rgba(255, 255, 255, 0.98);
+  border: 1px solid rgba(15, 23, 42, 0.08);
 }
 
 .contract-panel {
   background: linear-gradient(180deg, rgba(245, 243, 255, 0.98), rgba(255, 255, 255, 0.98));
   border: 1px solid rgba(124, 58, 237, 0.12);
+  padding: 14px;
 }
 
 .contract-panel-head h4 {
   color: var(--violet-2);
+}
+
+.contract-panel-head {
+  gap: 5px;
+}
+
+.contract-grid {
+  gap: 8px;
 }
 
 .contract-card {
@@ -624,6 +653,8 @@ pre {
   border: 1px solid rgba(124, 58, 237, 0.1);
   border-left: 3px solid rgba(124, 58, 237, 0.4);
   box-shadow: var(--shadow-soft);
+  padding: 10px 12px;
+  gap: 3px;
 }
 
 .contract-card.active {

@@ -412,6 +412,11 @@
       opacity: 1;
     }
 
+    .graph-wrap.focus-wallet .node-contract,
+    .graph-wrap.focus-wallet .graph-line-contract {
+      opacity: 0.18 !important;
+    }
+
     .node-contract strong {
       font-size: 1.04rem;
     }
@@ -437,6 +442,12 @@
 
     .risk-on .node-risk {
       opacity: 1;
+    }
+
+    .graph-wrap.focus-contract .node-risk,
+    .graph-wrap.focus-contract .graph-line-risk,
+    .graph-wrap.focus-contract .risk-label {
+      opacity: 0.18 !important;
     }
 
     .risk-label {
@@ -582,11 +593,12 @@
 
     .risk-detail {
       grid-column: 1 / -1;
+      order: 3;
       min-height: 174px;
       padding: 18px;
       border-radius: var(--radius-md);
-      background: linear-gradient(180deg, rgba(248, 113, 113, 0.08), rgba(20, 28, 43, 0.96));
-      border: 1px solid rgba(248, 113, 113, 0.12);
+      background: rgba(255, 255, 255, 0.96);
+      border: 1px solid rgba(15, 23, 42, 0.08);
       display: grid;
       align-items: start;
     }
@@ -868,8 +880,8 @@
         <div class="graph-wrap" id="riskDemo">
           <div class="graph-head">
             <p>
-              用户通常只看到标准 Web3 交互链路；但当钱包连接注册信息、备份服务、RPC 或第三方服务时，钱包可能成为数据汇聚与传播节点。与此同时，若 DApp 依赖的 Smart Contract 保留过强的 owner 权限，控制能力也可能重新集中。</p>
-              <p>蓝色表示标准 Web3 交互链路；红色表示钱包侧潜在风险路径；紫色表示 Smart Contract 中高权限 Owner 带来的控制集中风险。</p>
+              用户通常只看到标准 Web3 交互链路；但当钱包连接注册信息、备份服务、RPC 或第三方服务时，钱包可能成为数据汇聚与传播节点。与此同时，若 DApp 依赖的智能合约保留过强的 owner 权限，也可能导致安全风险</p>
+              <p>蓝色表示标准 Web3 交互链路；红色表示钱包侧潜在风险路径；紫色表示智能合约中高权限 Owner 带来的风险。</p>
           </div>
 
           <div class="graph-stage">
@@ -915,26 +927,26 @@
               </div>
 
               <div class="graph-node node-main" style="left: 13%; top: 50%;">
-                <small>Actor</small>
-                <strong>User</strong>
+                <small>User</small>
+                <strong>用户</strong>
                 <span>发起交互与签名</span>
               </div>
 
               <div class="graph-node node-main wallet-node" data-focus="sr1 sr2 sr3 sr4 sr5" style="left: 37%; top: 50%;">
-                <small>Core / Aggregation Point</small>
-                <strong>钱包 Wallet</strong>
-                <span>签名入口 / 隐私与风险聚合点</span>
+                <small>Crypto Wallet</small>
+                <strong>加密钱包 </strong>
+                <span>入口点，隐私风险聚合点</span>
               </div>
 
               <div class="graph-node node-main" style="left: 61%; top: 50%;">
-                <small>App</small>
-                <strong>DApp</strong>
+                <small>DApp</small>
+                <strong>Web3 应用</strong>
                 <span>链上应用与交互界面</span>
               </div>
 
               <div class="graph-node node-main" style="left: 85%; top: 50%;">
-                <small>Ledger</small>
-                <strong>Blockchain</strong>
+                <small>Blockchain</small>
+                <strong>区块链</strong>
                 <span>链上状态与交易记录</span>
               </div>
 
@@ -991,7 +1003,6 @@
               </div>
             </div>
           </div>
-
         </div>
 
         <aside class="risk-panel">
@@ -1062,58 +1073,58 @@
           </div>
 
           <div class="risk-detail-item" data-detail="sr1">
-            <span class="tag">SR#1 Anonymity Loss</span>
+          
             <h4>去匿名化</h4>
-            <p>一些加密钱包要求用户注册，并在注册过程中收集个人身份信息（Personally Identifiable Information, PII），如电子邮件地址和电话号码。例如，Bitcoin.com Wallet 是一款知名的加密钱包，下载量超过 500 万次，它提供可选的注册功能。类似地，一些 Web3 网站支持社交登录，如 Google 和 Facebook，这些中心化身份认证方式可能将用户身份信息与其公钥建立关联，从而削弱公钥带来的匿名性。此外，个人身份信息一旦泄露，也可能进一步放大钓鱼等安全风险。例如，Trezor 钱包曾泄露 106,856 名用户的电子邮件地址，并引发了后续的钓鱼邮件事件。
-            </p>
+           一些加密钱包要求用户注册，并在注册过程中收集个人身份信息（Personally Identifiable Information, PII），如电子邮件地址和电话号码。例如，Bitcoin.com Wallet 是一款知名的加密钱包，下载量超过 500 万次，它提供可选的注册功能。类似地，一些 Web3 网站支持社交登录，如 Google 和 Facebook，这些中心化身份认证方式可能将用户身份信息与其公钥建立关联，从而削弱公钥带来的匿名性。此外，个人身份信息一旦泄露，也可能进一步放大钓鱼等安全风险。例如，Trezor 钱包曾泄露 106,856 名用户的电子邮件地址，并引发了后续的钓鱼邮件事件。
+           
           </div>
 
           <div class="risk-detail-item" data-detail="sr2">
-            <span class="tag">SR#2 Private Key Leakage</span>
+         
             <h4>私钥泄露</h4>
-            <p>私钥是 Web3 生态的核心，用于管理用户的加密资产，必须安全存储在本地设备上。然而，一些钱包鼓励用户将私钥备份到第一方或第三方服务器。例如，Bitcoin.com Wallet 在设置页面提供了私钥备份选项，允许用户将私钥上传至 Bitcoin.com Wallet 的服务器。另一个钱包 ZenGo 要求用户在使用前必须将私钥备份至 Google Drive。这种做法可能导致私钥在传输或存储过程中暴露。例如，若用户通过不安全的网络传输私钥，相关数据可能被中间人截获并造成私钥泄露。一个真实案例是 Slope 钱包在传输过程中泄露用户私钥，导致约 600 万美元的代币被盗。</p>
+          私钥是 Web3 生态的核心，用于管理用户的加密资产，必须安全存储在本地设备上。然而，一些钱包鼓励用户将私钥备份到第一方或第三方服务器。例如，Bitcoin.com Wallet 在设置页面提供了私钥备份选项，允许用户将私钥上传至 Bitcoin.com Wallet 的服务器。另一个钱包 ZenGo 要求用户在使用前必须将私钥备份至 Google Drive。这种做法可能导致私钥在传输或存储过程中暴露。例如，若用户通过不安全的网络传输私钥，相关数据可能被中间人截获并造成私钥泄露。一个真实案例是 Slope 钱包在传输过程中泄露用户私钥，导致约 600 万美元的代币被盗。
           </div>
 
           <div class="risk-detail-item" data-detail="sr3">
-            <span class="tag">SR#3 Built-in Service</span>
+       
             <h4>内置服务</h4>
-            <p>许多加密钱包内置中心化服务，例如，Trust Wallet 内置了 Binance 交易所，以提供加密货币的购买服务。这些中心化服务通常受到监管，并可能要求用户提供身份信息。普通用户往往难以区分钱包内的中心化与去中心化服务，因此在用户使用相关服务时，钱包应明确告知相应风险。这些服务也可能因监管或运营问题导致宕机或停止运营，进而给用户带来资产损失风险。例如，近年来已有 75 家交易所停止运营，其中 Celsius Network 拥有 170 万名用户，其暂停服务曾造成大量用户的经济损失。</p>
+           许多加密钱包内置中心化服务，例如，Trust Wallet 内置了 Binance 交易所，以提供加密货币的购买服务。这些中心化服务通常受到监管，并可能要求用户提供身份信息。普通用户往往难以区分钱包内的中心化与去中心化服务，因此在用户使用相关服务时，钱包应明确告知相应风险。这些服务也可能因监管或运营问题导致宕机或停止运营，进而给用户带来资产损失风险。例如，近年来已有 75 家交易所停止运营，其中 Celsius Network 拥有 170 万名用户，其暂停服务曾造成大量用户的经济损失。
           </div>
 
           <div class="risk-detail-item" data-detail="sr4">
-            <span class="tag">SR#4 RPC Services</span>
+          
             <h4>RPC 服务</h4>
-            <p>加密钱包依赖 RPC 服务与区块链交互，用于查询链上数据或提交交易。然而，第三方 RPC 服务存在固有的中心化风险，例如服务不可用风险。此外，RPC 服务提供商可以提前访问用户的交易信息，从而可能引发 MEV 相关的交易排序与公平性风险。因此，钱包应披露默认的 RPC 服务提供商，并允许用户自定义 RPC 服务。RPC 服务的中心化已导致多起安全问题，例如，2022 年 3 月，Infura 因政策原因切断了对乌克兰用户的服务；由于钱包 MetaMask 的默认 RPC 服务商是 Infura，导致大量用户受到影响，无法访问区块链。</p>
+          加密钱包依赖 RPC 服务与区块链交互，用于查询链上数据或提交交易。然而，第三方 RPC 服务存在固有的中心化风险，例如服务不可用风险。此外，RPC 服务提供商可以提前访问用户的交易信息，从而可能引发 MEV 相关的交易排序与公平性风险。因此，钱包应披露默认的 RPC 服务提供商，并允许用户自定义 RPC 服务。RPC 服务的中心化已导致多起安全问题，例如，2022 年 3 月，Infura 因政策原因切断了对乌克兰用户的服务；由于钱包 MetaMask 的默认 RPC 服务商是 Infura，导致大量用户受到影响，无法访问区块链。
           </div>
 
           <div class="risk-detail-item" data-detail="sr5">
-            <span class="tag">SR#5 Third-party SDKs</span>
+           
             <h4>第三方 SDK</h4>
-            <p>加密钱包通常依赖第三方 SDK 实现通知、数据分析等功能，但在此过程中，钱包可能会向第三方服务提供商共享用户的 PII、设备 ID 和崩溃日志等数据。例如，在 Slope 事件中，白帽研究人员发现 Slope 钱包会将日志以明文形式传输至第三方漏洞分析服务商 Sentry，其中包含用户大量敏感信息。</p>
+           加密钱包通常依赖第三方 SDK 实现通知、数据分析等功能，但在此过程中，钱包可能会向第三方服务提供商共享用户的 PII、设备 ID 和崩溃日志等数据。例如，在 Slope 事件中，白帽研究人员发现 Slope 钱包会将日志以明文形式传输至第三方漏洞分析服务商 Sentry，其中包含用户大量敏感信息。
           </div>
 
           <div class="risk-detail-item" data-detail="ll">
-            <span class="tag">Limited Liquidity</span>
+          
             <h4>流动性限制</h4>
-            <p>在加密货币市场中，流动性指代币的自由交易能力。本文将流动性定义为：任何人均可自由转移（transfer）其持有的代币。如果合约所有者可以控制代币转账相关的函数，则认为该合约存在流动性限制风险。</p>
+            在加密货币市场中，流动性指代币的自由交易能力。本文将流动性定义为：任何人均可自由转移（transfer）其持有的代币。如果合约所有者可以控制代币转账相关的函数，则认为该合约存在流动性限制风险。
           </div>
 
           <div class="risk-detail-item" data-detail="vs">
-            <span class="tag">Vulnerable Scarcity</span>
+          
             <h4>稀缺性降低</h4>
-            <p>加密资产的价值通常受供应量影响。一些 token 或 NFT 的供应量是固定的，由于稀缺性，它们的市场价值也较高。然而，若 Owner 可随意增发代币，会导致代币稀缺性降低，从而损害现有持有者的利益。一个现实案例是 Yearn.finance 团队曾提议额外发行价值 2.25 亿美元的 YFI 代币以激励开发者，此举引发持有者强烈反对。</p>
+           加密资产的价值通常受供应量影响。一些 token 或 NFT 的供应量是固定的，由于稀缺性，它们的市场价值也较高。然而，若 Owner 可随意增发代币，会导致代币稀缺性降低，从而损害现有持有者的利益。一个现实案例是 Yearn.finance 团队曾提议额外发行价值 2.25 亿美元的 YFI 代币以激励开发者，此举引发持有者强烈反对。
           </div>
 
           <div class="risk-detail-item" data-detail="mm">
-            <span class="tag">Mutable Metadata</span>
+          
             <h4>可变元数据</h4>
-            <p>ERC20代币合约通常提供一组可选元数据，以标识代币的基本信息，包括名称（name）、符号（symbol）和小数位数（decimals）。这些元数据通常在合约部署后保持不变。然而，若Owner可以随意修改元数据，则可能导致用户误解代币属性，甚至影响市场交易。例如 ERC20代币如果合约允许Owner修改这些字段，则可能影响外部平台（如加密钱包和Web3网站）的正确显示，并可能对代币价值产生不利影响。</p>
+           ERC20代币合约通常提供一组可选元数据，以标识代币的基本信息，包括名称（name）、符号（symbol）和小数位数（decimals）。这些元数据通常在合约部署后保持不变。然而，若Owner可以随意修改元数据，则可能导致用户误解代币属性，甚至影响市场交易。例如 ERC20代币如果合约允许Owner修改这些字段，则可能影响外部平台（如加密钱包和Web3网站）的正确显示，并可能对代币价值产生不利影响。
           </div>
 
           <div class="risk-detail-item" data-detail="mp">
-            <span class="tag">Mutable Parameters</span>
+    
             <h4>可变参数</h4>
-            <p>ERC20 代币的 transfer() 函数通常包含开发者定义的参数，如交易税（taxFee）、流动性费（liquidityFee）等。这些参数通常在合约开发阶段由参与者共同决定。然而，若 Owner 拥有随意更改这些参数的权限，可能导致用户在不知情的情况下支付额外费用或遭受不公平交易。例如，PAWTH 是一个市值超过 100 万美元的 ERC20，合约 Owner 可以随意修改 taxFee、liquidityFee、burnFee 等参数。</p>
+            ERC20 代币的 transfer() 函数通常包含开发者定义的参数，如交易税（taxFee）、流动性费（liquidityFee）等。这些参数通常在合约开发阶段由参与者共同决定。然而，若 Owner 拥有随意更改这些参数的权限，可能导致用户在不知情的情况下支付额外费用或遭受不公平交易。例如，PAWTH 是一个市值超过 100 万美元的 ERC20，合约 Owner 可以随意修改 taxFee、liquidityFee、burnFee 等参数。
           </div>
         </div>
       </div>
@@ -1133,10 +1144,32 @@
     const detailEmpty = document.getElementById("riskDetailEmpty");
     let activeRisk = null;
     let activeDetail = null;
-    let contractOpen = false;
+    let activeGroup = null;
+
+    function syncContractState(riskOn) {
+      if (contractNode) {
+        contractNode.classList.toggle("open", !!riskOn && activeGroup === "contract");
+      }
+      if (contractPanel) {
+        contractPanel.classList.toggle("open", !!riskOn);
+      }
+    }
+
+    function resetRiskOverview() {
+      activeRisk = null;
+      activeDetail = null;
+    }
+
+    function clearRiskState() {
+      activeRisk = null;
+      activeDetail = null;
+      activeGroup = null;
+    }
 
     function applyFocus() {
       root.classList.toggle("focusing", !!activeRisk);
+      root.classList.toggle("focus-wallet", activeGroup === "wallet");
+      root.classList.toggle("focus-contract", activeGroup === "contract");
       focusTargets.forEach((el) => {
         const keys = (el.dataset.focus || "").split(/\s+/).filter(Boolean);
         const matched = !!activeRisk && keys.includes(activeRisk);
@@ -1160,7 +1193,8 @@
       });
     }
 
-    function setMode(mode) {
+    function setMode(mode, options = {}) {
+      const { reset = false } = options;
       const riskOn = mode === "risk";
       root.classList.toggle("risk-on", riskOn);
       document.body.classList.toggle("risk-on", riskOn);
@@ -1168,20 +1202,13 @@
       showRisk.classList.toggle("btn-active", riskOn);
 
       if (!riskOn) {
-        activeRisk = null;
-        activeDetail = null;
-        contractOpen = false;
-      } else {
-        contractOpen = true;
+        clearRiskState();
+      } else if (reset) {
+        resetRiskOverview();
+        activeGroup = null;
       }
 
-      if (contractNode) {
-        contractNode.classList.toggle("open", riskOn && contractOpen);
-      }
-      if (contractPanel) {
-        contractPanel.classList.toggle("open", riskOn && contractOpen);
-      }
-
+      syncContractState(riskOn);
       applyFocus();
     }
 
@@ -1189,7 +1216,7 @@
       showNormal.addEventListener("click", () => setMode("normal"));
     }
     if (showRisk) {
-      showRisk.addEventListener("click", () => setMode("risk"));
+      showRisk.addEventListener("click", () => setMode("risk", { reset: true }));
     }
 
     riskCards.forEach((card) => {
@@ -1202,6 +1229,8 @@
         const next = activeDetail === key ? null : key;
         activeRisk = next;
         activeDetail = next;
+        activeGroup = next ? "wallet" : null;
+        syncContractState(true);
         applyFocus();
       });
     });
@@ -1215,6 +1244,8 @@
         const key = card.dataset.contract;
         activeDetail = activeDetail === key ? null : key;
         activeRisk = null;
+        activeGroup = activeDetail ? "contract" : null;
+        syncContractState(true);
         applyFocus();
       });
     });
@@ -1225,17 +1256,18 @@
           setMode("risk");
         }
 
-        contractOpen = true;
-        contractNode.classList.toggle("open", true);
-
+        activeRisk = null;
+        activeDetail = null;
+        activeGroup = "contract";
+        syncContractState(true);
+        applyFocus();
         if (contractPanel) {
-          contractPanel.classList.toggle("open", true);
           contractPanel.scrollIntoView({ behavior: "smooth", block: "nearest" });
         }
       });
     }
 
-    setMode("risk");
+    setMode("risk", { reset: true });
   </script>
 </body>
 
