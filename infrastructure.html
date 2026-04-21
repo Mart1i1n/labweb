@@ -1,0 +1,427 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>基础设施 — 区块链系统安全与数字经济风险分析平台</title>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+SC:wght@300;400;500;700;900&family=JetBrains+Mono:wght@400;500;600;700&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<style>
+:root {
+  --bg-primary: #0a0e17;
+  --bg-secondary: #0f1420;
+  --bg-card: #141c2b;
+  --bg-card-hover: #192234;
+  --border: rgba(99, 179, 237, 0.1);
+  --border-hover: rgba(99, 179, 237, 0.28);
+  --accent: #60a5fa;
+  --accent-bright: #93c5fd;
+  --accent-dim: #2563eb;
+  --accent-green: #34d399;
+  --accent-amber: #fbbf24;
+  --accent-red: #f87171;
+  --accent-purple: #a78bfa;
+  --text-primary: #e2e8f0;
+  --text-secondary: #94a3b8;
+  --text-muted: #64748b;
+}
+*{margin:0;padding:0;box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{font-family:'Noto Sans SC','Inter',sans-serif;background:var(--bg-primary);color:var(--text-primary);line-height:1.75;overflow-x:hidden;font-size:18px}
+
+nav{position:fixed;top:0;left:0;right:0;z-index:100;padding:0 3rem;height:60px;display:flex;align-items:center;justify-content:space-between;background:rgba(10,14,23,.88);backdrop-filter:blur(24px);border-bottom:1px solid var(--border)}
+.nav-logo{font-size:1.1rem;font-weight:700;color:var(--accent-bright);display:flex;align-items:center;gap:.6rem}
+.nav-links{display:flex;gap:1.8rem;list-style:none}
+.nav-links a{color:var(--text-secondary);text-decoration:none;font-size:1.05rem;font-weight:500;transition:color .3s}
+.nav-links a:hover,.nav-links a.active{color:var(--accent-bright)}
+
+.page-hero{padding:8rem 3rem 4rem;background:var(--bg-secondary);border-bottom:1px solid var(--border)}
+.page-hero-inner{max-width:1100px;margin:0 auto}
+.page-tag{font-family:'JetBrains Mono',monospace;font-size:.95rem;color:var(--accent);letter-spacing:.12em;text-transform:uppercase;margin-bottom:.8rem;display:flex;align-items:center;gap:.5rem}
+.page-tag::before{content:'';display:inline-block;width:18px;height:1px;background:var(--accent)}
+.page-hero h1{font-size:clamp(2.2rem,3.5vw,3.4rem);font-weight:900;line-height:1.3;margin-bottom:1rem;letter-spacing:-.02em}
+.page-hero p{font-size:1.25rem;color:var(--text-secondary);max-width:680px;font-weight:300}
+
+section{padding:4rem 3rem;position:relative}
+section:nth-child(even){background:var(--bg-secondary);border-top:1px solid var(--border);border-bottom:1px solid var(--border)}
+.section-inner{max-width:1100px;margin:0 auto}
+.section-label{font-family:'JetBrains Mono',monospace;font-size:.9rem;color:var(--accent);letter-spacing:.1em;text-transform:uppercase;margin-bottom:.5rem}
+.section-title{font-size:1.9rem;font-weight:700;margin-bottom:.4rem}
+.section-sub{color:var(--text-secondary);font-size:1.1rem;margin-bottom:2rem;font-weight:300}
+
+/* Stat row */
+.stat-row{display:grid;grid-template-columns:repeat(4,1fr);gap:1rem;margin-bottom:3rem}
+.stat-card{background:var(--bg-card);border:1px solid var(--border);border-radius:10px;padding:1.4rem 1.6rem}
+.stat-num{font-family:'JetBrains Mono',monospace;font-size:2rem;font-weight:700;color:var(--accent-bright);line-height:1.2}
+.stat-lbl{font-size:1rem;color:var(--text-muted);margin-top:.3rem}
+
+/* Node grid */
+.node-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:1rem}
+.node-card{background:var(--bg-card);border:1px solid var(--border);border-radius:10px;padding:1.5rem;transition:all .3s}
+.node-card:hover{border-color:var(--border-hover);background:var(--bg-card-hover)}
+.node-chain{display:flex;align-items:center;gap:.7rem;margin-bottom:.8rem}
+.node-dot{width:8px;height:8px;border-radius:50%;flex-shrink:0}
+.node-dot.eth{background:#627EEA}
+.node-dot.bnb{background:#F3BA2F}
+.node-dot.dot{background:#E6007A}
+.node-chain-name{font-size:1.15rem;font-weight:700}
+.node-chain-tag{font-family:'JetBrains Mono',monospace;font-size:.82rem;color:var(--text-muted);margin-left:auto}
+.node-specs{display:flex;flex-direction:column;gap:.4rem}
+.node-spec{display:flex;justify-content:space-between;align-items:center;font-size:1rem;color:var(--text-secondary);border-top:1px solid var(--border);padding-top:.4rem}
+.node-spec:first-child{border-top:none;padding-top:0}
+.node-spec-val{font-family:'JetBrains Mono',monospace;font-size:.95rem;color:var(--text-primary)}
+
+/* Hardware grid */
+.hw-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:1.5rem}
+.hw-card{background:var(--bg-card);border:1px solid var(--border);border-radius:10px;overflow:hidden;transition:all .3s}
+.hw-card:hover{border-color:var(--border-hover)}
+.hw-img{width:100%;height:220px;background:var(--bg-secondary);display:flex;align-items:center;justify-content:center;border-bottom:1px solid var(--border);position:relative;overflow:hidden}
+.hw-img-placeholder{display:flex;flex-direction:column;align-items:center;gap:.8rem;color:var(--text-muted)}
+.hw-img-placeholder .hw-icon{width:56px;height:56px;border:1px solid var(--border);border-radius:8px;display:flex;align-items:center;justify-content:center}
+.hw-img-placeholder span{font-size:.95rem;font-family:'JetBrains Mono',monospace;letter-spacing:.05em}
+.hw-body{padding:1.2rem 1.4rem}
+.hw-title{font-size:1.15rem;font-weight:700;margin-bottom:.5rem}
+.hw-specs{display:flex;flex-direction:column;gap:.3rem}
+.hw-spec{display:flex;justify-content:space-between;font-size:.98rem;color:var(--text-secondary)}
+.hw-spec-val{font-family:'JetBrains Mono',monospace;font-size:.92rem;color:var(--text-primary)}
+
+/* Data table */
+.data-table{width:100%;border-collapse:collapse}
+.data-table th{text-align:left;padding:.6rem 1rem;font-family:'JetBrains Mono',monospace;font-size:.88rem;color:var(--text-muted);letter-spacing:.06em;text-transform:uppercase;border-bottom:1px solid var(--border)}
+.data-table td{padding:.8rem 1rem;font-size:1rem;color:var(--text-secondary);border-bottom:1px solid rgba(99,179,237,.05)}
+.data-table td:first-child{font-weight:600;color:var(--text-primary)}
+.data-table td .mono{font-family:'JetBrains Mono',monospace;font-size:.92rem;color:var(--accent-bright)}
+.data-table tr:last-child td{border-bottom:none}
+.status-dot{display:inline-block;width:7px;height:7px;border-radius:50%;margin-right:.5rem}
+.status-dot.active{background:var(--accent-green)}
+.status-dot.partial{background:var(--accent-amber)}
+
+footer{padding:2.5rem 3rem;border-top:1px solid var(--border);text-align:center;color:var(--text-muted);font-size:1.05rem}
+footer a{color:var(--accent);text-decoration:none}
+
+.fi{opacity:0;transform:translateY(18px);transition:all .55s cubic-bezier(.25,.46,.45,.94)}
+.fi.v{opacity:1;transform:translateY(0)}
+
+@media(max-width:900px){
+  nav{padding:0 1.5rem}.nav-links{display:none}
+  section,.page-hero{padding:3rem 1.5rem}
+  .stat-row{grid-template-columns:repeat(2,1fr)}
+  .node-grid,.hw-grid{grid-template-columns:1fr}
+}
+</style>
+</head>
+<body>
+
+<nav>
+  <div class="nav-logo">区块链安全研究</div>
+  <ul class="nav-links">
+    <li><a href="./lab-showcase.html">返回主页</a></li>
+    <li><a href="./lab-showcase.html#overview">研究概览</a></li>
+    <li><a href="./lab-showcase.html#highlights">核心成果</a></li>
+    <li><a href="./lab-showcase.html#platform">分析平台</a></li>
+    <li><a href="./infrastructure.html" class="active">基础设施</a></li>
+  </ul>
+</nav>
+
+<div class="page-hero">
+  <div class="page-hero-inner">
+    <div class="page-tag">Infrastructure</div>
+    <h1>研究基础设施</h1>
+    <p>支撑区块链安全研究的计算集群、全节点部署与数据采集体系，保障大规模链上数据分析与长周期实验验证能力。</p>
+  </div>
+</div>
+
+<!-- 总览统计 -->
+<section>
+  <div class="section-inner">
+    <div class="section-label">Overview</div>
+    <h2 class="section-title">基础设施概览</h2>
+    <p class="section-sub">截至 2025 年底的基础设施规模</p>
+    <div class="stat-row fi">
+      <div class="stat-card">
+        <div class="stat-num">3</div>
+        <div class="stat-lbl">全节点接入链</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-num">12+</div>
+        <div class="stat-lbl">计算节点</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-num">200+ TB</div>
+        <div class="stat-lbl">链上历史数据存档</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-num">7×24</div>
+        <div class="stat-lbl">持续监测运行</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- 全节点部署 -->
+<section>
+  <div class="section-inner">
+    <div class="section-label">Full Node Deployment</div>
+    <h2 class="section-title">区块链全节点部署</h2>
+    <p class="section-sub">覆盖主流区块链网络，支持历史数据完整回放与实时状态追踪</p>
+    <div class="node-grid fi">
+      <div class="node-card">
+        <div class="node-chain">
+          <div class="node-dot eth"></div>
+          <span class="node-chain-name">Ethereum</span>
+          <span class="node-chain-tag">Mainnet</span>
+        </div>
+        <div class="node-specs">
+          <div class="node-spec">
+            <span>节点类型</span>
+            <span class="node-spec-val">Archive + Beacon</span>
+          </div>
+          <div class="node-spec">
+            <span>客户端</span>
+            <span class="node-spec-val">Geth / Prysm</span>
+          </div>
+          <div class="node-spec">
+            <span>数据存档</span>
+            <span class="node-spec-val">创世区块至今</span>
+          </div>
+          <div class="node-spec">
+            <span>存储规模</span>
+            <span class="node-spec-val">~12 TB</span>
+          </div>
+          <div class="node-spec">
+            <span>运行状态</span>
+            <span class="node-spec-val"><span class="status-dot active"></span>持续同步</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="node-card">
+        <div class="node-chain">
+          <div class="node-dot bnb"></div>
+          <span class="node-chain-name">BNB Chain</span>
+          <span class="node-chain-tag">BSC Mainnet</span>
+        </div>
+        <div class="node-specs">
+          <div class="node-spec">
+            <span>节点类型</span>
+            <span class="node-spec-val">Full Archive</span>
+          </div>
+          <div class="node-spec">
+            <span>客户端</span>
+            <span class="node-spec-val">BSC / op-geth</span>
+          </div>
+          <div class="node-spec">
+            <span>数据存档</span>
+            <span class="node-spec-val">创世区块至今</span>
+          </div>
+          <div class="node-spec">
+            <span>存储规模</span>
+            <span class="node-spec-val">~8 TB</span>
+          </div>
+          <div class="node-spec">
+            <span>运行状态</span>
+            <span class="node-spec-val"><span class="status-dot active"></span>持续同步</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="node-card">
+        <div class="node-chain">
+          <div class="node-dot dot"></div>
+          <span class="node-chain-name">Polkadot</span>
+          <span class="node-chain-tag">Relay Chain</span>
+        </div>
+        <div class="node-specs">
+          <div class="node-spec">
+            <span>节点类型</span>
+            <span class="node-spec-val">Archive Node</span>
+          </div>
+          <div class="node-spec">
+            <span>客户端</span>
+            <span class="node-spec-val">Parity / Substrate</span>
+          </div>
+          <div class="node-spec">
+            <span>数据存档</span>
+            <span class="node-spec-val">创世区块至今</span>
+          </div>
+          <div class="node-spec">
+            <span>存储规模</span>
+            <span class="node-spec-val">~3 TB</span>
+          </div>
+          <div class="node-spec">
+            <span>运行状态</span>
+            <span class="node-spec-val"><span class="status-dot active"></span>持续同步</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- 计算硬件 -->
+<section>
+  <div class="section-inner">
+    <div class="section-label">Computing Hardware</div>
+    <h2 class="section-title">计算硬件环境</h2>
+    <p class="section-sub">支撑大规模链上数据分析、强化学习训练与长周期协议仿真</p>
+    <div class="hw-grid fi">
+      <div class="hw-card">
+        <div class="hw-img">
+          <div class="hw-img-placeholder">
+            <div class="hw-icon">
+              <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" color="#60a5fa"><rect x="2" y="3" width="20" height="14" rx="2"/><path d="M8 21h8M12 17v4"/></svg>
+            </div>
+            <span>GPU 计算集群</span>
+          </div>
+        </div>
+        <div class="hw-body">
+          <div class="hw-title">GPU 计算节点</div>
+          <div class="hw-specs">
+            <div class="hw-spec"><span>GPU 型号</span><span class="hw-spec-val">NVIDIA A100 / A800</span></div>
+            <div class="hw-spec"><span>节点数量</span><span class="hw-spec-val">4 节点</span></div>
+            <div class="hw-spec"><span>总显存</span><span class="hw-spec-val">320 GB</span></div>
+            <div class="hw-spec"><span>用途</span><span class="hw-spec-val">强化学习 / 大规模仿真</span></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="hw-card">
+        <div class="hw-img">
+          <div class="hw-img-placeholder">
+            <div class="hw-icon">
+              <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" color="#34d399"><rect x="2" y="2" width="20" height="8" rx="2"/><rect x="2" y="14" width="20" height="8" rx="2"/><line x1="6" y1="6" x2="6.01" y2="6"/><line x1="6" y1="18" x2="6.01" y2="18"/></svg>
+            </div>
+            <span>存储服务器</span>
+          </div>
+        </div>
+        <div class="hw-body">
+          <div class="hw-title">高性能存储服务器</div>
+          <div class="hw-specs">
+            <div class="hw-spec"><span>处理器</span><span class="hw-spec-val">Intel Xeon × 2</span></div>
+            <div class="hw-spec"><span>内存</span><span class="hw-spec-val">512 GB DDR5</span></div>
+            <div class="hw-spec"><span>存储</span><span class="hw-spec-val">NVMe SSD 100 TB</span></div>
+            <div class="hw-spec"><span>用途</span><span class="hw-spec-val">链上数据存档 / 检索</span></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="hw-card">
+        <div class="hw-img">
+          <div class="hw-img-placeholder">
+            <div class="hw-icon">
+              <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" color="#a78bfa"><path d="M22 12h-4l-3 9L9 3l-3 9H2"/></svg>
+            </div>
+            <span>监控工作站</span>
+          </div>
+        </div>
+        <div class="hw-body">
+          <div class="hw-title">实时监控工作站</div>
+          <div class="hw-specs">
+            <div class="hw-spec"><span>处理器</span><span class="hw-spec-val">AMD EPYC 9654</span></div>
+            <div class="hw-spec"><span>内存</span><span class="hw-spec-val">256 GB DDR5</span></div>
+            <div class="hw-spec"><span>网络</span><span class="hw-spec-val">25 GbE 双路</span></div>
+            <div class="hw-spec"><span>用途</span><span class="hw-spec-val">链上风险实时监测</span></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="hw-card">
+        <div class="hw-img">
+          <div class="hw-img-placeholder">
+            <div class="hw-icon">
+              <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" color="#fbbf24"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
+            </div>
+            <span>实验室工位</span>
+          </div>
+        </div>
+        <div class="hw-body">
+          <div class="hw-title">研究工位环境</div>
+          <div class="hw-specs">
+            <div class="hw-spec"><span>工位数量</span><span class="hw-spec-val">15+</span></div>
+            <div class="hw-spec"><span>工作站配置</span><span class="hw-spec-val">64 GB 内存起</span></div>
+            <div class="hw-spec"><span>内网带宽</span><span class="hw-spec-val">10 GbE</span></div>
+            <div class="hw-spec"><span>外网接入</span><span class="hw-spec-val">清华校园网专线</span></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- 数据采集能力 -->
+<section>
+  <div class="section-inner">
+    <div class="section-label">Data Collection</div>
+    <h2 class="section-title">数据采集与处理能力</h2>
+    <p class="section-sub">覆盖交易、事件、状态、P2P 网络等多维度链上数据</p>
+    <div class="fi">
+      <table class="data-table">
+        <thead>
+          <tr>
+            <th>数据类型</th>
+            <th>覆盖链</th>
+            <th>数据量</th>
+            <th>采集频率</th>
+            <th>状态</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>区块与交易数据</td>
+            <td>ETH / BNB / DOT</td>
+            <td><span class="mono">200+ TB</span></td>
+            <td>实时同步</td>
+            <td><span class="status-dot active"></span>运行中</td>
+          </tr>
+          <tr>
+            <td>智能合约事件日志</td>
+            <td>ETH / BNB</td>
+            <td><span class="mono">80+ TB</span></td>
+            <td>实时同步</td>
+            <td><span class="status-dot active"></span>运行中</td>
+          </tr>
+          <tr>
+            <td>Beacon Chain 验证者状态</td>
+            <td>ETH</td>
+            <td><span class="mono">5+ TB</span></td>
+            <td>每 Epoch</td>
+            <td><span class="status-dot active"></span>运行中</td>
+          </tr>
+          <tr>
+            <td>P2P 网络传播延迟</td>
+            <td>ETH</td>
+            <td><span class="mono">持续采集</span></td>
+            <td>每区块</td>
+            <td><span class="status-dot active"></span>运行中</td>
+          </tr>
+          <tr>
+            <td>DeFi 协议状态快照</td>
+            <td>ETH / BNB</td>
+            <td><span class="mono">10+ TB</span></td>
+            <td>每小时</td>
+            <td><span class="status-dot active"></span>运行中</td>
+          </tr>
+          <tr>
+            <td>跨链桥事件追踪</td>
+            <td>ETH / BNB / DOT</td>
+            <td><span class="mono">2+ TB</span></td>
+            <td>实时同步</td>
+            <td><span class="status-dot partial"></span>部分覆盖</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</section>
+
+<footer>
+  © 2026 区块链系统安全与数字经济风险分析平台 · 清华大学
+</footer>
+
+<script>
+const obs = new IntersectionObserver(es => {
+  es.forEach(e => { if (e.isIntersecting) e.target.classList.add('v'); });
+}, { threshold: 0.1 });
+document.querySelectorAll('.fi').forEach(el => obs.observe(el));
+</script>
+</body>
+</html>

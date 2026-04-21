@@ -400,10 +400,10 @@ body{font-family:'Noto Sans SC','Inter',sans-serif;background:var(--bg);color:va
       循环三 Epoch 周期持续发动，使公链所有检查点均无法被最终确认。
     </p>
     <div class="demo-meta">
-      <div class="demo-meta-item"><div class="demo-meta-val">33%</div><div class="demo-meta-lbl">最低攻击阈值 (k=1)</div></div>
-      <div class="demo-meta-item"><div class="demo-meta-val">3 epochs</div><div class="demo-meta-lbl">攻击周期长度</div></div>
-      <div class="demo-meta-item"><div class="demo-meta-val">≈ 1</div><div class="demo-meta-lbl">重复成功率</div></div>
-      <div class="demo-meta-item"><div class="demo-meta-val">$836K/day</div><div class="demo-meta-lbl">MEV 额外收益</div></div>
+      <div class="demo-meta-item"><div class="demo-meta-val">33%</div><div class="demo-meta-lbl">最低触发阈值 (k=1)</div></div>
+      <div class="demo-meta-item"><div class="demo-meta-val">3 epochs</div><div class="demo-meta-lbl">分析周期长度</div></div>
+      <div class="demo-meta-item"><div class="demo-meta-val">≈ 1</div><div class="demo-meta-lbl">重复触发概率</div></div>
+      <div class="demo-meta-item"><div class="demo-meta-val">Ethereum</div><div class="demo-meta-lbl">影响范围</div></div>
     </div>
   </div>
 </div>
@@ -474,7 +474,7 @@ body{font-family:'Noto Sans SC','Inter',sans-serif;background:var(--bg);color:va
   <!-- Controls -->
   <div class="controls">
     <button class="ctrl-btn secondary" onclick="startNormal()" id="btn-normal">▶ 正常运行</button>
-    <button class="ctrl-btn primary" onclick="launchAttack()" id="btn-attack">⚡ 发动攻击</button>
+    <button class="ctrl-btn primary" onclick="launchAttack()" id="btn-attack">发动攻击</button>
     <div class="ctrl-divider"></div>
     <button class="ctrl-btn" onclick="stepForward()" id="btn-step">↦ 单步执行</button>
     <button class="ctrl-btn" onclick="togglePause()" id="btn-pause">⏸ 暂停</button>
@@ -552,7 +552,7 @@ body{font-family:'Noto Sans SC','Inter',sans-serif;background:var(--bg);color:va
   </div>
 
   <div class="footer-note">
-    <strong>📄 论文信息</strong> · "A Liveness Attack to Ethereum PoS with No Additional Cost" (Paper #1665, IEEE S&P 2026) ·
+    <strong>论文信息</strong> · "A Liveness Attack to Ethereum PoS with No Additional Cost" (Paper #1665, IEEE S&P 2026) ·
     作者：Mingfei Zhang (Shandong Univ.), Rujia Li (Tsinghua), Xueqian Lu (Independent), Sisi Duan (Tsinghua) ·
     <strong>负责任披露</strong>：2025年5月24日已提交 Ethereum Bug Bounty（CL-2025-07-31），相应缓解方案正通过 EIP-7942 推进中。
     本可视化为论文 Figure 3 攻击流程的交互式演示；实际攻击在 Prysm (Electra) 上已实测，900 epochs · 23.9% stake 下链质量从 76.1% 降至 0，finalization 完全停滞。
@@ -565,7 +565,7 @@ body{font-family:'Noto Sans SC','Inter',sans-serif;background:var(--bg);color:va
 <!-- Attack initialization overlay -->
 <div class="attack-overlay" id="attack-overlay">
   <div class="attack-overlay-card">
-    <h3 id="ov-title">⚡ 正在计算 RANDAO 操纵</h3>
+    <h3 id="ov-title">正在计算 RANDAO 操纵</h3>
     <p id="ov-desc">枚举 2^n 可能的私链配置 · 搜索最优 RANDAO 种子 · 锁定未来 epochs 的 proposer schedule</p>
     <div id="ov-status" style="font-family:'JetBrains Mono',monospace;font-size:.8rem;color:var(--purple);margin-top:.5rem;min-height:1.2em"></div>
     <div class="attack-overlay-progress">
@@ -1792,7 +1792,7 @@ async function launchAttack(){
   STATE.attackCycleBase = startEpoch;
   STATE.attackCycleStarts = [startEpoch];
 
-  addLog('MODE', '<span class="red">⚡ 启动活性攻击</span>', 'attack');
+  addLog('MODE', '<span class="red">启动活性攻击</span>', 'attack');
   addLog('RANDAO', `初始 RANDAO 计算 · 锁定 Epoch ${startEpoch+2}, ${startEpoch+3}, ${startEpoch+4} 首 slot`, 'randao');
 
   // Progress bar while RANDAO animates
