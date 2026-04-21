@@ -4,7 +4,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Web3中的中心化安全风险：钱包与智能合约</title>
+  <title>Web3 组件中心化风险分析：钱包与智能合约</title>
   <style>
     :root {
       --bg: #0a0e17;
@@ -943,17 +943,17 @@
 <body>
   <div class="topbar">
     <a class="back-btn" href="./lab-showcase.html">← 返回主页</a>
-    <span class="topbar-title">Web3组件的中心化安全风险</span>
+    <span class="topbar-title">Web3组件的中心化风险分析</span>
     <span class="topbar-venue">ACM WWW 2023 / IEEE TDSC</span>
   </div>
 
   <main class="page">
     <section class="hero">
       <div>
-        <h1>Web3组件的<span>中心化安全风险</span></h1>
+        <h1>Web3组件的<span>中心化风险分析</span></h1>
 
         <p class="hero-sub">
-          基于钱包与链上合约的大规模分析，中心化风险并非个别现象，而是 Web3 基础设施中的普遍问题。
+          基于钱包与链上合约的大规模分析，中心化风险并非孤立现象，而是在部分 Web3 基础设施中具有一定普遍性。
         </p>
 
         <p class="hero-desc">
@@ -969,7 +969,7 @@
 
         <div class="demo-meta-item">
           <div class="demo-meta-val">83.5%</div>
-          <div class="demo-meta-lbl">链上合约检出风险</div>
+          <div class="demo-meta-lbl">链上合约识别出风险</div>
         </div>
       </div>
 
@@ -977,16 +977,16 @@
 
     <section class="section" style="margin-top: 16px;">
       <div class="controls">
-        <button class="btn-primary btn-active" id="showNormal">仅显示正常路径</button>
-        <button class="btn-danger" id="showRisk">显示钱包 / 合约风险</button>
+        <button class="btn-primary btn-active" id="showNormal">查看交互路径</button>
+        <button class="btn-danger" id="showRisk">查看风险分布</button>
       </div>
 
       <div class="analysis-layout">
         <div class="graph-wrap" id="riskDemo">
           <div class="graph-head">
             <p>
-              用户通常只看到标准 Web3 链路；但一旦钱包连向注册信息、备份服务、RPC 或第三方服务，钱包就会成为数据传播节点。与此同时，若 DApp 依赖的 Smart Contract 保留过强 owner 权限，控制风险也会重新集中。</p>
-              <p>蓝色表示标准 Web3 交互链路；红色表示钱包侧风险路径；紫色表示 Smart Contract 中 overpowered owner 带来的中心化控制风险。</p>
+              用户通常只看到标准 Web3 交互链路；但当钱包连接注册信息、备份服务、RPC 或第三方服务时，钱包可能成为数据汇聚与传播节点。与此同时，若 DApp 依赖的 Smart Contract 保留过强的 owner 权限，控制能力也可能重新集中。</p>
+              <p>蓝色表示标准 Web3 交互链路；红色表示钱包侧潜在风险路径；紫色表示 Smart Contract 中高权限 Owner 带来的控制集中风险。</p>
           </div>
 
           <div class="graph-stage">
@@ -1057,39 +1057,39 @@
 
               <div class="graph-node node-risk" data-focus="sr3" style="left: 50%; top: 18%;">
                 <small>Service</small>
-                <strong>Built-in Service</strong>
+                <strong>内置服务 Built-in Service</strong>
                 <span>交易、购买、兑换等内置服务</span>
               </div>
 
               <div class="graph-node node-risk" data-focus="sr4" style="left: 75%; top: 18%;">
                 <small>Infra</small>
-                <strong>RPC Provider</strong>
+                <strong>RPC 提供方 RPC Provider</strong>
                 <span>默认 RPC / 访问策略</span>
               </div>
 
               <div class="graph-node node-risk" data-focus="sr2" style="left: 10%; top: 82%;">
                 <small>Secret</small>
-                <strong>Private Key Backup</strong>
+                <strong>私钥备份 Private Key Backup</strong>
                 <span>云备份 / 恢复材料</span>
               </div>
 
               <div class="graph-node node-risk" data-focus="sr2" style="left: 32%; top: 82%;">
                 <small>Server</small>
-                <strong>Backup Server</strong>
+                <strong>备份服务 Backup Server</strong>
                 <span>备份存储与恢复端点</span>
               </div>
 
               <div class="graph-node node-risk" data-focus="sr5" style="left: 50%; top: 82%;">
                 <small>Analytics</small>
-                <strong>Third-party Server</strong>
+                <strong>第三方服务 Third-party Server</strong>
                 <span>SDK 上传 / 分析与日志端点</span>
               </div>
 
               <div class="graph-node node-contract" id="contractNode" style="left: 75%; top: 80%;">
                 <small>Smart Contract</small>
-                <strong>Overpowered Owner</strong>
-                <span>Owner Privilege Risk</span>
-                <div class="sub">Sub-risks shown below</div>
+                <strong>高权限 Owner</strong>
+                <span>Owner 权限集中风险</span>
+                <div class="sub">下方展示相关子风险</div>
               </div>
 
               <div class="risk-label" data-focus="sr1" style="left: 20%; top: 30%;">PII</div>
@@ -1104,7 +1104,7 @@
               <div class="legend">
                 <div class="legend-item"><span class="legend-dot normal"></span>正常路径</div>
                 <div class="legend-item"><span class="legend-dot risk"></span>钱包潜在风险路径</div>
-                <div class="legend-item"><span class="legend-dot contract"></span>Contract Owner 相关风险</div>
+                <div class="legend-item"><span class="legend-dot contract"></span>高权限 Owner 相关风险</div>
               </div>
             </div>
           </div>
@@ -1119,56 +1119,56 @@
           <div class="risk-grid">
             <div class="risk-card" data-risk="sr1">
               <span class="tag">SR#1 Anonymity Loss</span>
-              <strong>匿名性丧失 Anonymity Loss</strong>
+              <strong>匿名性丧失</strong>
             </div>
 
             <div class="risk-card" data-risk="sr2">
               <span class="tag">SR#2 Private Key Leakage</span>
-              <strong>私钥泄露 Private Key Leakage</strong>
+              <strong>私钥泄露</strong>
             </div>
 
             <div class="risk-card" data-risk="sr3">
               <span class="tag">SR#3 Built-in Service</span>
-              <strong>内置中心化服务 Built-in Centralized Services</strong>
+              <strong>内置服务</strong>
             </div>
 
             <div class="risk-card" data-risk="sr4">
               <span class="tag">SR#4 RPC Services</span>
-              <strong>RPC 服务 RPC Services</strong>
+              <strong>RPC 服务</strong>
             </div>
 
             <div class="risk-card" data-risk="sr5">
               <span class="tag">SR#5 Third-party SDKs</span>
-              <strong>第三方 SDK 或脚本 Third-party SDKs or Scripts</strong>
+              <strong>第三方 SDK 或脚本s</strong>
             </div>
           </div>
         </aside>
 
         <div class="contract-panel" id="contractPanel">
           <div class="contract-panel-head">
-            <h4>SR#6 智能合约 Overpowered Owner 子风险说明</h4>
+            <h4>SR#6 智能合约高权限 Owner 子风险说明</h4>
 
           </div>
 
           <div class="contract-grid">
             <div class="contract-card" data-contract="ll">
               <span class="tag">Limited Liquidity</span>
-              <strong>流动性受限 Limited Liquidity</strong>
+              <strong>流动性受限</strong>
             </div>
 
             <div class="contract-card" data-contract="vs">
               <span class="tag">Vulnerable Scarcity</span>
-              <strong>脆弱稀缺性 Vulnerable Scarcity</strong>
+              <strong>稀缺性脆弱</strong>
             </div>
 
             <div class="contract-card" data-contract="mm">
               <span class="tag">Mutable Metadata</span>
-              <strong>可变元数据 Mutable Metadata</strong>
+              <strong>可变元数据</strong>
             </div>
 
             <div class="contract-card" data-contract="mp">
               <span class="tag">Mutable Parameters</span>
-              <strong>可变参数 Mutable Parameters</strong>
+              <strong>可变参数</strong>
             </div>
           </div>
         </div>
@@ -1181,32 +1181,32 @@
           <div class="risk-detail-item" data-detail="sr1">
             <span class="tag">SR#1 Anonymity Loss</span>
             <h4>去匿名化</h4>
-            <p>一些加密钱包要求用户注册，并在注册过程中会收集个人身份信息（Personally Identifiable Information, PII），如电子邮件地址和电话号码。例如，Bitcoin.com Wallet是一款知名的加密钱包，下载量超过500万次，它提供可选的注册功能。类似地，一些Web3网站支持社交登录，如Google和Facebook，这些中心化身份认证方式会将用户的身份信息与其公钥绑定，从而破坏公钥带来的匿名性。此外，攻击者可以利用泄露的个人身份信息发动钓鱼攻击。例如，Trezor钱包曾泄露106,856名用户的电子邮件地址，引发了大规模的钓鱼邮件攻击。
+            <p>一些加密钱包要求用户注册，并在注册过程中收集个人身份信息（Personally Identifiable Information, PII），如电子邮件地址和电话号码。例如，Bitcoin.com Wallet 是一款知名的加密钱包，下载量超过 500 万次，它提供可选的注册功能。类似地，一些 Web3 网站支持社交登录，如 Google 和 Facebook，这些中心化身份认证方式可能将用户身份信息与其公钥建立关联，从而削弱公钥带来的匿名性。此外，个人身份信息一旦泄露，也可能进一步放大钓鱼等安全风险。例如，Trezor 钱包曾泄露 106,856 名用户的电子邮件地址，并引发了后续的钓鱼邮件事件。
             </p>
           </div>
 
           <div class="risk-detail-item" data-detail="sr2">
             <span class="tag">SR#2 Private Key Leakage</span>
             <h4>私钥泄露</h4>
-            <p>私钥是Web3生态的核心，用于管理用户的加密资产，必须安全存储在本地设备上。然而，一些钱包鼓励用户将私钥备份到第一方或第三方服务器。例如，Bitcoin.com Wallet在设置页面提供了私钥备份选项，允许用户将私钥上传至Bitcoin.com Wallet的服务器。另一个钱包ZenGo要求用户在使用前必须将私钥备份至Google Drive。这种做法可能导致私钥在传输或存储过程中被窃取。例如，若用户通过不安全的网络传输私钥，攻击者可通过中间人攻击拦截数据并获取私钥。一个真实案例是Slope钱包在传输过程中泄露用户私钥，导致约600万美元的代币被盗。</p>
+            <p>私钥是 Web3 生态的核心，用于管理用户的加密资产，必须安全存储在本地设备上。然而，一些钱包鼓励用户将私钥备份到第一方或第三方服务器。例如，Bitcoin.com Wallet 在设置页面提供了私钥备份选项，允许用户将私钥上传至 Bitcoin.com Wallet 的服务器。另一个钱包 ZenGo 要求用户在使用前必须将私钥备份至 Google Drive。这种做法可能导致私钥在传输或存储过程中暴露。例如，若用户通过不安全的网络传输私钥，相关数据可能被中间人截获并造成私钥泄露。一个真实案例是 Slope 钱包在传输过程中泄露用户私钥，导致约 600 万美元的代币被盗。</p>
           </div>
 
           <div class="risk-detail-item" data-detail="sr3">
             <span class="tag">SR#3 Built-in Service</span>
-            <h4>内置中心化服务</h4>
-            <p>许多加密钱包内置中心化服务，例如，Trust Wallet内置了Binance交易所，以提供加密货币的购买服务。这些中心化服务通常受到政府监管，并可能要求用户提供身份信息，与监管机构共享。普通用户往往难以区分钱包内的中心化和去中心化服务，因此在用户使用中心化服务时，钱包应明确告知相关风险。这些中心化服务可能因监管或运营问题导致宕机或停止运营，给用户带来财务损失。例如，近年来已有75家交易所停止运营，其中Celsius Network拥有170万名用户，它以市场环境不佳为由暂停服务，造成了大量用户的经济损失。</p>
+            <h4>内置服务</h4>
+            <p>许多加密钱包内置中心化服务，例如，Trust Wallet 内置了 Binance 交易所，以提供加密货币的购买服务。这些中心化服务通常受到监管，并可能要求用户提供身份信息。普通用户往往难以区分钱包内的中心化与去中心化服务，因此在用户使用相关服务时，钱包应明确告知相应风险。这些服务也可能因监管或运营问题导致宕机或停止运营，进而给用户带来资产损失风险。例如，近年来已有 75 家交易所停止运营，其中 Celsius Network 拥有 170 万名用户，其暂停服务曾造成大量用户的经济损失。</p>
           </div>
 
           <div class="risk-detail-item" data-detail="sr4">
             <span class="tag">SR#4 RPC Services</span>
             <h4>RPC 服务</h4>
-            <p>加密钱包依赖RPC服务与区块链交互，用于查询链上数据或提交交易。然而，第三方RPC服务存在固有的中心化风险，例如拒绝服务攻击。此外，RPC服务提供商可以提前访问用户的交易信息，从而可能利用这一点发起MEV攻击，影响交易的公平性。因此，钱包应披露默认的RPC服务提供商，并允许用户自定义RPC服务。RPC服务的中心化已导致多起安全问题，例如，2022年3月，Infura因政策原因切断了对乌克兰用户的服务，由于钱包Metamask的默认RPC服务商是Infura，导致大量用户受到影响，无法访问区块链。</p>
+            <p>加密钱包依赖 RPC 服务与区块链交互，用于查询链上数据或提交交易。然而，第三方 RPC 服务存在固有的中心化风险，例如服务不可用风险。此外，RPC 服务提供商可以提前访问用户的交易信息，从而可能引发 MEV 相关的交易排序与公平性风险。因此，钱包应披露默认的 RPC 服务提供商，并允许用户自定义 RPC 服务。RPC 服务的中心化已导致多起安全问题，例如，2022 年 3 月，Infura 因政策原因切断了对乌克兰用户的服务；由于钱包 MetaMask 的默认 RPC 服务商是 Infura，导致大量用户受到影响，无法访问区块链。</p>
           </div>
 
           <div class="risk-detail-item" data-detail="sr5">
             <span class="tag">SR#5 Third-party SDKs</span>
-            <h4>第三方 SDKs</h4>
-            <p>加密钱包通常依赖第三方SDK实现通知、数据分析等功能，但在此过程中，钱包可能会向第三方服务提供商共享用户的PII、设备ID和崩溃日志等数据。例如，在Slope事件中，白帽黑客发现Slope钱包会将日志以明文形式传输至第三方漏洞分析服务商Sentry，其中包含用户大量的敏感信息。</p>
+            <h4>第三方 SDK</h4>
+            <p>加密钱包通常依赖第三方 SDK 实现通知、数据分析等功能，但在此过程中，钱包可能会向第三方服务提供商共享用户的 PII、设备 ID 和崩溃日志等数据。例如，在 Slope 事件中，白帽研究人员发现 Slope 钱包会将日志以明文形式传输至第三方漏洞分析服务商 Sentry，其中包含用户大量敏感信息。</p>
           </div>
 
           <div class="risk-detail-item" data-detail="ll">
@@ -1218,7 +1218,7 @@
           <div class="risk-detail-item" data-detail="vs">
             <span class="tag">Vulnerable Scarcity</span>
             <h4>稀缺性降低</h4>
-            <p>加密资产的价值通常受供应量影响。一些token或NFT的供应量是固定的，由于稀缺性，它们的市场价值也较高。然而，若Owner可随意增发代币，会导致代币稀缺性降低，从而损害现有持有者的利益。一个现实案例是Yearn.finance团队曾提议额外发行价值2.25亿美元的YFI代币以激励开发者，此举引发持有者强烈反对。</p>
+            <p>加密资产的价值通常受供应量影响。一些 token 或 NFT 的供应量是固定的，由于稀缺性，它们的市场价值也较高。然而，若 Owner 可随意增发代币，会导致代币稀缺性降低，从而损害现有持有者的利益。一个现实案例是 Yearn.finance 团队曾提议额外发行价值 2.25 亿美元的 YFI 代币以激励开发者，此举引发持有者强烈反对。</p>
           </div>
 
           <div class="risk-detail-item" data-detail="mm">
@@ -1230,7 +1230,7 @@
           <div class="risk-detail-item" data-detail="mp">
             <span class="tag">Mutable Parameters</span>
             <h4>可变参数</h4>
-            <p>ERC20代币的transfer()函数通常包含开发者定义的参数，如交易税（taxFee）、流动性费（liquidityFee）等。这些参数通常在合约开发阶段由参与者共同决定。然而，若Owner拥有随意更改这些参数的权限，可能导致用户在不知情的情况下支付额外费用或遭受不公平交易。例如，PAWTH是一个市值超过100万美元的ERC20，合约Owner可以随意修改taxFee、liquidityFee、burnFee等参数。</p>
+            <p>ERC20 代币的 transfer() 函数通常包含开发者定义的参数，如交易税（taxFee）、流动性费（liquidityFee）等。这些参数通常在合约开发阶段由参与者共同决定。然而，若 Owner 拥有随意更改这些参数的权限，可能导致用户在不知情的情况下支付额外费用或遭受不公平交易。例如，PAWTH 是一个市值超过 100 万美元的 ERC20，合约 Owner 可以随意修改 taxFee、liquidityFee、burnFee 等参数。</p>
           </div>
         </div>
       </div>
