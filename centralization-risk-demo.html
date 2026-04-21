@@ -6,103 +6,12 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Web3 组件中心化风险分析：钱包与智能合约</title>
   <style>
-    .hero,
-    .section,
-    .graph-wrap,
-    .risk-panel {
-      background: var(--card);
-      border: 1px solid var(--line);
-      border-radius: var(--radius-lg);
-      box-shadow: var(--shadow);
-    }
-
-    .hero {
-      padding: 32px;
-      display: grid;
-      grid-template-columns: 1fr;
-      gap: 22px;
-    }
-
-    .hero h1 {
-      margin-top: 16px;
-      font-size: clamp(2.3rem, 4vw, 3.7rem);
-      line-height: 1.14;
-      letter-spacing: -0.04em;
-    }
-
-    .hero h1 span {
-      background: linear-gradient(135deg, var(--blue-2), var(--red-2));
-      -webkit-background-clip: text;
-      -webkit-text-fill-color: transparent;
-      background-clip: text;
-    }
-
-    .hero-sub {
-      margin-top: 14px;
-      color: var(--txt-2);
-      line-height: 1.7;
-      font-size: 1.12rem;
-      font-weight: 300;
-    }
-
-    .hero-desc {
-      margin-top: 16px;
-      color: var(--txt-2);
-      line-height: 1.84;
-    }
-
     .hero-points {
       display: grid;
       grid-template-columns: repeat(2, minmax(0, 1fr));
       gap: 18px;
       align-items: end;
       margin-top: 6px;
-    }
-
-    .mini-card,
-    .normal-card,
-    .risk-card,
-    .callout {
-      padding: 22px 24px;
-      border-radius: var(--radius-md);
-      background: var(--card-2);
-      border: 1px solid rgba(148, 163, 184, 0.1);
-    }
-
-    .normal-card strong,
-    .risk-card strong,
-    .mini-card strong {
-      display: block;
-      font-size: 0.95rem;
-      margin-bottom: 8px;
-    }
-
-    .normal-card p,
-    .risk-card p,
-    .mini-card p {
-      color: var(--txt-2);
-      line-height: 1.7;
-      font-size: 0.95rem;
-    }
-
-    .section {
-      padding: 24px;
-      display: grid;
-      gap: 18px;
-    }
-
-    .section-head {
-      display: grid;
-      gap: 10px;
-    }
-
-    .section h2 {
-      font-size: 1.42rem;
-    }
-
-    .section p {
-      color: var(--txt-2);
-      line-height: 1.8;
     }
 
     .normal-layout {
@@ -150,41 +59,6 @@
       font-weight: 600;
     }
 
-    .controls {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 10px;
-    }
-
-    button {
-      border: 0;
-      cursor: pointer;
-      font: inherit;
-      border-radius: 999px;
-      padding: 0.78rem 1.18rem;
-      transition: transform 0.18s ease, border-color 0.18s ease, background 0.18s ease;
-    }
-
-    button:hover {
-      transform: translateY(-1px);
-    }
-
-    .btn-primary {
-      background: linear-gradient(135deg, rgba(96, 165, 250, 0.2), rgba(59, 130, 246, 0.12));
-      color: var(--blue-2);
-      border: 1px solid rgba(96, 165, 250, 0.24);
-    }
-
-    .btn-danger {
-      background: linear-gradient(135deg, rgba(248, 113, 113, 0.18), rgba(220, 38, 38, 0.1));
-      color: var(--red-2);
-      border: 1px solid rgba(248, 113, 113, 0.22);
-    }
-
-    .btn-active {
-      box-shadow: 0 0 0 1px rgba(255, 255, 255, 0.03) inset, 0 0 24px rgba(96, 165, 250, 0.16);
-    }
-
     .analysis-layout {
       display: grid;
       grid-template-columns: repeat(2, minmax(0, 1fr));
@@ -197,20 +71,6 @@
       padding: 18px;
       position: relative;
       overflow: hidden;
-    }
-
-    .graph-head {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      gap: 12px;
-      margin-bottom: 14px;
-      flex-wrap: wrap;
-    }
-
-    .graph-head p {
-      color: var(--txt-2);
-      font-size: 0.95rem;
     }
 
     .graph-stage {
@@ -429,27 +289,6 @@
       gap: 10px;
     }
 
-    .legend {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 14px;
-      color: var(--txt-2);
-      font-size: 0.86rem;
-    }
-
-    .legend-item {
-      display: inline-flex;
-      align-items: center;
-      gap: 8px;
-    }
-
-    .legend-dot {
-      width: 11px;
-      height: 11px;
-      border-radius: 50%;
-      display: inline-block;
-    }
-
     .legend-dot.normal {
       background: var(--blue);
       box-shadow: 0 0 12px rgba(96, 165, 250, 0.35);
@@ -463,15 +302,6 @@
     .legend-dot.contract {
       background: var(--violet);
       box-shadow: 0 0 12px rgba(139, 92, 246, 0.28);
-    }
-
-    .callout {
-      color: var(--txt-2);
-      line-height: 1.75;
-    }
-
-    .callout strong {
-      color: var(--txt);
     }
 
     .risk-panel {
@@ -703,19 +533,8 @@
       background: rgba(248, 113, 113, 0.2);
     }
 
-    .sr-only {
-      position: absolute;
-      width: 1px;
-      height: 1px;
-      padding: 0;
-      margin: -1px;
-      overflow: hidden;
-      clip: rect(0, 0, 0, 0);
-      white-space: nowrap;
-      border: 0;
-    }
-
     @media (max-width: 1160px) {
+
       .hero,
       .analysis-layout {
         grid-template-columns: 1fr;
@@ -801,7 +620,8 @@
         </p>
 
         <p class="hero-desc">
-          对 28 款以太坊官方推荐钱包的深入分析显示，27 款存在不同程度的中心化风险；对超过 11 万份以太坊链上合约的自动化检测显示，83.5% 存在不同程度的中心化风险，其中包括 260 个总市值超过 980 亿美元的高价值合约。
+          对 28 款以太坊官方推荐钱包的深入分析显示，27 款存在不同程度的中心化风险；对超过 11 万份以太坊链上合约的自动化检测显示，83.5% 存在不同程度的中心化风险，其中包括 260 个总市值超过 980
+          亿美元的高价值合约。
         </p>
       </div>
 
@@ -820,17 +640,20 @@
     </section>
 
     <section class="section" style="margin-top: 16px;">
-      <div class="controls">
-        <button class="btn-primary btn-active" id="showNormal">查看交互路径</button>
-        <button class="btn-danger" id="showRisk">查看风险分布</button>
-      </div>
+
 
       <div class="analysis-layout">
         <div class="graph-wrap" id="riskDemo">
           <div class="graph-head">
-            <p>
-              用户通常只看到标准 Web3 交互链路；但当钱包连接注册信息、备份服务、RPC 或第三方服务时，钱包可能成为数据汇聚与传播节点。与此同时，若 DApp 依赖的智能合约保留过强的 owner 权限，也可能导致安全风险</p>
-              <p>蓝色表示标准 Web3 交互链路；红色表示钱包侧潜在风险路径；紫色表示智能合约中高权限 Owner 带来的风险。</p>
+
+            用户通常只看到标准 Web3 交互链路；但当钱包连接注册信息、备份服务、RPC 或第三方服务时，钱包可能成为数据汇聚与传播节点。与此同时，若 DApp 依赖的智能合约保留过强的 owner 权限，也可能导致安全风险。
+
+            蓝色表示标准 Web3 交互链路；红色表示钱包侧潜在风险路径；紫色表示智能合约中高权限 Owner 带来的风险。
+
+            <div class="controls">
+              <button class="btn-primary btn-active" id="showNormal">查看交互路径</button>
+              <button class="btn-danger" id="showRisk">查看风险分布</button>
+            </div>
           </div>
 
           <div class="graph-stage">
@@ -851,13 +674,20 @@
               <path class="graph-line-normal" marker-end="url(#arrowBlue)" d="M415 310 L560 310"></path>
               <path class="graph-line-normal" marker-end="url(#arrowBlue)" d="M655 310 L800 310"></path>
 
-              <path class="graph-line-risk risk-privacy" data-focus="sr1" marker-end="url(#arrowRed)" d="M140 150 L290 275"></path>
-              <path class="graph-line-risk risk-privacy" data-focus="sr1" marker-end="url(#arrowRed)" d="M280 120 L310 250"></path>
-              <path class="graph-line-risk risk-asset" data-focus="sr2" marker-end="url(#arrowRed)" d="M145 455 L290 365"></path>
-              <path class="graph-line-risk risk-privacy" data-focus="sr3" marker-end="url(#arrowRed)" d="M335 265 L470 130"></path>
-              <path class="graph-line-risk risk-privacy" data-focus="sr4" marker-end="url(#arrowRed)" d="M410 290 L715 130"></path>
-              <path class="graph-line-risk risk-privacy" data-focus="sr5" marker-end="url(#arrowRed)" d="M380 335 L480 460"></path>
-              <path class="graph-line-risk risk-asset" data-focus="sr2" marker-end="url(#arrowRed)" d="M335 345 L330 480"></path>
+              <path class="graph-line-risk risk-privacy" data-focus="sr1" marker-end="url(#arrowRed)"
+                d="M140 150 L290 275"></path>
+              <path class="graph-line-risk risk-privacy" data-focus="sr1" marker-end="url(#arrowRed)"
+                d="M280 120 L310 250"></path>
+              <path class="graph-line-risk risk-asset" data-focus="sr2" marker-end="url(#arrowRed)"
+                d="M145 455 L290 365"></path>
+              <path class="graph-line-risk risk-privacy" data-focus="sr3" marker-end="url(#arrowRed)"
+                d="M335 265 L470 130"></path>
+              <path class="graph-line-risk risk-privacy" data-focus="sr4" marker-end="url(#arrowRed)"
+                d="M410 290 L715 130"></path>
+              <path class="graph-line-risk risk-privacy" data-focus="sr5" marker-end="url(#arrowRed)"
+                d="M380 335 L480 460"></path>
+              <path class="graph-line-risk risk-asset" data-focus="sr2" marker-end="url(#arrowRed)"
+                d="M335 345 L330 480"></path>
               <path class="graph-line-contract" marker-end="url(#arrowViolet)" d="M640 346 L705 447"></path>
               <path class="graph-line-contract" marker-end="url(#arrowViolet)" d="M835 346 L790 447"></path>
             </svg>
@@ -881,7 +711,8 @@
                 <span>发起交互与签名</span>
               </div>
 
-              <div class="graph-node node-main wallet-node" data-focus="sr1 sr2 sr3 sr4 sr5" style="left: 37%; top: 50%;">
+              <div class="graph-node node-main wallet-node" data-focus="sr1 sr2 sr3 sr4 sr5"
+                style="left: 37%; top: 50%;">
                 <small>Crypto Wallet</small>
                 <strong>加密钱包 </strong>
                 <span>入口点，隐私风险聚合点</span>
@@ -1022,58 +853,73 @@
           </div>
 
           <div class="risk-detail-item" data-detail="sr1">
-          
+
             <h4>去匿名化</h4>
-           一些加密钱包要求用户注册，并在注册过程中收集个人身份信息（Personally Identifiable Information, PII），如电子邮件地址和电话号码。例如，Bitcoin.com Wallet 是一款知名的加密钱包，下载量超过 500 万次，它提供可选的注册功能。类似地，一些 Web3 网站支持社交登录，如 Google 和 Facebook，这些中心化身份认证方式可能将用户身份信息与其公钥建立关联，从而削弱公钥带来的匿名性。此外，个人身份信息一旦泄露，也可能进一步放大钓鱼等安全风险。例如，Trezor 钱包曾泄露 106,856 名用户的电子邮件地址，并引发了后续的钓鱼邮件事件。
-           
+            一些加密钱包要求用户注册，并在注册过程中收集个人身份信息（Personally Identifiable Information, PII），如电子邮件地址和电话号码。例如，Bitcoin.com Wallet
+            是一款知名的加密钱包，下载量超过 500 万次，它提供可选的注册功能。类似地，一些 Web3 网站支持社交登录，如 Google 和
+            Facebook，这些中心化身份认证方式可能将用户身份信息与其公钥建立关联，从而削弱公钥带来的匿名性。此外，个人身份信息一旦泄露，也可能进一步放大钓鱼等安全风险。例如，Trezor 钱包曾泄露 106,856
+            名用户的电子邮件地址，并引发了后续的钓鱼邮件事件。
+
           </div>
 
           <div class="risk-detail-item" data-detail="sr2">
-         
+
             <h4>私钥泄露</h4>
-          私钥是 Web3 生态的核心，用于管理用户的加密资产，必须安全存储在本地设备上。然而，一些钱包鼓励用户将私钥备份到第一方或第三方服务器。例如，Bitcoin.com Wallet 在设置页面提供了私钥备份选项，允许用户将私钥上传至 Bitcoin.com Wallet 的服务器。另一个钱包 ZenGo 要求用户在使用前必须将私钥备份至 Google Drive。这种做法可能导致私钥在传输或存储过程中暴露。例如，若用户通过不安全的网络传输私钥，相关数据可能被中间人截获并造成私钥泄露。一个真实案例是 Slope 钱包在传输过程中泄露用户私钥，导致约 600 万美元的代币被盗。
+            私钥是 Web3 生态的核心，用于管理用户的加密资产，必须安全存储在本地设备上。然而，一些钱包鼓励用户将私钥备份到第一方或第三方服务器。例如，Bitcoin.com Wallet
+            在设置页面提供了私钥备份选项，允许用户将私钥上传至 Bitcoin.com Wallet 的服务器。另一个钱包 ZenGo 要求用户在使用前必须将私钥备份至 Google
+            Drive。这种做法可能导致私钥在传输或存储过程中暴露。例如，若用户通过不安全的网络传输私钥，相关数据可能被中间人截获并造成私钥泄露。一个真实案例是 Slope 钱包在传输过程中泄露用户私钥，导致约 600
+            万美元的代币被盗。
           </div>
 
           <div class="risk-detail-item" data-detail="sr3">
-       
+
             <h4>内置服务</h4>
-           许多加密钱包内置中心化服务，例如，Trust Wallet 内置了 Binance 交易所，以提供加密货币的购买服务。这些中心化服务通常受到监管，并可能要求用户提供身份信息。普通用户往往难以区分钱包内的中心化与去中心化服务，因此在用户使用相关服务时，钱包应明确告知相应风险。这些服务也可能因监管或运营问题导致宕机或停止运营，进而给用户带来资产损失风险。例如，近年来已有 75 家交易所停止运营，其中 Celsius Network 拥有 170 万名用户，其暂停服务曾造成大量用户的经济损失。
+            许多加密钱包内置中心化服务，例如，Trust Wallet 内置了 Binance
+            交易所，以提供加密货币的购买服务。这些中心化服务通常受到监管，并可能要求用户提供身份信息。普通用户往往难以区分钱包内的中心化与去中心化服务，因此在用户使用相关服务时，钱包应明确告知相应风险。这些服务也可能因监管或运营问题导致宕机或停止运营，进而给用户带来资产损失风险。例如，近年来已有
+            75 家交易所停止运营，其中 Celsius Network 拥有 170 万名用户，其暂停服务曾造成大量用户的经济损失。
           </div>
 
           <div class="risk-detail-item" data-detail="sr4">
-          
+
             <h4>RPC 服务</h4>
-          加密钱包依赖 RPC 服务与区块链交互，用于查询链上数据或提交交易。然而，第三方 RPC 服务存在固有的中心化风险，例如服务不可用风险。此外，RPC 服务提供商可以提前访问用户的交易信息，从而可能引发 MEV 相关的交易排序与公平性风险。因此，钱包应披露默认的 RPC 服务提供商，并允许用户自定义 RPC 服务。RPC 服务的中心化已导致多起安全问题，例如，2022 年 3 月，Infura 因政策原因切断了对乌克兰用户的服务；由于钱包 MetaMask 的默认 RPC 服务商是 Infura，导致大量用户受到影响，无法访问区块链。
+            加密钱包依赖 RPC 服务与区块链交互，用于查询链上数据或提交交易。然而，第三方 RPC 服务存在固有的中心化风险，例如服务不可用风险。此外，RPC 服务提供商可以提前访问用户的交易信息，从而可能引发 MEV
+            相关的交易排序与公平性风险。因此，钱包应披露默认的 RPC 服务提供商，并允许用户自定义 RPC 服务。RPC 服务的中心化已导致多起安全问题，例如，2022 年 3 月，Infura
+            因政策原因切断了对乌克兰用户的服务；由于钱包 MetaMask 的默认 RPC 服务商是 Infura，导致大量用户受到影响，无法访问区块链。
           </div>
 
           <div class="risk-detail-item" data-detail="sr5">
-           
+
             <h4>第三方 SDK</h4>
-           加密钱包通常依赖第三方 SDK 实现通知、数据分析等功能，但在此过程中，钱包可能会向第三方服务提供商共享用户的 PII、设备 ID 和崩溃日志等数据。例如，在 Slope 事件中，白帽研究人员发现 Slope 钱包会将日志以明文形式传输至第三方漏洞分析服务商 Sentry，其中包含用户大量敏感信息。
+            加密钱包通常依赖第三方 SDK 实现通知、数据分析等功能，但在此过程中，钱包可能会向第三方服务提供商共享用户的 PII、设备 ID 和崩溃日志等数据。例如，在 Slope 事件中，白帽研究人员发现 Slope
+            钱包会将日志以明文形式传输至第三方漏洞分析服务商 Sentry，其中包含用户大量敏感信息。
           </div>
 
           <div class="risk-detail-item" data-detail="ll">
-          
+
             <h4>流动性限制</h4>
             在加密货币市场中，流动性指代币的自由交易能力。本文将流动性定义为：任何人均可自由转移（transfer）其持有的代币。如果合约所有者可以控制代币转账相关的函数，则认为该合约存在流动性限制风险。
           </div>
 
           <div class="risk-detail-item" data-detail="vs">
-          
+
             <h4>稀缺性降低</h4>
-           加密资产的价值通常受供应量影响。一些 token 或 NFT 的供应量是固定的，由于稀缺性，它们的市场价值也较高。然而，若 Owner 可随意增发代币，会导致代币稀缺性降低，从而损害现有持有者的利益。一个现实案例是 Yearn.finance 团队曾提议额外发行价值 2.25 亿美元的 YFI 代币以激励开发者，此举引发持有者强烈反对。
+            加密资产的价值通常受供应量影响。一些 token 或 NFT 的供应量是固定的，由于稀缺性，它们的市场价值也较高。然而，若 Owner 可随意增发代币，会导致代币稀缺性降低，从而损害现有持有者的利益。一个现实案例是
+            Yearn.finance 团队曾提议额外发行价值 2.25 亿美元的 YFI 代币以激励开发者，此举引发持有者强烈反对。
           </div>
 
           <div class="risk-detail-item" data-detail="mm">
-          
+
             <h4>可变元数据</h4>
-           ERC20代币合约通常提供一组可选元数据，以标识代币的基本信息，包括名称（name）、符号（symbol）和小数位数（decimals）。这些元数据通常在合约部署后保持不变。然而，若Owner可以随意修改元数据，则可能导致用户误解代币属性，甚至影响市场交易。例如 ERC20代币如果合约允许Owner修改这些字段，则可能影响外部平台（如加密钱包和Web3网站）的正确显示，并可能对代币价值产生不利影响。
+            ERC20代币合约通常提供一组可选元数据，以标识代币的基本信息，包括名称（name）、符号（symbol）和小数位数（decimals）。这些元数据通常在合约部署后保持不变。然而，若Owner可以随意修改元数据，则可能导致用户误解代币属性，甚至影响市场交易。例如
+            ERC20代币如果合约允许Owner修改这些字段，则可能影响外部平台（如加密钱包和Web3网站）的正确显示，并可能对代币价值产生不利影响。
           </div>
 
           <div class="risk-detail-item" data-detail="mp">
-    
+
             <h4>可变参数</h4>
-            ERC20 代币的 transfer() 函数通常包含开发者定义的参数，如交易税（taxFee）、流动性费（liquidityFee）等。这些参数通常在合约开发阶段由参与者共同决定。然而，若 Owner 拥有随意更改这些参数的权限，可能导致用户在不知情的情况下支付额外费用或遭受不公平交易。例如，PAWTH 是一个市值超过 100 万美元的 ERC20，合约 Owner 可以随意修改 taxFee、liquidityFee、burnFee 等参数。
+            ERC20 代币的 transfer() 函数通常包含开发者定义的参数，如交易税（taxFee）、流动性费（liquidityFee）等。这些参数通常在合约开发阶段由参与者共同决定。然而，若 Owner
+            拥有随意更改这些参数的权限，可能导致用户在不知情的情况下支付额外费用或遭受不公平交易。例如，PAWTH 是一个市值超过 100 万美元的 ERC20，合约 Owner 可以随意修改
+            taxFee、liquidityFee、burnFee 等参数。
           </div>
         </div>
       </div>
