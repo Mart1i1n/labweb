@@ -920,21 +920,21 @@
               <div class="hero-point"><strong>03 / 安全防护</strong><span>通过域名绑定和钱包提示，把消息真实目标站点变成可见信息。</span></div>
             </div> -->
 
-          <p class="hero-desc">Web3 登录通常基于钱包地址和签名。前端负责交互，后端负责生成消息与校验签名，钱包负责展示消息并完成签名；只有后端验证通过后，用户才能访问站内的 off-chain 数据。</p>
+          <p class="hero-desc">Web3 登录通常基于钱包地址与签名。前端发起交互，后端生成并校验消息，钱包负责展示与签名；校验通过后，用户才能访问站内 off-chain 数据。</p>
 
 
          
             <div class="bullet-list">
-              <div>前端负责交互与传递。</div>
-              <div>后端负责生成消息、校验签名并决定登录结果。</div>
-              <div>钱包负责签名，也决定用户能否看清消息究竟将用于哪个网站。</div>
+              <div>前端发起登录请求。</div>
+              <div>后端生成消息并校验签名。</div>
+              <div>钱包展示消息并完成签名。</div>
             </div>
                        <p class="hero-desc">
-              本页面展示 Web3 登录的基本机制、盲消息安全风险（Blind Message Attack）的典型链路，以及一种基于钱包检测域名不一致的缓解思路。
+              本页面展示 Web3 登录基本流程、盲消息风险链路，以及基于域名校验的缓解方案。
             </p>
 
             <p class="hero-desc">
-              对 27 个知名网站的检测显示，75.8% 的 Web3 登录存在不同程度的盲消息安全风险，相关用户规模超过 200 万。为降低这类风险，本文在 MetaMask 中实现了 Web3AuthGuard，可在登录签名前自动检查消息来源，并提醒用户识别可疑的 Web3 登录；评估结果显示，该工具可识别 80% 的潜在风险场景。
+              对 27 个知名网站的检测显示，75.8% 的 Web3 登录存在盲消息风险，相关用户规模超过 200 万。为降低风险，本工作实现了 Web3AuthGuard，可在签名前检查消息来源；评估显示可识别 80% 的潜在风险场景。
             </p>
 
             <div class="hero-points" aria-label="impact metrics">
@@ -948,7 +948,7 @@
               </div>
               <div class="demo-meta-item">
                 <div class="demo-meta-val">80%</div>
-                <div class="demo-meta-lbl">Web3AuthGuard 识别潜在风险场景</div>
+                <div class="demo-meta-lbl">应对潜在风险场景</div>
               </div>
             </div>
    
@@ -957,7 +957,7 @@
         </section>
 
         <section class="toolbar">
-          <p>三个案例共享同一个示例钱包面板；开始新的模拟演示会自动清空上一个状态。</p>
+          三个案例共用同一示例钱包；切换案例会自动重置状态。
           <div class="btn-row"><button class="btn-subtle" id="resetAll">重置模拟</button></div>
         </section>
 
@@ -968,8 +968,7 @@
           <div class="case-head">
             <div>
               <div class="kicker">案例一：正常的 Web3 登录流程</div>
-              <p>用户访问网站 A，网站 A 前端向网站 A 后端请求登录消息，后端生成带随机 Nonce 的消息；前端唤起钱包签名，用户签名后，前端把地址、消息、签名交给网站 A 后端，网站 A
-                后端验证通过后返回登录成功。</p>
+              <p>用户访问网站 A。前端向后端请求登录消息，后端返回需要签名的消息；用户使用钱包签名后，前端将地址、消息和签名提交给后端，校验通过后登录成功。</p>
             </div>
             <button class="btn-primary start-btn" data-case="normal">正常模拟</button>
           </div>
@@ -999,8 +998,8 @@
 Nonce: 483921
 Issued At: 2026-04-05T13:20:00Z</pre>
               </div>
-              <div class="detail-card" id="detail-normal">点击“开始模拟”后，将按顺序展示从连接钱包、请求消息、签名到后端校验的完整链路。</div>
-              <div class="status safe" id="status-normal">等待开始。这个案例用于建立对 Web3 登录基本机制的正确理解。</div>
+              <div class="detail-card" id="detail-normal">展示从连接钱包到后端校验的完整登录流程。</div>
+              <div class="status safe" id="status-normal">等待开始。</div>
             </div>
           </div>
 
@@ -1010,11 +1009,11 @@ Issued At: 2026-04-05T13:20:00Z</pre>
         <section class="section">
           <h2>盲消息安全风险 Blind Message Attack</h2>
           <p>
-            用户以为自己只是在当前网站完成一次普通登录，但诱导站点实际向用户展示的是“另一个目标网站”的登录消息。由于用户或钱包难以判断该消息真正服务于哪个网站，用户可能在不充分感知的情况下签名；该签名随后可能被转交至目标网站后端，最终带来跨站数据访问/泄露风险。
+            用户以为自己在当前网站完成普通登录，但诱导站点实际展示的是“另一个目标网站”的登录消息。由于消息来源没有和网站绑定，签名可能被用于登录目标网站，带来跨站数据访问/泄露风险。
           </p>
 
           <div class="callout">
-            <strong>核心问题：用户签的是消息，但很难确认这个消息究竟属于哪个网站。</strong><br>问题不在于签名算法失效，而在于“签名内容与来源之间缺乏清晰绑定”，导致用户在诱导站点上完成的签名，可能被转用于另一个站点的后端认证。
+            <strong>核心问题：用户签名的消息没有和登录的网站绑定。</strong><br>问题不在签名算法本身，而在于“签名内容与来源缺乏清晰绑定”，导致签名可能被转用于另一个站点的后端认证。
           </div>
         </section>
 
@@ -1022,15 +1021,14 @@ Issued At: 2026-04-05T13:20:00Z</pre>
           <div class="case-head">
             <div>
               <div class="kicker">案例二：盲消息风险链路模拟</div>
-              <p>用户访问诱导站点 M。该站点伪装成普通登录页面，但实际上诱导用户签署的是“网站 B 将接受的登录消息”。用户签名后，相关地址、消息和签名被转发给网站 B 后端，由网站 B 后端完成认证，最终导致网站
-                B 出现跨站数据访问/泄露风险。</p>
+              <p>用户访问诱导站点 M。该站点展示的是“网站 B 的登录消息”。用户签名后，签名内容由站点 M 提交给网站 B ，从而实现未授权访问用户在网站 B 的数据，造成数据泄露。</p>
             </div>
             <button class="btn-danger start-btn" data-case="attack">风险模拟</button>
           </div>
 
           <div class="case-body">
             <div class="diagram">
-              <h3>风险链路节点</h3>
+              <h3>风险演示</h3>
               <div class="nodes" id="nodes-attack">
                 <div class="node" data-node="user"><small>Actor</small><strong>用户</strong><span>01</span></div>
                 <div class="node-arrow">→</div>
@@ -1048,14 +1046,14 @@ Issued At: 2026-04-05T13:20:00Z</pre>
 
           <div class="side-col">
               <div class="message-card">
-                <strong>用户在钱包里看到的消息</strong>
+                <strong>钱包显示的消息（用户难以验证来源）</strong>
                 <pre>Login Request
 Nonce: 774183
 Purpose: Authentication Session
 Issued At: 2026-04-05T13:22:30Z</pre>
               </div>
-              <div class="detail-card" id="detail-attack">这个案例会完整展示：诱导站点获取签名 -> 转发到网站 B 后端 -> 网站 B 建立会话 -> 形成跨站数据访问/泄露风险。</div>
-              <div class="status attack" id="status-attack">等待开始。重点观察“签名被转用于网站 B 后端认证”这一关键步骤。</div>
+              <div class="detail-card" id="detail-attack">展示签名被转用于网站 B 后端并形成风险的过程。</div>
+              <div class="status attack" id="status-attack">等待开始。重点观察签名如何被转用。</div>
             </div>
           </div>
 
@@ -1063,7 +1061,7 @@ Issued At: 2026-04-05T13:22:30Z</pre>
 
           <div class="result-card" id="attackResult">
             <strong>模拟演示结果</strong>
-            <p>这些数据原本只应在用户本人成功登录网站 B 后可见。模拟演示中，诱导站点 M 通过把签名提交给网站 B 后端，形成了对这些数据的访问能力，展示了跨站数据访问/泄露风险。</p>
+            <p>这些数据原本只应在用户本人登录网站 B 后可见。模拟演示中，诱导站点 M 通过转用签名获取了访问能力，展示了跨站数据访问/泄露风险。</p>
             <div class="result-row"><span>用户资料</span><code>Alice Research / UID-B-2048</code></div>
             <div class="result-row"><span>邮箱</span><code>alice.web3@example.com</code></div>
             <div class="result-row"><span>账户偏好</span><code>通知开启 / 导出权限开启</code></div>
@@ -1076,15 +1074,15 @@ Issued At: 2026-04-05T13:22:30Z</pre>
 
           <h2>缓解思路：消息绑定域名 + 钱包侧一致性检查</h2>
           <p>
-            如果登录消息中明确包含目标域名，钱包就可以在签名中检查该域名，把它与当前访问页面域名进行对比。一旦发现不一致，钱包就直接告警并中止签名。
+            如果登录消息中明确包含目标域名，钱包就可以将其与当前页面域名比对；一旦不一致，即可告警并中止签名。
           </p>
 
 
               <div class="bullet-list">
-                <div>消息中明确写入目标域名，例如 <code>Domain: websiteB.com</code>。</div>
-                <div>钱包高亮显示该域名，避免用户忽略。</div>
-                <div>钱包同时展示当前访问页面域名并执行比对。</div>
-                <div>若域名不一致，则直接阻止签名。</div>
+              <div>消息中写入目标域名，例如 <code>Domain: websiteB.com</code>。</div>
+              <div>钱包高亮显示目标域名。</div>
+              <div>钱包同时展示当前页面域名并进行比对。</div>
+              <div>域名不一致时直接阻止签名。</div>
               </div>
 
 
@@ -1094,8 +1092,8 @@ Issued At: 2026-04-05T13:22:30Z</pre>
           <div class="case-head">
             <div>
               <div class="kicker">案例三：基于钱包的防护机制模拟</div>
-              <p>用户仍然访问诱导站点 M。该站点尝试诱导用户签署网站 B 的登录消息，但这次消息中明确包含 <code>websiteB.com</code>。钱包识别该域名，再把它与当前页面
-                <code>malicious-site.com</code> 比较；由于两者不一致，钱包告警并阻止签名，相关风险链路在签名前被阻断。</p>
+              <p>用户仍然访问诱导站点 M。该站点尝试诱导用户签署网站 B 的登录消息，但这次消息中明确包含 <code>websiteB.com</code>。钱包将其与当前页面
+                <code>malicious-site.com</code> 比对后，告警并阻止签名，风险链路在签名前被阻断。</p>
             </div>
             <button class="btn-warn start-btn" data-case="defense">防护模拟</button>
           </div>
@@ -1108,7 +1106,7 @@ Issued At: 2026-04-05T13:22:30Z</pre>
                 <div class="node-arrow">→</div>
                 <div class="node" data-node="wallet"><small>Wallet</small><strong>钱包</strong><span>02 / 04</span></div>
                 <div class="node-arrow">→</div>
-                <div class="node" data-node="mitigation"><small>Wallet Mitigation</small><strong>钱包缓解模块</strong><span>05 / 06 / 07 / 08</span>
+                <div class="node" data-node="mitigation"><small>Wallet Mitigation</small><strong>钱包安全模块</strong><span>05 / 06 / 07 / 08</span>
                 </div>
                 <div class="node-arrow">→</div>
                 <div class="node" data-node="m"><small>Site M</small><strong>诱导站点 M</strong><span>01 / 02 /
@@ -1132,8 +1130,8 @@ Issued At: 2026-04-05T13:24:10Z</pre>
                 <div class="compare-row"><span>检查结果</span><span class="tag">域名不一致</span></div>
               </div>
 
-              <div class="detail-card" id="detail-defense">这个案例会在钱包阶段直接显示域名差异，并在签名前中止流程，因此风险链路不会进入网站 B 后端。</div>
-              <div class="status warn" id="status-defense">等待开始。这个案例用于说明“提升可见性 + 钱包拦截”如何阻断本次风险链路。</div>
+              <div class="detail-card" id="detail-defense">展示钱包如何通过域名比对在签名前阻断风险链路。</div>
+              <div class="status warn" id="status-defense">等待开始。</div>
             </div>
           </div>
 
@@ -1147,7 +1145,7 @@ Issued At: 2026-04-05T13:24:10Z</pre>
         <div class="wallet-head">
           <div>
             <h3>示例钱包</h3>
-            <p>用于模拟签名过程</p>
+            <p>用于模拟签名流程</p>
           </div>
           <div class="wallet-state" id="walletState">未连接</div>
         </div>
@@ -1167,7 +1165,7 @@ Issued At: 2026-04-05T13:24:10Z</pre>
           <button class="btn-subtle" id="rejectBtn">拒绝</button>
         </div>
 
-        <div class="wallet-hint" id="walletHint">操作提示：点击任一案例的开始按钮后，钱包会根据场景进入“等待消息”“待签名”“已签名”“域名不一致，已阻止”等不同状态。</div>
+        <div class="wallet-hint" id="walletHint">等待开始演示。</div>
       </aside>
     </div>
   </div>
@@ -1182,14 +1180,14 @@ Issued At: 2026-04-05T13:24:10Z</pre>
         status: document.getElementById("status-normal"),
         result: null,
         steps: [
-          { title: "用户访问网站 A 前端", desc: "用户进入 website-a.com，准备使用钱包登录网站 A。", nodes: ["user", "front"], await: "connect", wallet: { status: "未连接", cls: "", page: "website-a.com", target: "-", msg: "当前无待签名消息。\n请先连接钱包以继续网站 A 的登录流程。", check: "域名检查结果：本案例不启用钱包侧域名一致性拦截。", checkCls: "safe", hint: "请点击“连接钱包”，模拟用户在网站 A 上连接示例钱包。" }, banner: "步骤 1/8：用户位于网站 A 前端，准备连接钱包。", bannerCls: "safe" },
-          { title: "钱包连接完成", desc: "用户已连接示例钱包，网站 A 前端可以继续发起登录流程。", nodes: ["user", "wallet", "front"], wallet: { status: "已连接", cls: "safe", page: "website-a.com", target: "-", msg: "钱包已连接到 website-a.com。", check: "域名检查结果：无额外检查。", checkCls: "safe", hint: "连接完成后，前端将向网站 A 后端请求登录消息。" }, banner: "步骤 2/8：钱包已连接，前端准备请求网站 A 后端生成消息。", bannerCls: "safe" },
-          { title: "网站 A 前端请求网站 A 后端生成消息", desc: "前端向网站 A 后端请求一条带随机 Nonce 的登录消息。", nodes: ["front", "back"], wallet: { status: "等待消息", cls: "safe", page: "website-a.com", target: "-", msg: "前端正在向网站 A 后端请求登录消息...", check: "域名检查结果：无额外检查。", checkCls: "safe", hint: "真正的登录消息由后端生成，而不是由前端随意拼接。" }, banner: "步骤 3/8：网站 A 前端向网站 A 后端请求登录消息。", bannerCls: "safe" },
-          { title: "网站 A 后端返回带 Nonce 的登录消息", desc: "后端生成消息并返回给前端，供钱包签名使用。", nodes: ["back", "front"], wallet: { status: "等待消息", cls: "safe", page: "website-a.com", target: "-", msg: "Sign in to Website A\nNonce: 483921\nIssued At: 2026-04-05T13:20:00Z", check: "域名检查结果：无额外检查。", checkCls: "safe", hint: "消息已经回到前端，下一步将唤起钱包签名窗口。" }, banner: "步骤 4/8：网站 A 后端把登录消息返回给网站 A 前端。", bannerCls: "safe" },
-          { title: "前端唤起钱包签名窗口", desc: "前端把消息交给钱包，钱包进入待签名状态。", nodes: ["front", "wallet"], wallet: { status: "待签名", cls: "safe", page: "website-a.com", target: "-", msg: "Sign in to Website A\nNonce: 483921\nIssued At: 2026-04-05T13:20:00Z", check: "域名检查结果：当前案例仅展示正常登录，不做域名拦截。", checkCls: "safe", hint: "钱包已展示消息。请点击“签名”继续模拟，或点击“拒绝”停止当前案例。" }, await: "sign", banner: "步骤 5/8：钱包展示消息，等待用户签名。", bannerCls: "safe" },
-          { title: "前端提交地址 + 消息 + 签名给网站 A 后端", desc: "用户签名后，前端将地址、消息和签名提交给网站 A 后端。", nodes: ["front", "back"], wallet: { status: "已签名", cls: "success", page: "website-a.com", target: "website-a.com", msg: "Sign in to Website A\nNonce: 483921\nIssued At: 2026-04-05T13:20:00Z\nSignature: 0xsig-demo-normal", check: "域名检查结果：正常流程。", checkCls: "safe", hint: "现在由网站 A 后端决定这次登录是否成立。" }, banner: "步骤 6/8：前端把地址、消息和签名交回网站 A 后端。", bannerCls: "safe" },
-          { title: "网站 A 后端完成校验", desc: "后端验证地址、消息和 Signature 的对应关系，并检查 Nonce 是否有效。", nodes: ["back"], wallet: { status: "已签名", cls: "success", page: "website-a.com", target: "website-a.com", msg: "服务器正在校验地址、消息和 Signature 的对应关系。", check: "域名检查结果：正常流程。", checkCls: "safe", hint: "后端验证通过后，才会真正返回登录成功。" }, banner: "步骤 7/8：网站 A 后端完成校验。", bannerCls: "safe" },
-          { title: "登录成功", desc: "网站 A 后端创建会话，用户获得对网站 A off-chain 资源的访问权限。", nodes: ["back", "ok"], wallet: { status: "已签名", cls: "success", page: "website-a.com", target: "website-a.com", msg: "登录成功。网站 A 已接受本次签名，并建立会话。", check: "域名检查结果：本次流程是正常登录场景。", checkCls: "safe", hint: "正常登录模拟结束。可以切换到风险或防护案例继续查看。" }, stop: true, banner: "步骤 8/8：网站 A 登录成功。", bannerCls: "safe" }
+          { title: "访问网站 A", desc: "用户进入 website-a.com，准备使用钱包登录。", nodes: ["user", "front"], await: "connect", wallet: { status: "未连接", cls: "", page: "website-a.com", target: "-", msg: "当前无待签名消息。\n请先连接钱包。", check: "域名检查结果：本案例不启用域名一致性拦截。", checkCls: "safe", hint: "点击“连接钱包”，开始正常登录流程。" }, banner: "步骤 1/8：用户访问网站 A。", bannerCls: "safe" },
+          { title: "连接钱包", desc: "用户完成钱包连接，前端可以继续发起登录。", nodes: ["user", "wallet", "front"], wallet: { status: "已连接", cls: "safe", page: "website-a.com", target: "-", msg: "钱包已连接到 website-a.com。", check: "域名检查结果：无额外检查。", checkCls: "safe", hint: "下一步由前端请求登录消息。" }, banner: "步骤 2/8：钱包已连接。", bannerCls: "safe" },
+          { title: "请求登录消息", desc: "前端向后端请求一条带随机 Nonce 的登录消息。", nodes: ["front", "back"], wallet: { status: "等待消息", cls: "safe", page: "website-a.com", target: "-", msg: "前端正在请求登录消息...", check: "域名检查结果：无额外检查。", checkCls: "safe", hint: "登录消息由后端生成。", }, banner: "步骤 3/8：前端请求登录消息。", bannerCls: "safe" },
+          { title: "返回登录消息", desc: "后端生成消息并返回给前端。", nodes: ["back", "front"], wallet: { status: "等待消息", cls: "safe", page: "website-a.com", target: "-", msg: "Sign in to Website A\nNonce: 483921\nIssued At: 2026-04-05T13:20:00Z", check: "域名检查结果：无额外检查。", checkCls: "safe", hint: "下一步唤起钱包签名。", }, banner: "步骤 4/8：后端返回登录消息。", bannerCls: "safe" },
+          { title: "钱包签名", desc: "前端将消息交给钱包，等待用户签名。", nodes: ["front", "wallet"], wallet: { status: "待签名", cls: "safe", page: "website-a.com", target: "-", msg: "Sign in to Website A\nNonce: 483921\nIssued At: 2026-04-05T13:20:00Z", check: "域名检查结果：本案例不做域名拦截。", checkCls: "safe", hint: "点击“签名”继续，或点击“拒绝”停止。", }, await: "sign", banner: "步骤 5/8：钱包等待签名。", bannerCls: "safe" },
+          { title: "提交签名材料", desc: "前端将地址、消息和签名提交给后端。", nodes: ["front", "back"], wallet: { status: "已签名", cls: "success", page: "website-a.com", target: "website-a.com", msg: "Sign in to Website A\nNonce: 483921\nIssued At: 2026-04-05T13:20:00Z\nSignature: 0xsig-demo-normal", check: "域名检查结果：正常流程。", checkCls: "safe", hint: "后端开始校验登录材料。", }, banner: "步骤 6/8：前端提交签名材料。", bannerCls: "safe" },
+          { title: "后端校验", desc: "后端校验地址、消息和签名，并检查 Nonce。", nodes: ["back"], wallet: { status: "已签名", cls: "success", page: "website-a.com", target: "website-a.com", msg: "服务器正在校验地址、消息和 Signature。", check: "域名检查结果：正常流程。", checkCls: "safe", hint: "校验通过后返回登录成功。", }, banner: "步骤 7/8：后端校验。", bannerCls: "safe" },
+          { title: "登录成功", desc: "后端创建会话，用户获得访问权限。", nodes: ["back", "ok"], wallet: { status: "已签名", cls: "success", page: "website-a.com", target: "website-a.com", msg: "登录成功。网站 A 已建立会话。", check: "域名检查结果：正常登录场景。", checkCls: "safe", hint: "正常登录流程结束。", }, stop: true, banner: "步骤 8/8：网站 A 登录成功。", bannerCls: "safe" }
         ]
       },
       attack: {
@@ -1200,14 +1198,14 @@ Issued At: 2026-04-05T13:24:10Z</pre>
         status: document.getElementById("status-attack"),
         result: document.getElementById("attackResult"),
         steps: [
-          { title: "用户访问诱导站点 M", desc: "用户当前位于 malicious-site.com，以为自己只是在当前网站做普通登录。", nodes: ["user", "m"], await: "connect", wallet: { status: "未连接", cls: "", page: "malicious-site.com", target: "-", msg: "诱导站点 M 正在伪装成普通登录入口。\n请先连接钱包以继续模拟。", check: "域名检查结果：钱包尚未识别消息目标域名，无法给出风险提示。", checkCls: "", hint: "请点击“连接钱包”，模拟用户在诱导站点上继续操作。" }, banner: "步骤 1/8：用户访问诱导站点 M。", bannerCls: "attack" },
-          { title: "钱包连接完成", desc: "用户已经在诱导站点 M 上连接了示例钱包。", nodes: ["user", "wallet", "m"], wallet: { status: "已连接", cls: "attack", page: "malicious-site.com", target: "-", msg: "钱包已连接到 malicious-site.com。", check: "域名检查结果：暂无可见的目标站点信息。", checkCls: "", hint: "连接完成后，诱导站点开始准备网站 B 的登录消息。" }, banner: "步骤 2/8：用户在诱导站点 M 上完成钱包连接。", bannerCls: "attack" },
-          { title: "诱导站点获取属于网站 B 的登录消息", desc: "该站点不是直接读取数据，而是先准备一条最终会被网站 B 后端接受的登录消息。", nodes: ["m", "b"], wallet: { status: "等待消息", cls: "attack", page: "malicious-site.com", target: "websiteB.com", msg: "诱导站点 M 已拿到将被网站 B 后端接受的登录消息。", check: "域名检查结果：钱包没有把目标域名清楚展示给用户。", checkCls: "", hint: "这是风险链路的关键准备阶段：先拿到网站 B 的认证消息。" }, banner: "步骤 3/8：诱导站点 M 已获取网站 B 的登录消息。", bannerCls: "attack" },
-          { title: "诱导站点把消息伪装成普通登录请求送入钱包", desc: "用户看到的是看似普通的 Login Request，难以判断它实际将被用于网站 B。", nodes: ["m", "wallet"], wallet: { status: "待签名", cls: "attack", page: "malicious-site.com", target: "websiteB.com", msg: "Login Request\nNonce: 774183\nPurpose: Authentication Session\nIssued At: 2026-04-05T13:22:30Z", check: "域名检查结果：没有清晰的目标域名提示，用户难以确认消息真正属于哪个网站。", checkCls: "", hint: "请点击“签名”，模拟用户在不清楚消息真实目标站点时完成签名。" }, await: "sign", banner: "步骤 4/8：钱包弹出签名框，但来源和用途没有被清楚绑定。", bannerCls: "attack" },
-          { title: "诱导站点拿到地址、消息和签名", desc: "用户一旦签名，诱导站点就拿到了完整认证材料。", nodes: ["m", "wallet"], wallet: { status: "已签名", cls: "attack", page: "malicious-site.com", target: "websiteB.com", msg: "Login Request\nNonce: 774183\nPurpose: Authentication Session\nIssued At: 2026-04-05T13:22:30Z\nSignature: 0xsig-demo-attack", check: "域名检查结果：签名前没有阻断，因此诱导站点已经得到可转用的签名。", checkCls: "", hint: "风险已经形成：诱导站点可以把这些材料提交给网站 B 后端。" }, banner: "步骤 5/8：诱导站点 M 已拿到地址、消息和签名。", bannerCls: "attack" },
-          { title: "诱导站点把材料转发给网站 B 后端", desc: "签名被从诱导站点 M 转用于网站 B 后端认证。", nodes: ["m", "b"], wallet: { status: "已签名", cls: "attack", page: "malicious-site.com", target: "websiteB.com", msg: "Forwarding to websiteB.com backend:\nAddress: 0x71C...9Af2\nMessage: Login Request / Nonce 774183\nSignature: 0xsig-demo-attack", check: "域名检查结果：钱包未阻止，该站点得以把签名提交给网站 B 后端。", checkCls: "", hint: "真正导致风险扩大的不是签名本身，而是网站 B 后端接受了这份签名。", }, banner: "步骤 6/8：诱导站点 M 正在把签名材料提交给网站 B 后端。", bannerCls: "attack" },
-          { title: "网站 B 后端校验通过并建立会话", desc: "网站 B 后端只看到一组合法的地址、消息和签名，于是误认为用户本人在登录网站 B。", nodes: ["b"], wallet: { status: "已签名", cls: "attack", page: "malicious-site.com", target: "websiteB.com", msg: "websiteB.com backend verification passed.\nSession issued for 0x71C...9Af2", check: "域名检查结果：后端并不知道用户实际上是在 malicious-site.com 上完成签名。", checkCls: "", hint: "一旦网站 B 创建会话，风险就会从“签名误用”转化为“跨站数据访问/泄露风险”。" }, banner: "步骤 7/8：网站 B 后端完成校验并创建会话。", bannerCls: "attack" },
-          { title: "网站 B 出现数据泄露风险", desc: "相关签名被转用后，网站 B 的用户资料、邮箱、偏好设置等 off-chain 数据出现泄露风险。", nodes: ["b", "data"], wallet: { status: "已签名", cls: "attack", page: "malicious-site.com", target: "websiteB.com", msg: "风险链路已形成\nWebsite B login accepted.\nCross-site data access risk enabled.", check: "域名检查结果：由于签名前缺乏清晰绑定，风险链路已经完整闭合。", checkCls: "warn", hint: "风险模拟结束。请注意：诱导站点是先借用签名通过网站 B 的认证，再形成数据访问能力。" }, stop: true, reveal: true, banner: "步骤 8/8：盲消息风险链路形成，网站 B 出现跨站数据访问/泄露风险。", bannerCls: "attack" }
+          { title: "访问诱导站点 M", desc: "用户位于 malicious-site.com，以为自己在做普通登录。", nodes: ["user", "m"], await: "connect", wallet: { status: "未连接", cls: "", page: "malicious-site.com", target: "-", msg: "诱导站点 M 正在伪装成普通登录入口。\n请先连接钱包。", check: "域名检查结果：尚未识别消息目标域名。", checkCls: "", hint: "点击“连接钱包”，继续风险链路模拟。" }, banner: "步骤 1/8：用户访问诱导站点 M。", bannerCls: "attack" },
+          { title: "连接钱包", desc: "用户在诱导站点 M 上连接了示例钱包。", nodes: ["user", "wallet", "m"], wallet: { status: "已连接", cls: "attack", page: "malicious-site.com", target: "-", msg: "钱包已连接到 malicious-site.com。", check: "域名检查结果：暂无目标站点信息。", checkCls: "", hint: "下一步准备网站 B 的登录消息。" }, banner: "步骤 2/8：钱包已连接。", bannerCls: "attack" },
+          { title: "获取目标消息", desc: "诱导站点准备一条可被网站 B 接受的登录消息。", nodes: ["m", "b"], wallet: { status: "等待消息", cls: "attack", page: "malicious-site.com", target: "websiteB.com", msg: "诱导站点 M 已拿到网站 B 的登录消息。", check: "域名检查结果：钱包未清楚展示目标域名。", checkCls: "", hint: "这是风险链路的准备阶段。", }, banner: "步骤 3/8：诱导站点获取网站 B 的登录消息。", bannerCls: "attack" },
+          { title: "送入钱包签名", desc: "用户看到的是普通的 Login Request，难以判断其真实用途。", nodes: ["m", "wallet"], wallet: { status: "待签名", cls: "attack", page: "malicious-site.com", target: "websiteB.com", msg: "Login Request\nNonce: 774183\nPurpose: Authentication Session\nIssued At: 2026-04-05T13:22:30Z", check: "域名检查结果：目标站点不清晰。", checkCls: "", hint: "点击“签名”，模拟用户继续操作。", }, await: "sign", banner: "步骤 4/8：钱包等待签名。", bannerCls: "attack" },
+          { title: "获取签名材料", desc: "用户签名后，诱导站点获得完整认证材料。", nodes: ["m", "wallet"], wallet: { status: "已签名", cls: "attack", page: "malicious-site.com", target: "websiteB.com", msg: "Login Request\nNonce: 774183\nPurpose: Authentication Session\nIssued At: 2026-04-05T13:22:30Z\nSignature: 0xsig-demo-attack", check: "域名检查结果：签名前未阻断。", checkCls: "", hint: "签名材料已可被转用。", }, banner: "步骤 5/8：诱导站点获得签名材料。", bannerCls: "attack" },
+          { title: "转交网站 B", desc: "签名材料被转交给网站 B 后端。", nodes: ["m", "b"], wallet: { status: "已签名", cls: "attack", page: "malicious-site.com", target: "websiteB.com", msg: "Forwarding to websiteB.com backend:\nAddress: 0x71C...9Af2\nMessage: Login Request / Nonce 774183\nSignature: 0xsig-demo-attack", check: "域名检查结果：钱包未阻止转用。", checkCls: "", hint: "风险开始扩展到网站 B 后端。 ", }, banner: "步骤 6/8：签名材料被转交给网站 B。", bannerCls: "attack" },
+          { title: "后端建立会话", desc: "网站 B 后端校验通过，并误以为用户本人正在登录。", nodes: ["b"], wallet: { status: "已签名", cls: "attack", page: "malicious-site.com", target: "websiteB.com", msg: "websiteB.com backend verification passed.\nSession issued for 0x71C...9Af2", check: "域名检查结果：后端不知道签名发生在 malicious-site.com。", checkCls: "", hint: "会话一旦建立，即可能产生数据风险。", }, banner: "步骤 7/8：网站 B 后端建立会话。", bannerCls: "attack" },
+          { title: "形成数据风险", desc: "签名被转用后，网站 B 出现跨站数据访问/泄露风险。", nodes: ["b", "data"], wallet: { status: "已签名", cls: "attack", page: "malicious-site.com", target: "websiteB.com", msg: "风险链路已形成\nWebsite B login accepted.\nCross-site data access risk enabled.", check: "域名检查结果：风险链路已闭合。", checkCls: "warn", hint: "风险模拟结束。", }, stop: true, reveal: true, banner: "步骤 8/8：网站 B 出现跨站数据访问/泄露风险。", bannerCls: "attack" }
         ]
       },
       defense: {
@@ -1218,14 +1216,14 @@ Issued At: 2026-04-05T13:24:10Z</pre>
         status: document.getElementById("status-defense"),
         result: null,
         steps: [
-          { title: "用户访问诱导站点 M", desc: "用户仍在 malicious-site.com 上操作，但这次钱包支持域名识别与一致性检查。", nodes: ["user", "m"], await: "connect", wallet: { status: "未连接", cls: "", page: "malicious-site.com", target: "-", msg: "当前页面为 malicious-site.com。\n请先连接钱包，观察带域名绑定的防护流程。", check: "域名检查结果：等待消息载入后执行。", checkCls: "", hint: "请点击“连接钱包”，模拟用户继续在诱导站点上尝试登录。" }, banner: "步骤 1/8：用户访问诱导站点 M。", bannerCls: "warn" },
-          { title: "钱包连接完成", desc: "用户仍然在诱导站点 M 上连接了示例钱包。", nodes: ["user", "wallet", "m"], wallet: { status: "已连接", cls: "safe", page: "malicious-site.com", target: "-", msg: "钱包已连接到 malicious-site.com。", check: "域名检查结果：等待消息目标域名载入。", checkCls: "", hint: "连接完成后，诱导站点将尝试发起网站 B 的登录消息。" }, banner: "步骤 2/8：钱包已连接，诱导站点准备发起目标消息。", bannerCls: "warn" },
-          { title: "诱导站点发起包含 websiteB.com 的登录消息", desc: "诱导站点仍试图让用户签署网站 B 的登录消息，但消息中这次明确写出了目标域名。", nodes: ["m"], wallet: { status: "等待消息", cls: "warn", page: "malicious-site.com", target: "websiteB.com", msg: "Sign in to websiteB.com\nDomain: websiteB.com\nNonce: 912734\nIssued At: 2026-04-05T13:24:10Z", check: "域名检查结果：钱包已提取出目标域名 websiteB.com，准备与当前页面比较。", checkCls: "safe", hint: "目标域名成为显式可见信息。" }, banner: "步骤 3/8：诱导站点发起网站 B 的登录消息。", bannerCls: "warn" },
-          { title: "钱包高亮消息中的目标域名", desc: "钱包明确显示消息目标域名是 websiteB.com，避免用户忽略签名将被用于哪个站点。", nodes: ["wallet"], wallet: { status: "待签名", cls: "warn", page: "malicious-site.com", target: "websiteB.com", msg: "Sign in to websiteB.com\nDomain: websiteB.com\nNonce: 912734\nIssued At: 2026-04-05T13:24:10Z", check: "域名检查结果：已识别消息中的目标域名 websiteB.com。", checkCls: "safe", hint: "此时钱包不会直接让用户签名，而是先进行域名一致性检查。" }, banner: "步骤 4/8：钱包高亮展示消息中的目标域名。", bannerCls: "warn" },
-          { title: "钱包展示当前访问页面 malicious-site.com", desc: "钱包同时展示当前页面域名，帮助用户把“当前页面”与“签名目标站点”比较。", nodes: ["wallet", "mitigation"], wallet: { status: "待签名", cls: "warn", page: "malicious-site.com", target: "websiteB.com", msg: "Sign in to websiteB.com\nDomain: websiteB.com\nNonce: 912734\nIssued At: 2026-04-05T13:24:10Z", check: "当前访问页面：malicious-site.com；消息目标域名：websiteB.com。", checkCls: "safe", hint: "钱包正在进行域名一致性检查。" }, banner: "步骤 5/8：钱包同时展示当前页面域名和消息目标域名。", bannerCls: "warn" },
-          { title: "域名比对失败", desc: "当前页面是 malicious-site.com，但消息目标域名是 websiteB.com，两者不一致。", nodes: ["wallet", "mitigation"], wallet: { status: "域名不一致，已阻止", cls: "warn", page: "malicious-site.com", target: "websiteB.com", msg: "Sign in to websiteB.com\nDomain: websiteB.com\nNonce: 912734\nIssued At: 2026-04-05T13:24:10Z", check: "检测到域名不一致：当前页面为 malicious-site.com，但签名消息目标为 websiteB.com。", checkCls: "warn", hint: "钱包将直接阻止签名，不再继续后续流程。" }, banner: "步骤 6/8：域名比对失败，钱包发出高亮告警。", bannerCls: "warn" },
-          { title: "钱包阻止签名", desc: "由于域名不一致，钱包中止签名，诱导站点无法获得可提交给网站 B 后端的认证材料。", nodes: ["wallet", "mitigation"], wallet: { status: "域名不一致，已阻止", cls: "warn", page: "malicious-site.com", target: "websiteB.com", msg: "风险已阻断\nNo signature generated.\nWebsite B backend never receives valid auth material.", check: "域名检查结果：已阻止继续签名。", checkCls: "warn", hint: "风险链路在签名前被截断，无法进入网站 B 后端认证阶段。" }, banner: "步骤 7/8：钱包阻止签名请求。", bannerCls: "warn" },
-          { title: "风险链路被阻断", desc: "诱导站点没有拿到签名，因此无法把认证材料提交给网站 B 后端，风险链路在钱包阶段结束。", nodes: ["mitigation"], wallet: { status: "域名不一致，已阻止", cls: "warn", page: "malicious-site.com", target: "websiteB.com", msg: "风险已阻断\nNo signature generated.\nWebsite B backend never receives valid auth material.", check: "域名检查结果：钱包已拦截本次盲消息风险链路。", checkCls: "warn", hint: "防护模拟结束。风险链路没有进入网站 B 后端，因此也无法访问任何用户数据。" }, stop: true, banner: "步骤 8/8：风险链路被拦截。域名绑定 + 钱包侧一致性检查阻断了本次模拟演示。", bannerCls: "warn" }
+          { title: "访问诱导站点 M", desc: "用户仍在 malicious-site.com 上操作，但这次钱包支持域名一致性检查。", nodes: ["user", "m"], await: "connect", wallet: { status: "未连接", cls: "", page: "malicious-site.com", target: "-", msg: "当前页面为 malicious-site.com。\n请先连接钱包。", check: "域名检查结果：等待消息载入。", checkCls: "", hint: "点击“连接钱包”，开始防护流程。", }, banner: "步骤 1/8：用户访问诱导站点 M。", bannerCls: "warn" },
+          { title: "连接钱包", desc: "用户在诱导站点 M 上连接了示例钱包。", nodes: ["user", "wallet", "m"], wallet: { status: "已连接", cls: "safe", page: "malicious-site.com", target: "-", msg: "钱包已连接到 malicious-site.com。", check: "域名检查结果：等待目标域名载入。", checkCls: "", hint: "下一步发起网站 B 的登录消息。", }, banner: "步骤 2/8：钱包已连接。", bannerCls: "warn" },
+          { title: "发起目标消息", desc: "诱导站点发起一条包含 websiteB.com 的登录消息。", nodes: ["m"], wallet: { status: "等待消息", cls: "warn", page: "malicious-site.com", target: "websiteB.com", msg: "Sign in to websiteB.com\nDomain: websiteB.com\nNonce: 912734\nIssued At: 2026-04-05T13:24:10Z", check: "域名检查结果：已提取目标域名 websiteB.com。", checkCls: "safe", hint: "目标域名已成为显式信息。", }, banner: "步骤 3/8：诱导站点发起目标消息。", bannerCls: "warn" },
+          { title: "高亮目标域名", desc: "钱包高亮展示消息中的目标域名。", nodes: ["wallet"], wallet: { status: "待签名", cls: "warn", page: "malicious-site.com", target: "websiteB.com", msg: "Sign in to websiteB.com\nDomain: websiteB.com\nNonce: 912734\nIssued At: 2026-04-05T13:24:10Z", check: "域名检查结果：已识别消息目标域名。", checkCls: "safe", hint: "下一步进行域名一致性检查。", }, banner: "步骤 4/8：钱包高亮目标域名。", bannerCls: "warn" },
+          { title: "展示当前页面", desc: "钱包同时展示当前页面域名与目标域名。", nodes: ["wallet", "mitigation"], wallet: { status: "待签名", cls: "warn", page: "malicious-site.com", target: "websiteB.com", msg: "Sign in to websiteB.com\nDomain: websiteB.com\nNonce: 912734\nIssued At: 2026-04-05T13:24:10Z", check: "当前页面：malicious-site.com；目标域名：websiteB.com。", checkCls: "safe", hint: "钱包正在比较两个域名。", }, banner: "步骤 5/8：钱包展示两个域名。", bannerCls: "warn" },
+          { title: "域名不一致", desc: "当前页面与消息目标域名不一致。", nodes: ["wallet", "mitigation"], wallet: { status: "域名不一致，已阻止", cls: "warn", page: "malicious-site.com", target: "websiteB.com", msg: "Sign in to websiteB.com\nDomain: websiteB.com\nNonce: 912734\nIssued At: 2026-04-05T13:24:10Z", check: "检测到域名不一致：malicious-site.com ≠ websiteB.com。", checkCls: "warn", hint: "钱包将直接阻止签名。", }, banner: "步骤 6/8：检测到域名不一致。", bannerCls: "warn" },
+          { title: "阻止签名", desc: "钱包中止签名，诱导站点无法继续提交认证材料。", nodes: ["wallet", "mitigation"], wallet: { status: "域名不一致，已阻止", cls: "warn", page: "malicious-site.com", target: "websiteB.com", msg: "风险已阻断\nNo signature generated.\nWebsite B backend never receives valid auth material.", check: "域名检查结果：已阻止继续签名。", checkCls: "warn", hint: "风险链路在签名前被截断。", }, banner: "步骤 7/8：钱包阻止签名。", bannerCls: "warn" },
+          { title: "风险被阻断", desc: "诱导站点未获得签名，风险链路在钱包阶段结束。", nodes: ["mitigation"], wallet: { status: "域名不一致，已阻止", cls: "warn", page: "malicious-site.com", target: "websiteB.com", msg: "风险已阻断\nNo signature generated.\nWebsite B backend never receives valid auth material.", check: "域名检查结果：钱包已拦截本次风险链路。", checkCls: "warn", hint: "防护模拟结束。", }, stop: true, banner: "步骤 8/8：风险链路被阻断。", bannerCls: "warn" }
         ]
       }
     };
@@ -1295,14 +1293,14 @@ Issued At: 2026-04-05T13:24:10Z</pre>
         if (demo.result) demo.result.classList.remove("show");
       });
 
-      demos.normal.detail.textContent = "点击“开始模拟”后，将按顺序展示从连接钱包、请求消息、签名到后端校验的完整链路。";
-      demos.normal.status.textContent = "等待开始。这个案例用于建立对 Web3 登录基本机制的正确理解。";
+      demos.normal.detail.textContent = "展示从连接钱包到后端校验的完整登录流程。";
+      demos.normal.status.textContent = "等待开始。用于说明 Web3 登录的基本机制。";
       demos.normal.status.className = "status safe";
-      demos.attack.detail.textContent = "这个案例会完整展示：诱导站点获取签名 -> 转发到网站 B 后端 -> 网站 B 建立会话 -> 形成跨站数据访问/泄露风险。";
-      demos.attack.status.textContent = "等待开始。重点观察“签名被转用于网站 B 后端认证”这一关键步骤。";
+      demos.attack.detail.textContent = "展示签名被转用于网站 B 后端并形成风险的过程。";
+      demos.attack.status.textContent = "等待开始。重点观察签名如何被转用。";
       demos.attack.status.className = "status attack";
-      demos.defense.detail.textContent = "这个案例会在钱包阶段直接显示域名差异，并在签名前中止流程，因此风险链路不会进入网站 B 后端。";
-      demos.defense.status.textContent = "等待开始。这个案例用于说明“提升可见性 + 钱包拦截”如何阻断本次风险链路。";
+      demos.defense.detail.textContent = "展示钱包如何通过域名比对在签名前阻断风险链路。";
+      demos.defense.status.textContent = "等待开始。用于说明域名校验的防护效果。";
       demos.defense.status.className = "status warn";
     }
 
@@ -1311,7 +1309,7 @@ Issued At: 2026-04-05T13:24:10Z</pre>
       state.current = null;
       state.step = -1;
       resetViews();
-      setWallet({ status: "未连接", cls: "", page: "-", target: "-", msg: "当前没有待签名消息。请选择一个案例开始模拟。", check: "域名检查结果：暂无。", checkCls: "", hint: "操作提示：点击任一案例的开始按钮后，钱包会根据场景进入“等待消息”“待签名”“已签名”“域名不一致，已阻止”等不同状态。" });
+      setWallet({ status: "未连接", cls: "", page: "-", target: "-", msg: "当前没有待签名消息。请选择一个案例开始模拟。", check: "域名检查结果：暂无。", checkCls: "", hint: "等待开始演示。" });
       walletActions(false, false, false);
       setGlobal("当前未开始模拟演示", false);
     }
@@ -1378,7 +1376,7 @@ Issued At: 2026-04-05T13:24:10Z</pre>
       const step = demos[state.current].steps[state.step];
       if (step.await !== "connect") return;
       const cls = state.current === "attack" ? "attack" : "safe";
-      setWallet({ ...step.wallet, status: "已连接", cls, hint: "钱包已连接。模拟演示将继续推进到下一步。" });
+      setWallet({ ...step.wallet, status: "已连接", cls, hint: "钱包已连接，流程继续。" });
       walletActions(false, false, false);
       stopTimer();
       state.timer = setTimeout(nextStep, 650);
@@ -1390,8 +1388,8 @@ Issued At: 2026-04-05T13:24:10Z</pre>
       if (step.await !== "sign") return;
       const cls = state.current === "attack" ? "attack" : "success";
       const hint = state.current === "attack"
-        ? "用户已经签名。诱导站点将继续把签名转用于网站 B 后端。"
-        : "用户已经签名。前端将把地址、消息和签名提交给网站 A 后端。";
+        ? "用户已签名，签名材料将继续被转用。"
+        : "用户已签名，前端将提交登录材料。";
       setWallet({ ...step.wallet, status: "已签名", cls, hint });
       walletActions(false, false, false);
       stopTimer();
@@ -1404,9 +1402,9 @@ Issued At: 2026-04-05T13:24:10Z</pre>
       const step = demo.steps[state.step];
       if (step.await !== "sign") return;
       stopTimer();
-      setWallet({ ...step.wallet, status: "已拒绝", cls: "warn", hint: "用户拒绝签名，当前模拟已停止。可重新开始任一案例。" });
+      setWallet({ ...step.wallet, status: "已拒绝", cls: "warn", hint: "用户已拒绝签名，当前流程停止。" });
       walletActions(false, false, false);
-      demo.status.textContent = "用户在钱包中拒绝签名，当前链路已停止。可以重新开始该案例或切换到其他案例。";
+      demo.status.textContent = "用户拒绝签名，当前流程已停止。";
       demo.status.className = "status warn";
       setGlobal(`模拟演示暂停：${demo.name}`, true);
     }
