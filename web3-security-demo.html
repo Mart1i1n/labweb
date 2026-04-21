@@ -6,48 +6,6 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Web3 登录盲消息风险演示</title>
   <style>
-    :root {
-      --bg: #0a0e17;
-      --bg-2: #0f1420;
-      --card: #141c2b;
-      --card-2: #192234;
-      --line: rgba(99, 179, 237, 0.12);
-      --line-strong: rgba(99, 179, 237, 0.28);
-      --blue: #60a5fa;
-      --blue-2: #93c5fd;
-      --green: #34d399;
-      --red: #f87171;
-      --amber: #fbbf24;
-      --txt: #e2e8f0;
-      --txt-2: #94a3b8;
-      --txt-3: #64748b;
-      --shadow: 0 24px 60px rgba(3, 8, 20, 0.34);
-      --radius-lg: 18px;
-      --radius-md: 14px;
-      --radius-sm: 10px;
-      --sans: "Noto Sans SC", "PingFang SC", "Microsoft YaHei", sans-serif;
-      --mono: "JetBrains Mono", "Consolas", monospace;
-    }
-
-    body {
-      background:
-        radial-gradient(circle at top right, rgba(96, 165, 250, 0.08), transparent 24%),
-        radial-gradient(circle at bottom left, rgba(52, 211, 153, 0.06), transparent 20%),
-        var(--bg);
-    }
-
-    body::before {
-      content: "";
-      position: fixed;
-      inset: 0;
-      pointer-events: none;
-      background-image:
-        linear-gradient(rgba(96, 165, 250, 0.02) 1px, transparent 1px),
-        linear-gradient(90deg, rgba(96, 165, 250, 0.02) 1px, transparent 1px);
-      background-size: 50px 50px;
-      mask-image: radial-gradient(ellipse 72% 62% at 50% 26%, black, transparent);
-    }
-
     .sr-only {
       position: absolute;
       width: 1px;
@@ -236,17 +194,6 @@
       color: var(--txt);
       background: rgba(15, 20, 32, 0.86);
       border: 1px solid var(--line);
-    }
-
-    @keyframes walletActionPulse {
-      0%,
-      100% {
-        box-shadow: 0 0 0 1px rgba(96, 165, 250, 0.14), 0 0 0 rgba(59, 130, 246, 0);
-      }
-
-      50% {
-        box-shadow: 0 0 0 1px rgba(96, 165, 250, 0.26), 0 0 0 8px rgba(59, 130, 246, 0.14);
-      }
     }
 
     .section {
@@ -792,7 +739,6 @@
     .wallet-actions button:not(:disabled) {
       color: #fff;
       border-color: transparent;
-      animation: walletActionPulse 1.6s ease-in-out infinite;
     }
 
     .wallet-actions #connectBtn:not(:disabled) {
@@ -818,13 +764,6 @@
       color: var(--txt-2);
       line-height: 1.66;
       font-size: 0.9rem;
-    }
-
-    .footer {
-      padding: 18px 22px;
-      color: var(--txt-2);
-      line-height: 1.8;
-      font-size: 0.94rem;
     }
 
     @media (max-width: 1160px) {
